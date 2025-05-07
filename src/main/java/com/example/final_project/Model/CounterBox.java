@@ -44,7 +44,7 @@ public class CounterBox {
 
 
     @ManyToOne
-    @JoinColumn(name = "accountant_id") // اسم العمود اللي راح يتخزن في جدول counterBox
+    @JoinColumn(name = "accountant_id")
     private Accountant accountant;
 
     @OneToMany(mappedBy = "counterBox", cascade = CascadeType.ALL)
