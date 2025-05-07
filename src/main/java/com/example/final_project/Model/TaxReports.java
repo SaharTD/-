@@ -56,5 +56,5 @@ public class TaxReports {
     @ManyToOne
     @JoinColumn(name = "audit_id",referencedColumnName = "id")
     @JsonIgnore
-    private Audit audit;
+    private Auditor auditor;
 }

@@ -45,7 +45,7 @@ public class User {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    private Audit audit;
+    private Auditor auditor;
 
     @OneToOne
     @PrimaryKeyJoinColumn

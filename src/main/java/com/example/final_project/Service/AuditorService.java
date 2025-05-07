@@ -3,7 +3,9 @@ package com.example.final_project.Service;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Auditor;
 import com.example.final_project.Model.DTOAuditor;
+import com.example.final_project.Model.User;
 import com.example.final_project.Repository.AuditorRepository;
+import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 public class AuditorService {
 
     private final AuditorRepository auditorRepository;
+    private final MyUserRepository myUserRepository;
 
     public List<Auditor> getAllAuditors(){
         return auditorRepository.findAll();
@@ -28,13 +31,13 @@ public class AuditorService {
         user.setEmail(dtoAuditor.getEmail());
         user.setRole("auditor");
         Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user);
-        user.getAuditor().add(auditor);
-        userRepository.save(user);
+        user.setAuditor(auditor);
+        myUserRepository.save(user);
         auditorRepository.save(auditor);
     }
 
     public void updateAuditor(Integer auditorId, DTOAuditor dtoAuditor){
-        User user = userRepository.findUserById(auditorId);
+        User user = myUserRepository.findUserById(auditorId);
         if (user==null)
             throw new ApiException("auditor not found");
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
@@ -44,16 +47,16 @@ public class AuditorService {
         user.setEmail(dtoAuditor.getEmail());
         auditor.setSOCPA(dtoAuditor.getSOCPA());
 
-        userRepository.save(user);
+        myUserRepository.save(user);
         auditorRepository.save(auditor);
     }
 
 
     public void deleteAuditor(Integer auditorId){
-        User user = userRepository.findUserById(auditorId);
+        User user = myUserRepository.findUserById(auditorId);
         if (user==null)
             throw new ApiException("auditor not found");
-        userRepository.delete(user);
+        myUserRepository.delete(user);
 //        auditorRepository.delete(auditor);
     }
 
