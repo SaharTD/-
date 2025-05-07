@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Setter @Getter @AllArgsConstructor @NoArgsConstructor
@@ -45,5 +46,8 @@ public class CounterBox {
     @ManyToOne
     @JoinColumn(name = "accountant_id") // اسم العمود اللي راح يتخزن في جدول counterBox
     private Accountant accountant;
+
+    @OneToMany(mappedBy = "counterBox", cascade = CascadeType.ALL)
+    private List<Sales> salesList;
 
 }

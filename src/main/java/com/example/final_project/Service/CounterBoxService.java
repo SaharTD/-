@@ -6,6 +6,8 @@ import com.example.final_project.Repository.CounterBoxRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -53,4 +55,21 @@ public class CounterBoxService {
         }
         counterBoxRepository.delete(box);
     }
+
+    //TODO: test it
+    //1 end point close the counter box if it stays open for 12 hour
+    public void autoCloseBoxesAfter12Hours() {
+        List<CounterBox> openBoxes = counterBoxRepository.findByCloseDatetimeIsNull();
+
+        for (CounterBox box : openBoxes) {
+            if (box.getOpenDatetime() != null) {
+                long hoursOpen = Duration.between(box.getOpenDatetime(), LocalDateTime.now()).toHours();
+                if (hoursOpen >= 12) {
+                    box.setCloseDatetime(LocalDateTime.now());
+                    counterBoxRepository.save(box);
+                }
+            }
+        }
+    }
+
 }
