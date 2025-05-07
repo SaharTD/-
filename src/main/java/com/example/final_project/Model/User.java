@@ -1,0 +1,59 @@
+package com.example.final_project.Model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(columnDefinition = "varchar(20) not null")
+    @NotEmpty(message = "name must ne not empty")
+    private String name;
+
+    @Column(columnDefinition = "varchar(20) not null")
+    @NotEmpty(message = "username must ne not empty unique")
+    private String username;
+
+    @Column(columnDefinition = "varchar(20) not null")
+    @NotEmpty(message = "password must ne not empty")
+    private String password;
+
+    @Column(columnDefinition = "varchar(40) not null unique")
+    @Email(message = "email must be valid")
+    private String email;
+
+    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXBUYER','AUDIT','ACCOUNTANT'))")
+    @NotEmpty(message = "role must ne not empty")
+    @Pattern(regexp = "TAXBUYER|AUDIT|ACCOUNTANT")
+    private String role;
+
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Audit audit;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Accountant accountant;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private TaxBuyer taxBuyer;
+
+
+}
