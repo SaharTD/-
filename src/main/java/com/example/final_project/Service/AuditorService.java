@@ -2,12 +2,11 @@ package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Auditor;
-import com.example.final_project.Model.DTOAuditor;
+import com.example.final_project.DTO.DTOAuditor;
 import com.example.final_project.Model.User;
 import com.example.final_project.Repository.AuditorRepository;
 import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class AuditorService {
         user.setPassword(dtoAuditor.getPassword());
         user.setEmail(dtoAuditor.getEmail());
         user.setRole("auditor");
-        Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user);
+        Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user,null);
         user.setAuditor(auditor);
         myUserRepository.save(user);
         auditorRepository.save(auditor);

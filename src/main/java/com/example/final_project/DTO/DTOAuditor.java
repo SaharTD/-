@@ -1,4 +1,4 @@
-package com.example.final_project.Model;
+package com.example.final_project.DTO;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
