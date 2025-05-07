@@ -2,6 +2,7 @@ package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Branch;
+import com.example.final_project.Model.Business;
 import com.example.final_project.Repository.BranchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

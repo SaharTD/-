@@ -2,14 +2,13 @@ package com.example.final_project.Model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -26,4 +25,13 @@ public class Auditor {
     @MapsId
     @JsonIgnore
     private User user;
+
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "auditor")
+    private Set<TaxBuyer> taxBuyers;
+
+
+
+
+
 }
