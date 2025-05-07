@@ -13,7 +13,7 @@ import org.hibernate.annotations.Check;
 @AllArgsConstructor
 public class DTOAuditor {
 
-    private Integer user_id;
+//    private Integer user_id;
     @NotEmpty
     private String role="auditor";
     @NotEmpty
@@ -30,8 +30,10 @@ public class DTOAuditor {
     private String email;
     @NotEmpty
     @Size(min = 8,max = 16,message = "password length should be between 8-16")
-    @Pattern(regexp = "^([a-z]+|[A-Z]+|[0-9]+|#|$|&|%){8}-{16}+$")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@&*%#.=+/-]).{8,16}$")
     @Column(columnDefinition = "varchar(16) not null")
     @Check(constraints = "length(name)>=8 and length(name)<=16")
     private String password;
+    private String SOCPA;
+
 }
