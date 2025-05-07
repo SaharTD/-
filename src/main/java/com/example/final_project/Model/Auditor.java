@@ -24,6 +24,7 @@ public class Auditor {
     @OneToOne
     @MapsId
     @JsonIgnore
+    @JoinColumn
     private User user;
 
 

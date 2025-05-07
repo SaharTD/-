@@ -38,4 +38,6 @@ public class Branch {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "branch")
     private Set<Accountant> accountants;
+
+
 }

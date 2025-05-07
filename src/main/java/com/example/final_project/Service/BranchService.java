@@ -13,11 +13,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BranchService {
 
+
     private final BranchRepository branchRepository;
+
 
     public List<Branch> getAllBranches(){
         return branchRepository.findAll();
     }
+
 
     public void addBranch(Integer businessId, Branch branch){
         Business business = businessRepository.findBusinessById(businessId);
@@ -25,4 +28,5 @@ public class BranchService {
             throw new ApiException("business not found");
 
     }
+
 }
