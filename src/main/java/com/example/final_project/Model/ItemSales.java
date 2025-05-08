@@ -48,4 +48,7 @@ public class ItemSales {
     private Set<CounterBox> counterBoxes = new HashSet<CounterBox>();
 
 
+    @ManyToOne
+    @JoinColumn(name = "sales_id")
+    private Sales sales;
 }

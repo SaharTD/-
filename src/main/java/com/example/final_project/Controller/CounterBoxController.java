@@ -45,4 +45,11 @@ public class CounterBoxController {
         counterBoxService.deleteCounterBox(id);
         return ResponseEntity.status(200).body(new ApiResponse("Deleted successfully"));
     }
+
+    @PutMapping("/auto-close")
+    public ResponseEntity autoCloseLongOpenedBoxes() {
+        counterBoxService.autoCloseBoxesAfter12Hours();
+        return ResponseEntity.status(200).body(new ApiResponse("Checked and closed boxes open for more than 12 hours"));
+    }
+
 }
