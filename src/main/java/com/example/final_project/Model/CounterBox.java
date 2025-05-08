@@ -1,5 +1,6 @@
 package com.example.final_project.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Setter @Getter @AllArgsConstructor @NoArgsConstructor
@@ -37,13 +39,15 @@ public class CounterBox {
     @Column
     private LocalDateTime closeDatetime;
 
-
-    @ManyToMany(mappedBy = "counterBoxes")
-    private Set<ItemSales> itemSales = new HashSet<>();
-
+    @ManyToOne
+    @JsonIgnore
+    private Branch branch;
 
     @ManyToOne
-    @JoinColumn(name = "accountant_id") // اسم العمود اللي راح يتخزن في جدول counterBox
+//    @JoinColumn(name = "accountant_id") // اسم العمود اللي راح يتخزن في جدول counterBox
     private Accountant accountant;
+
+    @OneToMany(mappedBy = "counterBox", cascade = CascadeType.ALL)
+    private Set<Sales> salesList;
 
 }

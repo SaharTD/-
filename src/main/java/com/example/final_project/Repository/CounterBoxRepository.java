@@ -4,7 +4,12 @@ import com.example.final_project.Model.CounterBox;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CounterBoxRepository extends JpaRepository<CounterBox,Integer> {
     CounterBox findCounterBoxById(Integer id);
+
+    List<CounterBox> findByCloseDatetimeIsNull();
+
 }
