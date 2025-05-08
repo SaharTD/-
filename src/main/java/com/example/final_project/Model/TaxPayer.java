@@ -57,7 +57,7 @@ public class TaxPayer {
 
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "texBuyer")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "taxBuyer")
     private Set<Business> businesses;
 
 

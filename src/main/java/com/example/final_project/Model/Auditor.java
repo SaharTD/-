@@ -23,7 +23,7 @@ public class Auditor {
     @OneToOne
     @MapsId
     @JsonIgnore
-    @JoinColumn
+    @JoinColumn(name = "id")
     private User user;
 
 
