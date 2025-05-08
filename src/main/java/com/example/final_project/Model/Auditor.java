@@ -1,6 +1,5 @@
 package com.example.final_project.Model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,7 +28,7 @@ public class Auditor {
 
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "auditor")
-    private Set<TaxBuyer> taxBuyers;
+    private Set<TaxPayer> taxPayers;
 
 
 

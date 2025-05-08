@@ -53,7 +53,7 @@ public class User {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    private TaxBuyer taxBuyer;
+    private TaxPayer taxPayer;
 
 
 }
