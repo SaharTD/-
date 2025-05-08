@@ -39,9 +39,9 @@ public class User {
     private String email;
 
 //    @Check(constraints = "role in ('TAXBUYER','AUDIT','ACCOUNTANT')")
-    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXBUYER','AUDIT','ACCOUNTANT'))")
+//    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))")
     @NotEmpty(message = "role must ne not empty")
-    @Pattern(regexp = "TAXBUYER|AUDIT|ACCOUNTANT|ADMIN")
+    @Pattern(regexp = "TAXBUYER|AUDITOR|ACCOUNTANT|ADMIN")
     private String role;
 
 

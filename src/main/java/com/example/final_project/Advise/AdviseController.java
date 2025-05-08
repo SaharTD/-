@@ -6,7 +6,7 @@ import com.example.final_project.Api.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.mail.MailSendException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -77,8 +77,8 @@ public class AdviseController {
     }
 
 
-    @ExceptionHandler(value = MailSendException.class)
-    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
+    @ExceptionHandler(value = JpaSystemException.class)
+    public ResponseEntity<ApiResponse> JpaSystemException(JpaSystemException e) {
         String msg = e.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
