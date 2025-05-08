@@ -10,6 +10,8 @@ import com.example.final_project.Repository.TaxPayerRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -38,9 +40,10 @@ public class TaxPayerService {
         User user = new User();
 
         user.setRole("TAXPAYER");
+        user.setName(taxPayerDTO.getName());
         user.setUsername(taxPayerDTO.getUsername());
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
-//        user.setPassword(hashPassword);
+        user.setPassword(taxPayerDTO.getPassword());
         user.setEmail(taxPayerDTO.getEmail());
 
 
