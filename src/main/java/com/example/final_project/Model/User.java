@@ -55,7 +55,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     @PrimaryKeyJoinColumn
-    private TaxBuyer taxBuyer;
+    private TaxPayer taxPayer;
 
 
 }
