@@ -13,6 +13,8 @@ import lombok.Singular;
 import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CollectionIdJdbcTypeCode;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +44,10 @@ public class Product {
     @ManyToOne
     @JsonIgnore
     private Branch branch;
+
+
+    @ManyToMany(mappedBy = "products")
+    private Set<Sales> sales;
 
 
 }

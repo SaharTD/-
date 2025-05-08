@@ -46,12 +46,13 @@ public class Sales {
     @JsonIgnore
     private Branch branch;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "sales")
-    private Set<ItemSales> itemSales;
 
     @ManyToOne
 //    @JoinColumn(name = "counterBox_id",referencedColumnName = "id")
     @JsonIgnore
     private CounterBox counterBox;
 
+    @ManyToMany
+    @JsonIgnore
+    private Set<Product> products;
 }
