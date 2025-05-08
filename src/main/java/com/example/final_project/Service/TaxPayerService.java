@@ -24,11 +24,6 @@ public class TaxPayerService {
     private final TaxPayerRepository taxPayerRepository;
     private final MyUserRepository myUserRepository;
 
-
-
-
-
-
     public List<TaxPayer> getAllTaxTaxPayers(Integer AuditId){
         return taxPayerRepository.findAll();
     }
@@ -43,14 +38,12 @@ public class TaxPayerService {
 //        user.setPassword(hashPassword);
         user.setEmail(taxPayerDTO.getEmail());
 
-
         TaxPayer taxPayer = new TaxPayer();
-
 
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
 
-       myUserRepository.save (user);
+       myUserRepository.save(user);
        taxPayerRepository.save(taxPayer);
     }
 
