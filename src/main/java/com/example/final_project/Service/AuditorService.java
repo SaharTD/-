@@ -28,7 +28,7 @@ public class AuditorService {
         user.setUsername(dtoAuditor.getUsername());
         user.setPassword(dtoAuditor.getPassword());
         user.setEmail(dtoAuditor.getEmail());
-        user.setRole("auditor");
+        user.setRole("AUDITOR");
         Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user,null);
         user.setAuditor(auditor);
         myUserRepository.save(user);
