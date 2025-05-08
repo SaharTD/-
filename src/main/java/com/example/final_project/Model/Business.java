@@ -70,9 +70,9 @@ public class Business {
     private String requestStatus;
 
 
-    @ManyToOne
-    @JsonIgnore
-    private TaxBuyer taxBuyer;
+//    @ManyToOne
+//    @JsonIgnore
+//    private TaxBuyer taxBuyer1;
 
 
     @ManyToOne

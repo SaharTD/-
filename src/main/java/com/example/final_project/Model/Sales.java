@@ -42,7 +42,7 @@ public class Sales {
 
 
     @ManyToOne
-    @JoinColumn(name = "branch_id",referencedColumnName = "id")
+//    @JoinColumn(name = "branch_id",referencedColumnName = "id")
     @JsonIgnore
     private Branch branch;
 
@@ -50,7 +50,7 @@ public class Sales {
     private Set<ItemSales> itemSales;
 
     @ManyToOne
-    @JoinColumn(name = "counterBox_id",referencedColumnName = "id")
+//    @JoinColumn(name = "counterBox_id",referencedColumnName = "id")
     @JsonIgnore
     private CounterBox counterBox;
 

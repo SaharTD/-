@@ -49,6 +49,6 @@ public class ItemSales {
 
 
     @ManyToOne
-    @JoinColumn(name = "sales_id")
+//    @JoinColumn(name = "sales_id")
     private Sales sales;
 }

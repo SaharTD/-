@@ -1,6 +1,7 @@
 package com.example.final_project.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +19,18 @@ public class Accountant {
     private Integer id;
 
 
+    @OneToOne
+    @MapsId
+    @JsonIgnore
+    private User user;
 
     @OneToMany(mappedBy = "accountant")
     private List<CounterBox> counterBoxes = new ArrayList<>();
+
+    @ManyToOne
+    @JsonIgnore
+    private Branch branch;
+
+
 
 }

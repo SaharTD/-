@@ -51,12 +51,12 @@ public class TaxReports {
 
 
     @ManyToOne
-    @JoinColumn(name = "business_id",referencedColumnName = "id")
+//    @JoinColumn(name = "business_id",referencedColumnName = "id")
     @JsonIgnore
     private Business business;
 
     @ManyToOne
-    @JoinColumn(name = "audit_id",referencedColumnName = "id")
+//    @JoinColumn(name = "audit_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
 }

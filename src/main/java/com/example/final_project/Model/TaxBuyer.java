@@ -47,7 +47,7 @@ public class TaxBuyer {
     private Boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "auditor_id",referencedColumnName = "id")
+//    @JoinColumn(name = "auditor_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
 
@@ -57,8 +57,8 @@ public class TaxBuyer {
 
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "texBuyer")
-    private Set<Business> businesses;
+//    @OneToMany(cascade = CascadeType.ALL,mappedBy = "texBuyer1")
+//    private Set<Business> businesses;
 
 
     @OneToOne
