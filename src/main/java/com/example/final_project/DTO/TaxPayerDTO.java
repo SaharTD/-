@@ -26,12 +26,12 @@ public class TaxPayerDTO {
 
 
     @NotEmpty(message = "the phone number should not be empty")
-    @Pattern(regexp = "^5[0-9]{8}$",message = " please enter correct phone number")
+//    @Pattern(regexp = "^05[0-9]{8}$",message = " please enter correct phone number")
     private String phoneNumber;
 
 
     @NotEmpty(message = "the commercial registration number should not be empty")
-    @Pattern(regexp = "^[1-9][0-9]{9}$",message = " please enter correct commercial registration")
+//    @Pattern(regexp = "^[1-9][0-9]{9}$",message = " please enter correct commercial registration")
     private String commercialRegistration ;
 
 

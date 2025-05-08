@@ -45,9 +45,12 @@ public class TaxPayerService {
 
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
+        taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+        taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
 
        myUserRepository.save(user);
        taxPayerRepository.save(taxPayer);
+
     }
 
 

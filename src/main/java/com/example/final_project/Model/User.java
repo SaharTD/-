@@ -41,7 +41,7 @@ public class User {
 //    @Check(constraints = "role in ('TAXBUYER','AUDIT','ACCOUNTANT')")
 //    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))")
     @NotEmpty(message = "role must ne not empty")
-    @Pattern(regexp = "TAXBUYER|AUDITOR|ACCOUNTANT|ADMIN")
+    @Pattern(regexp = "TAXPAYER|AUDITOR|ACCOUNTANT|ADMIN")
     private String role;
 
 
