@@ -50,7 +50,7 @@ public class BusinessController {
 
 
 
-    @DeleteMapping("delete /{taxPayerId}/{businessId}")
+    @DeleteMapping("delete/{taxPayerId}/{businessId}")
     public ResponseEntity deleteBusiness(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
         businessService.deleteBusiness(taxPayerId,businessId);
         return ResponseEntity.status(200).body(new ApiResponse("the business has been deleted successfully "));
