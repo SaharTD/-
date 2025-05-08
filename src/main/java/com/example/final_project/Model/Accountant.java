@@ -1,6 +1,7 @@
 package com.example.final_project.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,9 +25,17 @@ public class Accountant {
 
 
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
     @OneToMany(mappedBy = "accountant")
     private Set<CounterBox> counterBoxes;
 
-
-
+    @ManyToOne
+    @MapsId
+    @JsonIgnore
+    @JoinColumn(name = "id")
+    private Branch branch;
 }
