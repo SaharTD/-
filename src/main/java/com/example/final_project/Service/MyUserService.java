@@ -4,6 +4,7 @@ import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.User;
 import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +22,32 @@ public class MyUserService {
     }
 
     public void addAdmin(User user){
+
+       //String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+       // user.setPassword(hashPassword);
         user.setRole("ADMIN");
         myUserRepository.save(user);
     }
 
+    public void updateUser(String username,User user){
+        User oldUser=myUserRepository.findUserByUsername(username);
 
-    public void deleteUser(Integer id){
-        User user=myUserRepository.findUserById(id);
+        if(oldUser==null){
+            throw new ApiException("user not found");
+        }
+
+        oldUser.setUsername(user.getUsername());
+        oldUser.setPassword(user.getPassword());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setName(user.getName());
+        oldUser.setRole(user.getRole());
+
+        myUserRepository.save(oldUser);
+    }
+
+
+    public void deleteUser(String username ){
+        User user=myUserRepository.findUserByUsername(username);
 
         if(user==null){
             throw new ApiException("user not found");
