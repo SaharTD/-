@@ -8,7 +8,7 @@ import com.example.final_project.Service.TaxPayerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+//import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,21 +21,21 @@ public class TaxPayerController {
 
 
 
-    @GetMapping("get-all-tax-payers/{taxPayerId}")
+    @GetMapping("/get-all-tax-payers/{taxPayerId}")
     public ResponseEntity getAllTaxTaxPayers (@PathVariable Integer taxPayerId){
         return ResponseEntity.status(200).body(taxPayerService.getAllTaxTaxPayers(taxPayerId));
     }
 
 
 
-    @PostMapping("tax-payer-register")
+    @PostMapping("/tax-payer-register")
     public ResponseEntity register (@RequestBody @Valid TaxPayerDTO taxPayerDTO ){
         taxPayerService.register(taxPayerDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer is registered successfully "));
     }
 
 
-    @PutMapping("update/{taxPayerId}")
+    @PutMapping("/update/{taxPayerId}")
     public ResponseEntity updateTaxPayer(@PathVariable Integer taxPayerId , @RequestBody TaxPayerDTO taxPayerDTO ){
         taxPayerService.updateTaxPayer(taxPayerId,taxPayerDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer information has been updated successfully "));
@@ -43,7 +43,7 @@ public class TaxPayerController {
 
 
 
-    @DeleteMapping("delete/{taxPayerId}")
+    @DeleteMapping("/delete/{taxPayerId}")
     public ResponseEntity deleteTaxPayer(@PathVariable Integer taxPayerId){
         taxPayerService.deleteTaxPayer(taxPayerId);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer has been deleted successfully "));

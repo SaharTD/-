@@ -22,19 +22,19 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.getAllProduct());
     }
 
-    @PostMapping("/add/{branchId}")
+    @PostMapping("/add/branch/{branchId}")
     public ResponseEntity addProduct(@PathVariable Integer branchId, @RequestBody@Valid Product product){
         productService.addProduct(branchId, product);
         return ResponseEntity.status(200).body(new ApiResponse("new product added"));
     }
 
-    @PutMapping("/update/{branchId}/product/{productId}")
+    @PutMapping("/update/branch/{branchId}/product/{productId}")
     public ResponseEntity updateProduct(@PathVariable Integer branchId,@PathVariable Integer productId, @RequestBody@Valid Product product){
         productService.updateProduct(branchId, productId, product);
         return ResponseEntity.status(200).body(new ApiResponse("product updated"));
     }
 
-    @DeleteMapping("/delete/{branchId}/product/{productId}")
+    @DeleteMapping("/delete/branch/{branchId}/product/{productId}")
     public ResponseEntity deleteProduct(@PathVariable Integer branchId,@PathVariable Integer productId){
         productService.deleteProduct(branchId, productId);
         return ResponseEntity.status(200).body(new ApiResponse("product deleted"));

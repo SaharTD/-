@@ -52,12 +52,12 @@ public class TaxPayer {
     private Auditor auditor;
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "taxBuyer")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "taxPayer")
     private Set<Payment> payments;
 
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "taxBuyer")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "taxPayer")
     private Set<Business> businesses;
 
 
