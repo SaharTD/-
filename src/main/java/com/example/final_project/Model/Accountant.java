@@ -9,17 +9,24 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-@Setter @Getter @AllArgsConstructor @NoArgsConstructor
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Accountant {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
 
 
     @OneToMany(mappedBy = "accountant")
-    private List<CounterBox> counterBoxes = new ArrayList<>();
+    private Set<CounterBox> counterBoxes;
+
+
 
 }
