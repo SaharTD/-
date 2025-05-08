@@ -39,13 +39,7 @@ public class ItemSales {
 
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "counterbox_items",
-            joinColumns = @JoinColumn(name = "item_sales_id"),
-            inverseJoinColumns = @JoinColumn(name = "counter_box_id")
-    )
-    private Set<CounterBox> counterBoxes = new HashSet<CounterBox>();
+
 
 
     @ManyToOne
