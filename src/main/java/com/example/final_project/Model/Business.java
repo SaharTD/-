@@ -67,6 +67,7 @@ public class Business {
     private String requestStatus;
 
 
+
     @ManyToOne
     @JsonIgnore
     private TaxPayer taxPayer;
@@ -76,11 +77,11 @@ public class Business {
     @JsonIgnore
     private Auditor auditor;
 
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "business")
     private Set<TaxReports> taxReports;
 
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "business")
     private Set<Branch> branches;
 

@@ -23,15 +23,71 @@ public class BusinessService {
     private final BranchRepository branchRepository;
 
 
+
+
+
     public List<Business> getAllBusiness(Integer AuditId) {
         return businessRepository.findAll();
     }
 
-    /// get all business details for one taxpayer
+    /// get one business details for taxpayer
+    public BusinessDTO getMyBusiness(Integer taxPayerId, Integer bId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+
+        if (taxPayer == null) {
+            throw new ApiException("Tax Payer is not found");
+        }
+
+        Business myBusiness = businessRepository.findBusinessByIdAndTaxPayer(bId, taxPayer);
+        if (myBusiness == null) {
+            throw new ApiException("Business is not found or does not belong to tax payer");
+        }
+
+        BusinessDTO businessDTO = new BusinessDTO(myBusiness.getBusinessName(), myBusiness.getBusinessCategory(), myBusiness.getCommercialRegistration(), myBusiness.getTaxNumber(), myBusiness.getCity(), myBusiness.getRegion());
+        return businessDTO;
+    }
+
+
+    /// get all business details for taxpayer
+
     public List<Business> getMyBusinesses(Integer taxPayerId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        return businessRepository.findBusinessByTaxPayer(taxPayer);
+        if (taxPayer == null) {
+            throw new ApiException("Tax Payer is not found");
+        }
+
+        List<Business> myBusinesses =businessRepository.findBusinessByTaxPayer(taxPayer);
+
+        if ( myBusinesses.isEmpty()) {
+            throw new ApiException("Businesses are not found or does not belong to tax payer");
+        }
+         return myBusinesses;
     }
+
+
+
+
+
+
+    /// // number of branches for each business
+    public Integer getMyBranches(Integer taxPayerId,Integer bId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+
+        Business myBusiness = businessRepository.findBusinessByIdAndTaxPayer(bId, taxPayer);
+        if (myBusiness == null) {
+            throw new ApiException("Business is not found or does not belong to tax payer");
+        }
+
+
+        List<Branch> branches =branchRepository.findBranchByBusiness(myBusiness);
+
+
+        Integer NOFBranches= branches.size();
+
+        return NOFBranches;
+    }
+
+
 
 
 
@@ -42,6 +98,12 @@ public class BusinessService {
             throw new ApiException("Tax Payer is not found");
 
         }
+
+       if (!taxPayer.getIsActive()){
+           throw new ApiException("Tax Payer :"+ taxPayer.getUser().getName() +" is not Active"
+           +"--inactive taxpayers are unable to add business");
+       }
+
 
         Business business=new Business();
         business.setBusinessName(businessDTO.getBusinessName());

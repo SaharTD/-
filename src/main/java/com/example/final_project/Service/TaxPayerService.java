@@ -34,6 +34,20 @@ public class TaxPayerService {
 
 
 
+/// run by admin
+    public void activateTP (Integer adminId,Integer taxPayerId){
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
+            throw new ApiException("Tax Payer is not found");
+        }
+        if (taxPayer.getIsActive()){
+            throw new ApiException("Tax Payer is already active");
+        }
+         taxPayer.setIsActive(true);
+        taxPayerRepository.save(taxPayer);
+    }
+
+
     public List<TaxPayer> getAllTaxTaxPayers(Integer AuditId){
         return taxPayerRepository.findAll();
     }

@@ -29,7 +29,18 @@ public class BusinessController {
 
 
 
-    @GetMapping("/get-my-business/{taxPayerId}")
+    @GetMapping("/get-my-business/{taxPayerId}/{bId}")
+    public ResponseEntity getMyBusiness (@PathVariable Integer taxPayerId,@PathVariable Integer bId){
+        return ResponseEntity.status(200).body(businessService.getMyBusiness(taxPayerId,bId));
+    }
+
+    @GetMapping("/get-number-of-branches/{taxPayerId}/{bI}")
+    public ResponseEntity getMyBranches (@PathVariable Integer taxPayerId,@PathVariable Integer bI){
+        return ResponseEntity.status(200).body(new ApiResponse("The number of branches for the business : "+businessService.getMyBranches(taxPayerId,bI)));
+    }
+
+
+    @GetMapping("/get-my-businesses/{taxPayerId}")
     public ResponseEntity getMyBusinesses (@PathVariable Integer taxPayerId){
         return ResponseEntity.status(200).body(businessService.getMyBusinesses(taxPayerId));
     }

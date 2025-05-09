@@ -4,11 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class BusinessDTO {
 
 
@@ -37,5 +39,7 @@ public class BusinessDTO {
 
     @NotEmpty(message = "the business located region should not be empty")
     private String region;
+
+
 
 }
