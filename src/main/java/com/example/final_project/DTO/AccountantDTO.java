@@ -28,7 +28,7 @@ public class AccountantDTO {
     @Email(message = "email must be valid")
     private String email;
 
-    @NotEmpty(message = "role must not be empty")
+    //@NotEmpty(message = "role must not be empty")
     private String role;
 
     private Integer branchId;

@@ -152,6 +152,7 @@ public class TaxPayerService {
         userACC.setEmail(accountantDTO.getEmail());
 
         Accountant accountant = new Accountant();
+       // accountant.setUser(userACC);
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
 
 
