@@ -27,7 +27,7 @@ public class TaxPayer {
     @Column(columnDefinition = "varchar(9) not null")
     private String phoneNumber;
 
-    @Column(columnDefinition = "varchar(10) not null")
+    @Column(columnDefinition = "varchar(10) not null unique")
     private String commercialRegistration ;
 
 

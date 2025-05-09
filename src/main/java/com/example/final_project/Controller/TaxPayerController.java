@@ -2,10 +2,12 @@ package com.example.final_project.Controller;
 
 
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.DTO.AccountantDTO;
 import com.example.final_project.DTO.TaxPayerDTO;
 import com.example.final_project.Model.User;
 import com.example.final_project.Service.TaxPayerService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,5 +52,10 @@ public class TaxPayerController {
     }
 
 
+    @PostMapping("add-accountant/{taxPayerID}")
+    public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID){
+        taxPayerService.addAccountant(taxPayerID,accountantDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
+    }
 
 }
