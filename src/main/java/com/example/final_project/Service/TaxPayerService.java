@@ -69,32 +69,21 @@ public class TaxPayerService {
             throw new ApiException("A Taxpayer With the same commercial registration number already exit");
 
         }
+
         user.setRole("TAXPAYER");
-        user.setRole("TAXBUYER");
-        user.setName(taxPayerDTO.getName());
         user.setUsername(taxPayerDTO.getUsername());
         user.setName(taxPayerDTO.getName());
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
 //        user.setPassword(hashPassword);
         user.setPassword(taxPayerDTO.getPassword());
         user.setEmail(taxPayerDTO.getEmail());
-        user.setPassword(taxPayerDTO.getPassword());
-
 
         TaxPayer taxPayer = new TaxPayer();
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
-        taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
-
-
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
-        taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
-
         taxPayer.setRegistrationDate(LocalDateTime.now());
-
-        myUserRepository.save(user);
-        taxPayerRepository.save(taxPayer);
 
         myUserRepository.save(user);
         taxPayerRepository.save(taxPayer);
@@ -112,16 +101,13 @@ public class TaxPayerService {
         taxPayer.getUser().setEmail(taxPayerDTO.getEmail());
         taxPayer.getUser().setUsername(taxPayerDTO.getUsername());
 
-
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
 //        taxPayer.getUser().setPassword(hashPassword);
-
 
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
 
         taxPayerRepository.save(taxPayer);
-
 
     }
 
@@ -215,4 +201,3 @@ public class TaxPayerService {
 
 
     }
-}

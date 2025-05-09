@@ -17,7 +17,6 @@ import org.hibernate.annotations.Check;
 @NoArgsConstructor
 public class User {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -42,10 +41,6 @@ public class User {
 //    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))")
 //    @NotEmpty(message = "role must ne not empty")
 //    @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
-
-
-
-
     private String role;
 
 
