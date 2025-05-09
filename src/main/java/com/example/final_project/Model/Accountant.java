@@ -3,6 +3,8 @@ package com.example.final_project.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,21 +22,26 @@ import java.util.Set;
 public class Accountant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Boolean isActive=false;
+
+    @Column(columnDefinition = "varchar(10) not null unique")
+    private String employeeId;
+
+    private Boolean isActive;
 
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @MapsId
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "accountant")
+    @JsonIgnore
+    @OneToMany(mappedBy = "accountant")
     private Set<CounterBox> counterBoxes;
 
     @ManyToOne
-    @MapsId
     @JsonIgnore
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 }

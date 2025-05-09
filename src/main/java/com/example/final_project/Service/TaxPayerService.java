@@ -2,10 +2,13 @@ package com.example.final_project.Service;
 
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.DTO.AccountantDTO;
 import com.example.final_project.DTO.TaxPayerDTO;
 import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
+import com.example.final_project.Notification.NotificationService;
+import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.MyUserRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
@@ -30,6 +33,8 @@ public class TaxPayerService {
     private final TaxPayerRepository taxPayerRepository;
     private final MyUserRepository myUserRepository;
     private final AccountantRepository accountantRepository;
+    private final NotificationService notificationService;
+    private final AccountantRepository accountantRepository;
 
     /// run by admin
     public void activateTP(Integer adminId, Integer taxPayerId) {
@@ -42,6 +47,16 @@ public class TaxPayerService {
         }
         taxPayer.setIsActive(true);
         taxPayerRepository.save(taxPayer);
+//
+//
+//        String subject = ": Successful Activation of Your Account ";
+//        String message = "Dear : " + taxPayer.getUser().getName() + " We are pleased to inform you that your account has been successfully activated you can now use our services :\n" +
+//                "Best regards,\n" +
+//                "[mohasil team]";
+//
+//
+//        notificationService.sendEmail(taxPayer.getUser().getEmail(), message, subject);
+
     }
 
 
@@ -52,7 +67,10 @@ public class TaxPayerService {
 
     public void register(TaxPayerDTO taxPayerDTO) {
         User user = new User();
+        if (taxPayerRepository.findTaxPayerByCommercialRegistration(taxPayerDTO.getCommercialRegistration()) != null) {
+            throw new ApiException("A Taxpayer With the same commercial registration number already exit");
 
+        }
         user.setRole("TAXPAYER");
         user.setName(taxPayerDTO.getName());
         user.setUsername(taxPayerDTO.getUsername());
@@ -77,15 +95,21 @@ public class TaxPayerService {
         myUserRepository.save(user);
         taxPayerRepository.save(taxPayer);
 
+        myUserRepository.save(user);
+        taxPayerRepository.save(taxPayer);
+        myUserRepository.save(user);
+        taxPayerRepository.save(taxPayer);
+
     }
 
+    public void updateTaxPayer(Integer taxPayerId, TaxPayerDTO taxPayerDTO) {
 
     public void updateTaxPayer(Integer taxPayerId, TaxPayerDTO taxPayerDTO) {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
 
         if (taxPayer == null) {
-            throw new ApiException("the tax payer is not found");
+            throw new ApiException("The Taxpayer is not found");
         }
 
         taxPayer.getUser().setEmail(taxPayerDTO.getEmail());
@@ -109,12 +133,57 @@ public class TaxPayerService {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
-            throw new ApiException("the tax payer is not found");
+            throw new ApiException("The Taxpayer is not found");
         }
         myUserRepository.delete(taxPayer.getUser());
     }
 
 
+    public void addAccountant(Integer taxPayerID, AccountantDTO accountantDTO) {
+
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+
+        User userACC = new User();
+        userACC.setRole("ACCOUNTANT");
+
+
+        userACC.setName(accountantDTO.getName());
+        userACC.setUsername(accountantDTO.getUsername());
+        userACC.setPassword(accountantDTO.getPassword());
+        userACC.setEmail(accountantDTO.getEmail());
+        myUserRepository.save(userACC);
+
+        Accountant accountant = new Accountant();
+        accountant.setEmployeeId(accountantDTO.getEmployeeId());
+        accountant.setUser(userACC);
+        accountantRepository.save(accountant);
+
+
+//
+//        String subject=": Successful Activation of Your Account";
+//        String message="We are pleased to inform you that your account has been successfully activated. Below are your login details:\n" +
+//                "\n" +
+//                "Username: \n" +accountant.getUser().getUsername()+
+//                "\n" +
+//                "Password:\n" +accountant.getUser().getPassword()+
+//                "\n" +
+//                "Employee Code:\n" +accountant.getEmployeeId()+
+//                "\n" +
+//                "Please keep this information secure and do not share it with anyone.\n" +
+//                "\n" +
+//                "If you have any questions or need assistance, feel free to contact us.\n" +
+//                "\n" +
+//                "Best regards,\n" +
+//                "[mohasil team]";
+//
+//
+//        notificationService.sendEmail(accountant.getUser().getEmail(),message,subject);
+//    }
+//
     // Endpoint 40
     public void activateAccountant(Integer taxPayerId, Integer accountantId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
@@ -146,4 +215,5 @@ public class TaxPayerService {
     }
 
 
+    }
 }

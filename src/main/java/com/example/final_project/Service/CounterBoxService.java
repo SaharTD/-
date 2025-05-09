@@ -1,7 +1,12 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.DTO.CounterBoxDTO;
+import com.example.final_project.Model.Accountant;
+import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
+import com.example.final_project.Repository.AccountantRepository;
+import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +21,36 @@ import java.util.List;
 public class CounterBoxService {
 
     private final CounterBoxRepository counterBoxRepository;
+    private final AccountantRepository accountantRepository;
+    private final BranchRepository branchRepository;
 
-    public void addCounterBox(CounterBox counterBox) {
+    //كرييت مع المحاسب
+    /*public void createCounterBox(CounterBoxDTO counterBoxDTO) {
+        if (counterBoxDTO.getAccountantId() == null) {
+            throw new ApiException("Accountant ID is required");
+        }
+
+        Accountant accountant = accountantRepository.getReferenceById(counterBoxDTO.getAccountantId());
+        if (accountant == null) {
+            throw new ApiException("Accountant not found");
+        }
+        CounterBox counterBox = new CounterBox();
+        counterBox.setType(counterBoxDTO.getType());
+        counterBox.setPaymentType(counterBoxDTO.getPaymentType());
+        counterBox.setDailyTreasury(counterBoxDTO.getDailyTreasury());
+        counterBox.setOpenDatetime(LocalDateTime.now());
+       // counterBox.setAccountant(accountant);
+
+        if (counterBoxDTO.getBranchId() != null) {
+            Branch branch = branchRepository.getReferenceById(counterBoxDTO.getBranchId());
+            if (branch == null) {
+                throw new ApiException("Branch not found");
+            }
+            counterBox.setBranch(branch);
+        }
+
         counterBoxRepository.save(counterBox);
-    }
+    }*/
 
     public List getAllCounterBoxes() {
         return counterBoxRepository.findAll();
@@ -56,20 +87,19 @@ public class CounterBoxService {
         counterBoxRepository.delete(box);
     }
 
-    //TODO: test it
-    //1 end point close the counter box if it stays open for 12 hour
-    public void autoCloseBoxesAfter12Hours() {
-        List<CounterBox> openBoxes = counterBoxRepository.findByCloseDatetimeIsNull();
 
-        for (CounterBox box : openBoxes) {
-            if (box.getOpenDatetime() != null) {
-                long hoursOpen = Duration.between(box.getOpenDatetime(), LocalDateTime.now()).toHours();
-                if (hoursOpen >= 12) {
-                    box.setCloseDatetime(LocalDateTime.now());
-                    counterBoxRepository.save(box);
-                }
-            }
-        }
+    public void createCounterBox2(CounterBoxDTO counterBoxDTO) {
+        CounterBox counterBox = new CounterBox();
+        counterBox.setType(counterBoxDTO.getType());
+        counterBox.setPaymentType(counterBoxDTO.getPaymentType());
+        counterBox.setDailyTreasury(counterBoxDTO.getDailyTreasury());
+        counterBox.setOpenDatetime(LocalDateTime.now());
+
+
+        counterBoxRepository.save(counterBox);
     }
+
+
+
 
 }

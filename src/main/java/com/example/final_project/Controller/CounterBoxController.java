@@ -2,6 +2,7 @@ package com.example.final_project.Controller;
 
 
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.DTO.CounterBoxDTO;
 import com.example.final_project.Model.CounterBox;
 import com.example.final_project.Service.CounterBoxService;
 import jakarta.validation.Valid;
@@ -17,12 +18,13 @@ public class CounterBoxController {
 
     private final CounterBoxService counterBoxService;
 
+    //كرييت مع المحاسب
+    /*@PostMapping("/create")
+    public ResponseEntity<?> createCounterBox(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
+        counterBoxService.createCounterBox(counterBoxDTO);
+        return ResponseEntity.ok("Counter box created successfully");
+    }*/
 
-    @PostMapping("/add")
-    public ResponseEntity addCounterBox(@Valid @RequestBody CounterBox counterBox){
-        counterBoxService.addCounterBox(counterBox);
-        return ResponseEntity.status(200).body(new ApiResponse("CounterBox added successfully"));
-    }
 
     @GetMapping("/get")
     public ResponseEntity getAll(){
@@ -46,10 +48,13 @@ public class CounterBoxController {
         return ResponseEntity.status(200).body(new ApiResponse("Deleted successfully"));
     }
 
-    @PutMapping("/auto-close")
-    public ResponseEntity autoCloseLongOpenedBoxes() {
-        counterBoxService.autoCloseBoxesAfter12Hours();
-        return ResponseEntity.status(200).body(new ApiResponse("Checked and closed boxes open for more than 12 hours"));
+    @PostMapping("/create-box")
+    public ResponseEntity createCounterBox2(@RequestBody CounterBoxDTO counterBoxDTO) {
+        counterBoxService.createCounterBox2(counterBoxDTO);
+        return ResponseEntity.status(200).body("Counter box created successfully");
     }
+
+
+
 
 }
