@@ -42,6 +42,6 @@ public class Accountant {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "branch_id")
+    @JoinColumn(name ="branch_id")
     private Branch branch;
 }
