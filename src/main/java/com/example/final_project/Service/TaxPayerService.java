@@ -3,11 +3,11 @@ package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.DTO.AccountantDTO;
-import com.example.final_project.DTO.SendMailRequest;
 import com.example.final_project.DTO.TaxPayerDTO;
 import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
+import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.MyUserRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
@@ -32,7 +32,7 @@ public class TaxPayerService {
     private final TaxPayerRepository taxPayerRepository;
     private final MyUserRepository myUserRepository;
     private final AccountantRepository accountantRepository;
-    private final EmailNotificationService emailNotificationService;
+    private final NotificationService notificationService;
 
     /// run by admin
     public void activateTP(Integer adminId, Integer taxPayerId) {

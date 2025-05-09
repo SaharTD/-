@@ -30,7 +30,7 @@ public class Accountant {
 
     private Boolean isActive;
 
-    @JsonIgnore
+
     @OneToOne
     @MapsId
     @JsonIgnore
