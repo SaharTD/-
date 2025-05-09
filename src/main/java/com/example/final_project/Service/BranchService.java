@@ -42,10 +42,13 @@ public class BranchService {
             throw new ApiException("business not found");
         if (branch==null)
             throw new ApiException("branch not found");
+
+
+
         oldBranch.setBranchNumber(oldBranch.getBranchNumber());
         oldBranch.setCity(branch.getCity());
-        oldBranch.setAddress(branch.getAddress());
         oldBranch.setRegion(branch.getRegion());
+
 
         branchRepository.save(branch);
     }

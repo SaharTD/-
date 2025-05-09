@@ -25,13 +25,9 @@ public class TaxPayer {
 
 
     @Column(columnDefinition = "varchar(9) not null")
-    @NotEmpty(message = "the phone number should not be empty")
-    @Pattern(regexp = "^5[0-9]{8}$",message = " please enter correct phone number")
     private String phoneNumber;
 
     @Column(columnDefinition = "varchar(10) not null")
-    @NotEmpty(message = "the commercial registration number should not be empty")
-    @Pattern(regexp = "^[1-9][0-9]{9}$",message = " please enter correct commercial registration")
     private String commercialRegistration ;
 
 
@@ -64,7 +60,7 @@ public class TaxPayer {
     @OneToOne
     @MapsId
     @JsonIgnore
+    @JoinColumn(name = "id")
     private User user;
-
 
 }
