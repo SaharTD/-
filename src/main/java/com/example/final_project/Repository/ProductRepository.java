@@ -16,5 +16,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("select p from Product p where p.branch.id=?1")
     List<Product> findAllByBranchId(Integer branchId);
 
+    List<Product> findByBarcode(String barcode);
+
 
 }

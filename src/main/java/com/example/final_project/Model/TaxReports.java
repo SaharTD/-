@@ -42,7 +42,7 @@ public class TaxReports {
     private LocalDate paymentDate;
 
 
-    @Pattern(regexp = "Pending|Approved|Paid")
+    @Pattern(regexp = "Pending|Approved|Paid|Under Legal Action|Rejected")
     private String status;
 
 
@@ -59,6 +59,9 @@ public class TaxReports {
 //    @JoinColumn(name = "audit_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
+
+
+
 
     @OneToMany(mappedBy = "taxReports")
     private Set<Sales> sales;

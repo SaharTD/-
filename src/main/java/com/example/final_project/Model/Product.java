@@ -40,6 +40,8 @@ public class Product {
     @Check(constraints = "stock>=0")
     private Integer stock;
 
+    private String barcode;
+
 
     @ManyToOne
     @JsonIgnore

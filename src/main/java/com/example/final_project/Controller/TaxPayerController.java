@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/tax-payer")
+@RequestMapping("api/v1/taxPayer")
 @RequiredArgsConstructor
 public class TaxPayerController {
 
@@ -48,6 +48,7 @@ public class TaxPayerController {
         taxPayerService.addAccountant(taxPayerID,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
     }
+
 
     // Endpoint 40
     @PutMapping("/activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
