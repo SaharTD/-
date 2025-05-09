@@ -41,11 +41,12 @@ public class Sales {
     private Double grand_amount;
 
 
+    //************???***************
     @ManyToOne
 //    @JoinColumn(name = "branch_id",referencedColumnName = "id")
     @JsonIgnore
     private Branch branch;
-
+    //************???***************
 
     @ManyToOne
 //    @JoinColumn(name = "counterBox_id",referencedColumnName = "id")
@@ -55,4 +56,8 @@ public class Sales {
     @ManyToMany
     @JsonIgnore
     private Set<Product> products;
+
+    @ManyToOne
+    @JsonIgnore
+    private TaxReports taxReports;
 }

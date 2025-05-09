@@ -20,12 +20,12 @@ public class Auditor {
     @NotEmpty
     private String SOCPA;
 
+
     @OneToOne
     @MapsId
     @JsonIgnore
     @JoinColumn(name = "id")
     private User user;
-
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "auditor")
     private Set<TaxPayer> taxPayers;

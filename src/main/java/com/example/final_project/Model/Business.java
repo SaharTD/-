@@ -25,28 +25,23 @@ public class Business {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(columnDefinition = "varchar(50) not null unique")
     @NotEmpty(message = "the business name should not be empty")
     private String businessName;
 
-
     @Column(columnDefinition = "varchar(50) not null")
     @NotEmpty(message = "the business name should not be empty")
     private String businessCategory;
-
 
     @Column(columnDefinition = "varchar(15) not null")
     @NotEmpty(message = "the tax number should not be empty")
     @Pattern(regexp = "^[1-9][0-9]{14}$", message = " please enter correct tax number")
     private String taxNumber;
 
-
     @Column(columnDefinition = "varchar(10) not null")
     @NotEmpty(message = "the commercial registration number should not be empty")
     @Pattern(regexp = "^[1-9][0-9]{9}$", message = " please enter correct commercial registration")
     private String commercialRegistration;
-
 
     @Column(columnDefinition = "varchar(20) not null")
     @NotEmpty(message = "the business located city should not be empty")
@@ -56,12 +51,10 @@ public class Business {
     @NotEmpty(message = "the business located region should not be empty")
     private String region;
 
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime requestDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registrationDate;
-
 
     private Boolean isActive;
     private String requestStatus;
@@ -71,7 +64,6 @@ public class Business {
     @ManyToOne
     @JsonIgnore
     private TaxPayer taxPayer;
-
 
     @ManyToOne
     @JsonIgnore

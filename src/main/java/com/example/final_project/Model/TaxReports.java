@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -49,7 +50,6 @@ public class TaxReports {
     @PrimaryKeyJoinColumn
     private Payment payment;
 
-
     @ManyToOne
 //    @JoinColumn(name = "business_id",referencedColumnName = "id")
     @JsonIgnore
@@ -59,4 +59,7 @@ public class TaxReports {
 //    @JoinColumn(name = "audit_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
+
+    @OneToMany(mappedBy = "taxReports")
+    private Set<Sales> sales;
 }

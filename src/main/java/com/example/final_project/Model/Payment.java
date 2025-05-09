@@ -29,10 +29,10 @@ public class Payment {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime paymentDate;
 
+
     @ManyToOne
     @JsonIgnore
     private TaxPayer taxPayer;
-
 
     @OneToOne
     @MapsId

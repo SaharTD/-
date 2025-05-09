@@ -22,17 +22,15 @@ public class Accountant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    private Boolean isActive=false;
 
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private User user;
 
-
-    @OneToMany(mappedBy = "accountant")
+    @ManyToMany(mappedBy = "accountant")
     private Set<CounterBox> counterBoxes;
-    private Boolean isActive=false;
 
     @ManyToOne
     @MapsId
