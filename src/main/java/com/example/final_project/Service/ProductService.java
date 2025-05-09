@@ -3,6 +3,7 @@ package com.example.final_project.Service;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Product;
+import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,10 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
+    private final NotificationService notificationService;
 
     public List<Product> getAllProduct(){
+        notificationService.sendEmail("aa.ll.ii.pp5@gmail.com","test","dear customer");
         return productRepository.findAll();
     }
 
