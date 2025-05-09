@@ -26,6 +26,8 @@ public class Accountant {
 
 
     @OneToOne
+    @MapsId
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
