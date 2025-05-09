@@ -32,6 +32,7 @@ public class Accountant {
 
     @OneToMany(mappedBy = "accountant")
     private Set<CounterBox> counterBoxes;
+    private Boolean isActive=false;
 
     @ManyToOne
     @MapsId
