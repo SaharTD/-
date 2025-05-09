@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountantRepository extends JpaRepository<Accountant,Integer>{
 
+    Accountant findAccountantById(Integer id);
+
 }
