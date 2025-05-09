@@ -26,30 +26,6 @@ public class AccountantService {
 
 
 
-    public void createAccountant(AccountantDTO accountantDTO) {
-        Accountant accountant = new Accountant();
-
-        User user = new User();
-        user.setName(accountantDTO.getName());
-        user.setUsername(accountantDTO.getUsername());
-        user.setPassword(accountantDTO.getPassword());
-        user.setEmail(accountantDTO.getEmail());
-        user.setRole(accountantDTO.getRole());
-        accountant.setUser(user);
-
-        //نختار الفرع
-       /* if (accountantDTO.getBranchId() != null) {
-            Branch branch = branchRepository.getReferenceById(accountantDTO.getBranchId());
-            if (branch == null) {
-                throw new ApiException("Branch not found");
-            }
-            accountant.setBranch(branch);
-        }*/
-
-        accountantRepository.save(accountant);
-    }
-
-
 
     public List<Accountant> getAllAccountants() {
         return accountantRepository.findAll();
@@ -65,7 +41,7 @@ public class AccountantService {
         user.setUsername(accountantDTO.getUsername());
         user.setPassword(accountantDTO.getPassword());
         user.setEmail(accountantDTO.getEmail());
-        user.setRole(accountantDTO.getRole());
+//        user.setRole(accountantDTO.getRole());
 
         if (accountantDTO.getBranchId() != null) {
             Branch branch = branchRepository.getReferenceById(accountantDTO.getBranchId());

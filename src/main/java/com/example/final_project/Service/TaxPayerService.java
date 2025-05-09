@@ -45,15 +45,15 @@ public class TaxPayerService {
         }
         taxPayer.setIsActive(true);
         taxPayerRepository.save(taxPayer);
-
-
-        String subject=": Successful Activation of Your Account ";
-        String message="Dear : "+taxPayer.getUser().getName()+" We are pleased to inform you that your account has been successfully activated you can now use our services :\n" +
-                "Best regards,\n" +
-                "[mohasil team]";
-
-
-        notificationService.sendEmail(taxPayer.getUser().getEmail(),message,subject);
+//
+//
+//        String subject = ": Successful Activation of Your Account ";
+//        String message = "Dear : " + taxPayer.getUser().getName() + " We are pleased to inform you that your account has been successfully activated you can now use our services :\n" +
+//                "Best regards,\n" +
+//                "[mohasil team]";
+//
+//
+//        notificationService.sendEmail(taxPayer.getUser().getEmail(), message, subject);
 
     }
 
@@ -90,13 +90,12 @@ public class TaxPayerService {
 
         taxPayer.setRegistrationDate(LocalDateTime.now());
 
-       myUserRepository.save(user);
-       taxPayerRepository.save(taxPayer);
+        myUserRepository.save(user);
+        taxPayerRepository.save(taxPayer);
 
         myUserRepository.save(user);
         taxPayerRepository.save(taxPayer);
     }
-
 
 
     public void updateTaxPayer(Integer taxPayerId, TaxPayerDTO taxPayerDTO) {
@@ -150,38 +149,36 @@ public class TaxPayerService {
         userACC.setUsername(accountantDTO.getUsername());
         userACC.setPassword(accountantDTO.getPassword());
         userACC.setEmail(accountantDTO.getEmail());
+        myUserRepository.save(userACC);
 
         Accountant accountant = new Accountant();
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
-
-
-        myUserRepository.save(userACC);
+        accountant.setUser(userACC);
         accountantRepository.save(accountant);
 
 
+//
+//        String subject=": Successful Activation of Your Account";
+//        String message="We are pleased to inform you that your account has been successfully activated. Below are your login details:\n" +
+//                "\n" +
+//                "Username: \n" +accountant.getUser().getUsername()+
+//                "\n" +
+//                "Password:\n" +accountant.getUser().getPassword()+
+//                "\n" +
+//                "Employee Code:\n" +accountant.getEmployeeId()+
+//                "\n" +
+//                "Please keep this information secure and do not share it with anyone.\n" +
+//                "\n" +
+//                "If you have any questions or need assistance, feel free to contact us.\n" +
+//                "\n" +
+//                "Best regards,\n" +
+//                "[mohasil team]";
+//
+//
+//        notificationService.sendEmail(accountant.getUser().getEmail(),message,subject);
+//    }
+//
 
 
-        String subject=": Successful Activation of Your Account";
-        String message="We are pleased to inform you that your account has been successfully activated. Below are your login details:\n" +
-                "\n" +
-                "Username: \n" +accountant.getUser().getUsername()+
-                "\n" +
-                "Password:\n" +accountant.getUser().getPassword()+
-                "\n" +
-                "Employee Code:\n" +accountant.getEmployeeId()+
-                "\n" +
-                "Please keep this information secure and do not share it with anyone.\n" +
-                "\n" +
-                "If you have any questions or need assistance, feel free to contact us.\n" +
-                "\n" +
-                "Best regards,\n" +
-                "[mohasil team]";
-
-
-        notificationService.sendEmail(accountant.getUser().getEmail(),message,subject);
     }
-
-
-
-
 }

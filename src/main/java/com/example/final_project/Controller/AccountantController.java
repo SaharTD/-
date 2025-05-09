@@ -22,11 +22,7 @@ public class AccountantController {
     private final AccountantService accountantService;
 
 
-    @PostMapping("/add")
-    public ResponseEntity createAccountant(@RequestBody @Valid AccountantDTO accountantDTO) {
-        accountantService.createAccountant(accountantDTO);
-        return ResponseEntity.ok("Accountant created successfully");
-    }
+
 
 
     @GetMapping("/getall")

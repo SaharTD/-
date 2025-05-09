@@ -22,7 +22,6 @@ import java.util.Set;
 public class Accountant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(columnDefinition = "varchar(10) not null unique")
@@ -42,8 +41,7 @@ public class Accountant {
     private Set<CounterBox> counterBoxes;
 
     @ManyToOne
-    @MapsId
     @JsonIgnore
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 }

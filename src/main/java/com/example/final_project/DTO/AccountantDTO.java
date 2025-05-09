@@ -27,15 +27,17 @@ public class AccountantDTO {
 
     @Email(message = "email must be valid")
     private String email;
-
-    @NotEmpty(message = "role must not be empty")
-    private String role;
-
-    private Integer branchId;
+//
+//    @NotEmpty(message = "role must not be empty")
+//    private String role;
+//
 
     @NotEmpty(message = "the employee id should not be empty")
 //    @Pattern(regexp = "^ACC[0-9]{3,8}$",message = "the employee id must start with ACC followed by 3-8 characters")
     private String employeeId;
+
+    private Integer branchId;
+
 
 
 }
