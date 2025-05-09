@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/tax-payer")
+@RequestMapping("api/v1/taxPayer")
 @RequiredArgsConstructor
 public class TaxPayerController {
 
@@ -48,6 +48,7 @@ public class TaxPayerController {
         taxPayerService.deleteTaxPayer(taxPayerId);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer has been deleted successfully "));
     }
+
 
 
 

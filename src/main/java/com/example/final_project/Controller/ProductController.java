@@ -6,8 +6,11 @@ import com.example.final_project.Service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -39,5 +42,13 @@ public class ProductController {
         productService.deleteProduct(branchId, productId);
         return ResponseEntity.status(200).body(new ApiResponse("product deleted"));
     }
+
+    @GetMapping("/barcode/{barcode}")
+    public ResponseEntity<List<Product>> getProductsByBarcode(@PathVariable String barcode) {
+        List<Product> products = productService.getProductsByBarcode(barcode);
+        return ResponseEntity.ok(products);
+    }
+
+
 
 }

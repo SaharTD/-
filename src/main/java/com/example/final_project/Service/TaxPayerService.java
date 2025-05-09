@@ -42,13 +42,15 @@ public class TaxPayerService {
     public void register(TaxPayerDTO taxPayerDTO) {
         User user = new User();
 
-        user.setRole("TAXPAYER");
+        user.setRole("TAXBUYER");
         user.setName(taxPayerDTO.getName());
         user.setUsername(taxPayerDTO.getUsername());
+        user.setName(taxPayerDTO.getName());
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
 //        user.setPassword(hashPassword);
         user.setPassword(taxPayerDTO.getPassword());
         user.setEmail(taxPayerDTO.getEmail());
+        user.setPassword(taxPayerDTO.getPassword());
 
 
         TaxPayer taxPayer = new TaxPayer();
