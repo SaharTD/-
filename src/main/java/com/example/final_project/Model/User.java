@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 
 @Getter
 @Setter
@@ -37,23 +38,28 @@ public class User {
     @Email(message = "email must be valid")
     private String email;
 
-    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXBUYER','AUDIT','ACCOUNTANT'))")
-    @NotEmpty(message = "role must ne not empty")
-    @Pattern(regexp = "TAXBUYER|AUDIT|ACCOUNTANT")
+//    @Check(constraints = "role in ('TAXPAYER','AUDIT','ACCOUNTANT')")
+//    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))")
+//    @NotEmpty(message = "role must ne not empty")
+//    @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
+
+
+
+
     private String role;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     @PrimaryKeyJoinColumn
     private Auditor auditor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     @PrimaryKeyJoinColumn
     private Accountant accountant;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     @PrimaryKeyJoinColumn
-    private TaxBuyer taxBuyer;
+    private TaxPayer taxPayer;
 
 
 }

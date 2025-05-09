@@ -28,30 +28,31 @@ public class Sales {
     @Positive(message = " sale invoice must be   positive")
     private Integer sale_invoice;
 
-    @Column(columnDefinition = "int not null")
+    @Column(columnDefinition = "double not null")
     @Positive(message = "total amount  must be  positive")
-    private double total_amount;
+    private Double total_amount;
 
-    @Column(columnDefinition = "int not null")
+    @Column(columnDefinition = "double not null")
     @Positive(message = "tax amount must be   positive")
-    private double tax_amount;
+    private Double tax_amount;
 
-    @Column(columnDefinition = "int not null")
+    @Column(columnDefinition = "double not null")
     @Positive(message = "grand amount must be  positive")
-    private double grand_amount;
+    private Double grand_amount;
 
 
     @ManyToOne
-    @JoinColumn(name = "branch_id",referencedColumnName = "id")
+//    @JoinColumn(name = "branch_id",referencedColumnName = "id")
     @JsonIgnore
     private Branch branch;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "sales")
-    private Set<ItemSales> itemSales;
 
     @ManyToOne
-    @JoinColumn(name = "counterBox_id",referencedColumnName = "id")
+//    @JoinColumn(name = "counterBox_id",referencedColumnName = "id")
     @JsonIgnore
     private CounterBox counterBox;
 
+    @ManyToMany
+    @JsonIgnore
+    private Set<Product> products;
 }

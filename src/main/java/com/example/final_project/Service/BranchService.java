@@ -28,7 +28,43 @@ public class BranchService {
         Business business = businessRepository.findBusinessById(businessId);
         if (business==null)
             throw new ApiException("business not found");
-
+        branch.setBusiness(business);
+//        business.getBranches().add(branch);
+//        businessRepository.save(business);
+        branchRepository.save(branch);
     }
+
+
+    public void updateBranch(Integer businessId, Integer branchId, Branch branch){
+        Business business = businessRepository.findBusinessById(businessId);
+        Branch oldBranch = branchRepository.findBranchesById(branchId);
+        if (business==null)
+            throw new ApiException("business not found");
+        if (branch==null)
+            throw new ApiException("branch not found");
+
+
+
+        oldBranch.setBranchNumber(oldBranch.getBranchNumber());
+        oldBranch.setCity(branch.getCity());
+        oldBranch.setRegion(branch.getRegion());
+
+
+        branchRepository.save(branch);
+    }
+
+    public void deleteBranch(Integer businessId, Integer branchId){
+        Business business = businessRepository.findBusinessById(businessId);
+        Branch oldBranch = branchRepository.findBranchesById(branchId);
+        if (business==null)
+            throw new ApiException("business not found");
+        if (oldBranch==null)
+            throw new ApiException("branch not found");
+
+        business.getBranches().remove(oldBranch);
+        branchRepository.delete(oldBranch);
+        businessRepository.save(business);
+    }
+
 
 }

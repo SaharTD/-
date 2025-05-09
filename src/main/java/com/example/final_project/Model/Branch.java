@@ -25,8 +25,7 @@ public class Branch {
     private String region;
     @NotEmpty
     private String city;
-    @NotEmpty
-    private String address;
+
 
 
     @ManyToOne
@@ -38,6 +37,9 @@ public class Branch {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "branch")
     private Set<Accountant> accountants;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
+    private Set<CounterBox> counterBoxes;
 
 
 }

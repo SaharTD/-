@@ -25,8 +25,9 @@ public class TaxReports {
     private Integer id;
 
 
+    @Column(columnDefinition = "double not null")
     @PositiveOrZero(message = "Total tax must be zero or positive")
-    private double totalTax;
+    private Double totalTax;
 
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -39,22 +40,23 @@ public class TaxReports {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate paymentDate;
 
-    @Pattern(regexp = "Pendimg|Approved|Paid")
+
+    @Pattern(regexp = "Pending|Approved|Paid")
     private String status;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "taxReports")
     @PrimaryKeyJoinColumn
     private Payment payment;
 
 
     @ManyToOne
-    @JoinColumn(name = "business_id",referencedColumnName = "id")
+//    @JoinColumn(name = "business_id",referencedColumnName = "id")
     @JsonIgnore
     private Business business;
 
     @ManyToOne
-    @JoinColumn(name = "audit_id",referencedColumnName = "id")
+//    @JoinColumn(name = "audit_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
 }
