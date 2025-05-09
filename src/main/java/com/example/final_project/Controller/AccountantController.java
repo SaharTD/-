@@ -23,4 +23,6 @@ public class AccountantController {
         return ResponseEntity.status(200).body(new ApiResponse("product restocked successfully"));
     }
 
+
+
 }
