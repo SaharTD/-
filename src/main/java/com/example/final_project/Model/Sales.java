@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -21,8 +22,6 @@ public class Sales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-
 
     @Column(columnDefinition = "int not null")
     @Positive(message = " sale invoice must be   positive")
@@ -39,7 +38,7 @@ public class Sales {
     @Column(columnDefinition = "double not null")
     @Positive(message = "grand amount must be  positive")
     private Double grand_amount;
-
+    private LocalDateTime invoiceDate;
 
     //************???***************
     @ManyToOne

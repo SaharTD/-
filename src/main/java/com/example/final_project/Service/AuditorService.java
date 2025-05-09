@@ -3,9 +3,13 @@ package com.example.final_project.Service;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Auditor;
 import com.example.final_project.DTO.DTOAuditor;
+import com.example.final_project.Model.Business;
+import com.example.final_project.Model.Sales;
 import com.example.final_project.Model.User;
 import com.example.final_project.Repository.AuditorRepository;
+import com.example.final_project.Repository.BusinessRepository;
 import com.example.final_project.Repository.MyUserRepository;
+import com.example.final_project.Repository.SalesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,8 @@ public class AuditorService {
 
     private final AuditorRepository auditorRepository;
     private final MyUserRepository myUserRepository;
+    private final BusinessRepository businessRepository;
+    private final SalesRepository salesRepository;
 
     public List<Auditor> getAllAuditors(){
         return auditorRepository.findAll();
@@ -58,4 +64,9 @@ public class AuditorService {
 //        auditorRepository.delete(auditor);
     }
 
+
+    // Endpoint 27
+    public void createTaxReport(){
+        List<Sales> sales = salesRepository
+    }
 }
