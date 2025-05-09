@@ -178,6 +178,37 @@ public class TaxPayerService {
 //        notificationService.sendEmail(accountant.getUser().getEmail(),message,subject);
 //    }
 //
+    }
+
+    // Endpoint 40
+    public void activateAccountant(Integer taxPayerId, Integer accountantId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (taxPayer == null)
+            throw new ApiException("tax payer not found");
+        if (accountant == null)
+            throw new ApiException("accountant not found");
+
+        if (accountant.getIsActive())
+            throw new ApiException("accountant is already active");
+        accountant.setIsActive(true);
+        accountantRepository.save(accountant);
+    }
+
+    // Endpoint 41
+    public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (taxPayer == null)
+            throw new ApiException("tax payer not found");
+        if (accountant == null)
+            throw new ApiException("accountant not found");
+
+        if (!accountant.getIsActive())
+            throw new ApiException("accountant is already non active");
+        accountant.setIsActive(false);
+        accountantRepository.save(accountant);
+    }
 
 
     }
