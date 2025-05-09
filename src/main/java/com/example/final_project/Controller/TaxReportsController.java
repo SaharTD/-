@@ -1,6 +1,7 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.DTOOUT.TaxReportStatusDTO;
 import com.example.final_project.Model.TaxReports;
 import com.example.final_project.Service.TaxReportsService;
 import jakarta.validation.Valid;
@@ -38,4 +39,47 @@ public class TaxReportsController {
         taxReportsService.deleteTaxReports(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Tax Reports is deleted"));
     }
+
+    //فرض غرامة تاخير سداد بعدها بشهر
+    @PutMapping("/apply-penalty/{taxReportId}")
+    public ResponseEntity applyLatePaymentPenalty(@PathVariable Integer taxReportId) {
+        taxReportsService.applyLatePaymentPenalty(taxReportId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Late payment penalty applied if applicable"));
+    }
+
+    //فرض غرامة تاخير سداد بعدها بشهرين
+    @PutMapping("/apply-2month-penalty/{taxReportId}")
+    public ResponseEntity applyTwoMonthLatePenalty(@PathVariable Integer taxReportId) {
+        taxReportsService.applyTwoMonthLatePenalty(taxReportId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("10% penalty applied for 2-month late payment"));
+    }
+
+    //في حال تجاوز 90 يوم يتم اتخاذ الإجراءات القانونية
+    @PutMapping("/apply-legal-action/{taxReportId}")
+    public ResponseEntity applyLegalAction(@PathVariable Integer taxReportId) {
+        taxReportsService.applyLegalActionForTaxEvasion(taxReportId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Legal action applied for tax evasion"));
+    }
+
+
+
+//تغيير حالة تقرير
+    @PutMapping("/change-status/{taxReportId}/{auditorId}")
+    public ResponseEntity changeTaxReportStatus(@PathVariable Integer auditorId,@PathVariable Integer taxReportId,@RequestBody TaxReportStatusDTO taxReportStatusDTO) {
+        taxReportsService.changeTaxReportStatus(taxReportId,auditorId,taxReportStatusDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " + taxReportStatusDTO.getNewStatus()));
+    }
+
+// التقارير المستحقه لدفع وغير مدفوعه
+    @GetMapping("/due-payment")
+    public ResponseEntity getUnpaidDueTaxReports() {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getUnpaidDueTaxReports());
+    }
+
+
+
+
+
+
+
 }

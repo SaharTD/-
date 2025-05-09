@@ -64,4 +64,19 @@ public class ProductService {
     }
 
 
+
+    public List<Product> getProductsByBarcode(String barcode) {
+        List<Product> products = productRepository.findByBarcode(barcode);
+        if (products.isEmpty()) {
+            throw new RuntimeException("No products found with barcode: " + barcode);
+        }
+        return products;
+    }
+
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
+}
+
+
+
 }
