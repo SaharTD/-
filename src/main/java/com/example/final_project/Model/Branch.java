@@ -25,8 +25,7 @@ public class Branch {
     private String region;
     @NotEmpty
     private String city;
-    @NotEmpty
-    private String address;
+
 
 
     @ManyToOne

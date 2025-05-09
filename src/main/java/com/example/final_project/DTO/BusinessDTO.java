@@ -17,8 +17,6 @@ public class BusinessDTO {
     private String businessName;
 
 
-
-
     @NotEmpty(message = "the business name should not be empty")
     private String businessCategory;
 

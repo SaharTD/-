@@ -2,8 +2,10 @@ package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.DTO.BusinessDTO;
+import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
+import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.BusinessRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class BusinessService {
 
     private final TaxPayerRepository taxPayerRepository;
     private final BusinessRepository businessRepository;
+    private final BranchRepository branchRepository;
 
 
     public List<Business> getAllBusiness(Integer AuditId) {
@@ -51,7 +54,10 @@ public class BusinessService {
 
         business.setTaxPayer(taxPayer);
         business.setIsActive(false);
+
+
         businessRepository.save(business);
+
 
 
     }
@@ -103,7 +109,7 @@ public class BusinessService {
         }
 
 
-        businessRepository.delete(business);
+
 
     }
 

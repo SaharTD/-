@@ -38,10 +38,14 @@ public class User {
     @Email(message = "email must be valid")
     private String email;
 
-//    @Check(constraints = "role in ('TAXBUYER','AUDIT','ACCOUNTANT')")
+//    @Check(constraints = "role in ('TAXPAYER','AUDIT','ACCOUNTANT')")
 //    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))")
-    @NotEmpty(message = "role must ne not empty")
-    @Pattern(regexp = "TAXBUYER|AUDITOR|ACCOUNTANT|ADMIN")
+//    @NotEmpty(message = "role must ne not empty")
+//    @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
+
+
+
+
     private String role;
 
 

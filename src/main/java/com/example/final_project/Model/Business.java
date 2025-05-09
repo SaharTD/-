@@ -26,12 +26,12 @@ public class Business {
     private Integer id;
 
 
-    @Column(columnDefinition = "varchar(15) not null")
+    @Column(columnDefinition = "varchar(50) not null unique")
     @NotEmpty(message = "the business name should not be empty")
     private String businessName;
 
 
-    @Column(columnDefinition = "varchar(15) not null")
+    @Column(columnDefinition = "varchar(50) not null")
     @NotEmpty(message = "the business name should not be empty")
     private String businessCategory;
 
