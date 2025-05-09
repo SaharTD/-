@@ -25,9 +25,10 @@ public class ProductService {
         Branch branch = branchRepository.findBranchesById(branchId);
         if (branch==null)
             throw new ApiException("branch not found");
-        Product newProduct = new Product();
-        newProduct.setBranch(branch);
-        branch.getProducts().add(newProduct);
+//        Product newProduct = new Product();
+//        newProduct.setBranch(branch);
+//        branch.getProducts().add(newProduct);
+        product.setBranch(branch);
         branchRepository.save(branch);
         productRepository.save(product);
     }

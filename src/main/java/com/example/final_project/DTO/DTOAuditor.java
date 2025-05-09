@@ -14,8 +14,8 @@ import org.hibernate.annotations.Check;
 public class DTOAuditor {
 
 //    private Integer user_id;
-    @NotEmpty
-    private String role="auditor";
+//    @NotEmpty
+//    private String role="auditor";
     @NotEmpty
     @Size(min = 4,max = 20,message = "auditor name length should be between 4-20")
     @Column(columnDefinition = "varchar(20) not null")

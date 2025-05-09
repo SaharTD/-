@@ -46,10 +46,7 @@ public class TaxPayerService {
         user.setName(taxPayerDTO.getName());
         user.setUsername(taxPayerDTO.getUsername());
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
-        user.setPassword(taxPayerDTO.getPassword());
 //        user.setPassword(hashPassword);
-
-        user.setName(taxPayerDTO.getName());
         user.setPassword(taxPayerDTO.getPassword());
         user.setEmail(taxPayerDTO.getEmail());
 

@@ -29,8 +29,8 @@ public class BranchService {
         if (business==null)
             throw new ApiException("business not found");
         branch.setBusiness(business);
-        business.getBranches().add(branch);
-        businessRepository.save(business);
+//        business.getBranches().add(branch);
+//        businessRepository.save(business);
         branchRepository.save(branch);
     }
 
