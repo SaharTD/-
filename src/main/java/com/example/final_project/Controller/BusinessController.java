@@ -3,8 +3,6 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.BusinessDTO;
-import com.example.final_project.DTO.TaxPayerDTO;
-import com.example.final_project.Model.User;
 import com.example.final_project.Service.BusinessService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BusinessController {
 
-
     private final BusinessService businessService;
-
-
 
     @GetMapping("/get-all-business/{auditId}")
     public ResponseEntity getAllBusiness (@PathVariable Integer auditId){
         return ResponseEntity.status(200).body(businessService.getAllBusiness(auditId));
     }
-
 
 
     @GetMapping("/get-my-business/{taxPayerId}")
@@ -47,7 +41,6 @@ public class BusinessController {
         businessService.updateBusiness(taxPayerId,businessId,businessDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the business information has been updated successfully "));
     }
-
 
 
     @DeleteMapping("delete/{taxPayerId}/{businessId}")
