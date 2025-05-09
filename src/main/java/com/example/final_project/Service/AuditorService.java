@@ -39,15 +39,14 @@ public class AuditorService {
         User user = myUserRepository.findUserById(auditorId);
         if (user==null)
             throw new ApiException("auditor not found");
-        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
         user.setName(dtoAuditor.getName());
         user.setUsername(dtoAuditor.getUsername());
         user.setPassword(dtoAuditor.getPassword());
         user.setEmail(dtoAuditor.getEmail());
-        auditor.setSOCPA(dtoAuditor.getSOCPA());
+        user.getAuditor().setSOCPA(dtoAuditor.getSOCPA());
 
         myUserRepository.save(user);
-        auditorRepository.save(auditor);
+//        auditorRepository.save(auditor);
     }
 
 

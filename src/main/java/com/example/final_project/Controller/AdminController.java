@@ -16,7 +16,7 @@ public class AdminController {
     private final TaxPayerService taxPayerService;
 
 
-    @PutMapping("activate/{adminId}/{taxPayerId}")
+    @PutMapping("/activate/{adminId}/{taxPayerId}")
     public ResponseEntity updateBusiness(@PathVariable Integer adminId , @PathVariable Integer taxPayerId ){
         taxPayerService.activateTP(adminId,taxPayerId);
         return ResponseEntity.status(200).body(new ApiResponse("the Tax Payer has been activated successfully "));
