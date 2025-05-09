@@ -3,8 +3,10 @@ package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.DTO.TaxPayerDTO;
+import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
+import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.MyUserRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,33 +24,28 @@ import java.util.List;
 @RequiredArgsConstructor
 
 
-
 public class TaxPayerService {
 
 
     private final TaxPayerRepository taxPayerRepository;
     private final MyUserRepository myUserRepository;
+    private final AccountantRepository accountantRepository;
 
-
-
-
-
-
-/// run by admin
-    public void activateTP (Integer adminId,Integer taxPayerId){
+    /// run by admin
+    public void activateTP(Integer adminId, Integer taxPayerId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
             throw new ApiException("Tax Payer is not found");
         }
-        if (taxPayer.getIsActive()){
+        if (taxPayer.getIsActive()) {
             throw new ApiException("Tax Payer is already active");
         }
-         taxPayer.setIsActive(true);
+        taxPayer.setIsActive(true);
         taxPayerRepository.save(taxPayer);
     }
 
 
-    public List<TaxPayer> getAllTaxTaxPayers(Integer AuditId){
+    public List<TaxPayer> getAllTaxTaxPayers(Integer AuditId) {
         return taxPayerRepository.findAll();
     }
 
@@ -70,7 +67,6 @@ public class TaxPayerService {
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
 
 
-
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
@@ -78,18 +74,17 @@ public class TaxPayerService {
 
         taxPayer.setRegistrationDate(LocalDateTime.now());
 
-       myUserRepository.save(user);
-       taxPayerRepository.save(taxPayer);
+        myUserRepository.save(user);
+        taxPayerRepository.save(taxPayer);
 
     }
 
 
+    public void updateTaxPayer(Integer taxPayerId, TaxPayerDTO taxPayerDTO) {
 
-    public void updateTaxPayer(Integer taxPayerId,TaxPayerDTO taxPayerDTO){
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
 
-        TaxPayer taxPayer= taxPayerRepository.findTaxBuyerById(taxPayerId);
-
-        if (taxPayer==null){
+        if (taxPayer == null) {
             throw new ApiException("the tax payer is not found");
         }
 
@@ -101,7 +96,6 @@ public class TaxPayerService {
 //        taxPayer.getUser().setPassword(hashPassword);
 
 
-
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
 
@@ -111,17 +105,45 @@ public class TaxPayerService {
     }
 
 
+    public void deleteTaxPayer(Integer taxPayerId) {
 
-    public void deleteTaxPayer(Integer taxPayerId ){
-
-        TaxPayer taxPayer= taxPayerRepository.findTaxBuyerById(taxPayerId);
-        if (taxPayer==null){
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
             throw new ApiException("the tax payer is not found");
         }
         myUserRepository.delete(taxPayer.getUser());
     }
 
 
+    // Endpoint 40
+    public void activateAccountant(Integer taxPayerId, Integer accountantId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (taxPayer == null)
+            throw new ApiException("tax payer not found");
+        if (accountant == null)
+            throw new ApiException("accountant not found");
+
+        if (accountant.getIsActive())
+            throw new ApiException("accountant is already active");
+        accountant.setIsActive(true);
+        accountantRepository.save(accountant);
+    }
+
+    // Endpoint 41
+    public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (taxPayer == null)
+            throw new ApiException("tax payer not found");
+        if (accountant == null)
+            throw new ApiException("accountant not found");
+
+        if (!accountant.getIsActive())
+            throw new ApiException("accountant is already non active");
+        accountant.setIsActive(false);
+        accountantRepository.save(accountant);
+    }
 
 
 }

@@ -40,4 +40,19 @@ public class TaxPayerController {
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer has been deleted successfully "));
     }
 
+    // Endpoint 40
+    @PutMapping("/activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
+    public ResponseEntity activateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
+        taxPayerService.activateAccountant(taxPayerId, accountantId);
+        return ResponseEntity.status(200).body(new ApiResponse("accountant is active"));
+    }
+
+
+    // Endpoint 41
+    @PutMapping("/de-activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
+    public ResponseEntity deActivateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
+        taxPayerService.deActivateAccountant(taxPayerId, accountantId);
+        return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
+    }
+
 }
