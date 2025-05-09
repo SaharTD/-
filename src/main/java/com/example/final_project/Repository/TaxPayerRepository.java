@@ -8,6 +8,7 @@ public interface TaxPayerRepository extends JpaRepository<TaxPayer,Integer> {
 
     TaxPayer findTaxBuyerById(Integer id);
 
+    TaxPayer findTaxPayerByCommercialRegistration(String commercialRegistration);
 
 
 }

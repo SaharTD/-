@@ -30,12 +30,14 @@ public class BusinessService {
         return businessRepository.findAll();
     }
 
+
+
     /// get one business details for taxpayer
     public BusinessDTO getMyBusiness(Integer taxPayerId, Integer bId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
 
         if (taxPayer == null) {
-            throw new ApiException("Tax Payer is not found");
+            throw new ApiException("The Taxpayer is not found");
         }
 
         Business myBusiness = businessRepository.findBusinessByIdAndTaxPayer(bId, taxPayer);
@@ -51,9 +53,10 @@ public class BusinessService {
     /// get all business details for taxpayer
 
     public List<Business> getMyBusinesses(Integer taxPayerId) {
+
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
-            throw new ApiException("Tax Payer is not found");
+            throw new ApiException("The Taxpayer is not found");
         }
 
         List<Business> myBusinesses =businessRepository.findBusinessByTaxPayer(taxPayer);
@@ -73,6 +76,9 @@ public class BusinessService {
     public Integer getMyBranches(Integer taxPayerId,Integer bId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
 
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
         Business myBusiness = businessRepository.findBusinessByIdAndTaxPayer(bId, taxPayer);
         if (myBusiness == null) {
             throw new ApiException("Business is not found or does not belong to tax payer");
@@ -95,7 +101,7 @@ public class BusinessService {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
-            throw new ApiException("Tax Payer is not found");
+            throw new ApiException("The Taxpayer is not found");
 
         }
 
@@ -104,6 +110,10 @@ public class BusinessService {
            +"--inactive taxpayers are unable to add business");
        }
 
+       if (businessRepository.findBusinessByBusinessName(businessDTO.getBusinessName())!=null){
+           throw new ApiException("A Business With the same name already exit");
+
+       }
 
         Business business=new Business();
         business.setBusinessName(businessDTO.getBusinessName());
@@ -132,7 +142,7 @@ public class BusinessService {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
-            throw new ApiException("Tax Payer is not found");
+            throw new ApiException("The Taxpayer is not found");
 
         }
         Business business = businessRepository.findBusinessByIdAndTaxPayer(businessId,taxPayer);
@@ -160,7 +170,7 @@ public class BusinessService {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
-            throw new ApiException("Tax Payer is not found");
+            throw new ApiException("The Taxpayer is not found");
 
         }
         Business business = businessRepository.findBusinessByIdAndTaxPayer(businessID, taxPayer);

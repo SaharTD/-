@@ -3,6 +3,7 @@ package com.example.final_project.Repository;
 import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,5 +16,8 @@ public interface BusinessRepository extends JpaRepository<Business,Integer> {
    List<Business> findBusinessByTaxPayer(TaxPayer taxPayer);
 
     Business findBusinessByIdAndTaxPayer(Integer id, TaxPayer taxPayer);
+
+    Business findBusinessByBusinessName( String businessName);
+
 
 }
