@@ -26,5 +26,7 @@ public interface TaxReportsRepository extends JpaRepository<TaxReports,Integer> 
     @Query("select r from TaxReports r order by r.end_date desc")
     List<TaxReports> findTopByAuditorIdOrderByEnd_dateDesc(Integer auditorId);
 
+    @Query("SELECT t FROM TaxReports t WHERE t.status <> 'Approved'")
+    List<TaxReports> findAllUnapproved();
 
 }

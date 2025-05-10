@@ -220,43 +220,26 @@ public class TaxPayerService {
         accountantRepository.save(accountant);
     }
 
+    // Displays all accountants associated with the TB across all branches affiliated with him
+    public List<Map<String, Object>> getAccountantsByTaxPayerId(Integer taxPayerId) {
+        List<Object[]> rows = accountantRepository.findAccountantsByTaxPayerId(taxPayerId);
+        List<Map<String, Object>> result = new ArrayList<>();
 
-    public List<Map<String, Object>> getTaxPayersWithAccountants() {
-        List<TaxPayer> taxPayers = taxPayerRepository.findAll();
-        List<Map<String, Object>> response = new ArrayList<>();
-
-        for (TaxPayer taxPayer : taxPayers) {
-            Map<String, Object> taxPayerData = new LinkedHashMap<>();
-            taxPayerData.put("taxPayerId", taxPayer.getId());
-            taxPayerData.put("phoneNumber", taxPayer.getPhoneNumber());
-            taxPayerData.put("commercialRegistration", taxPayer.getCommercialRegistration());
-
-            List<Map<String, Object>> accountantList = new ArrayList<>();
-
-            if (taxPayer.getBusinesses() != null) {
-                for (Business business : new HashSet<>(taxPayer.getBusinesses())) {
-                    if (business.getBranches() != null) {
-                        for (Branch branch : new HashSet<>(business.getBranches())) {
-                            if (branch.getAccountants() != null) {
-                                for (Accountant accountant : new HashSet<>(branch.getAccountants())) {
-                                    Map<String, Object> accountantData = new LinkedHashMap<>();
-                                    accountantData.put("employeeId", accountant.getEmployeeId());
-                                    accountantData.put("isActive", accountant.getIsActive());
-                                    accountantData.put("branchId", branch.getId());
-                                    accountantList.add(accountantData);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            taxPayerData.put("accountants", accountantList);
-            response.add(taxPayerData);
+        for (Object[] row : rows) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("taxPayerId", row[0]);
+            map.put("commercialRegistration", row[1]);
+            map.put("employeeId", row[2]);
+            map.put("isActive", row[3]);
+            map.put("branchId", row[4]);
+            result.add(map);
         }
 
-        return response;
+        return result;
     }
+
+
+
 
 
 
