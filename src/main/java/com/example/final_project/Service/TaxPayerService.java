@@ -149,7 +149,7 @@ public class TaxPayerService {
         accountant.setUser(userACC);
         accountant.setIsActive(true);
 
-        Business business= businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
+        Business business = businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
         accountant.setBusiness(business);
         accountantRepository.save(accountant);
 
@@ -170,6 +170,11 @@ public class TaxPayerService {
                 "Best regards,\n" +
                 "[mohasil team]";
 
+        notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
+
+
+    }
+
     // Endpoint 40
     public void activateAccountant(Integer taxPayerId, Integer accountantId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
@@ -179,16 +184,11 @@ public class TaxPayerService {
         if (accountant == null)
             throw new ApiException("accountant not found");
 
-        notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
         if (accountant.getIsActive())
             throw new ApiException("accountant is already active");
         accountant.setIsActive(true);
         accountantRepository.save(accountant);
     }
-
-
-}
-
 
     // Endpoint 41
     public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
@@ -206,4 +206,4 @@ public class TaxPayerService {
     }
 
 
-    }
+}
