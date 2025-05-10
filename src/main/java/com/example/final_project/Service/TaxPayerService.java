@@ -5,10 +5,12 @@ import com.example.final_project.Api.ApiException;
 import com.example.final_project.DTO.AccountantDTO;
 import com.example.final_project.DTO.TaxPayerDTO;
 import com.example.final_project.Model.Accountant;
+import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
 import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.AccountantRepository;
+import com.example.final_project.Repository.BusinessRepository;
 import com.example.final_project.Repository.MyUserRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,8 @@ public class TaxPayerService {
     private final MyUserRepository myUserRepository;
     private final AccountantRepository accountantRepository;
     private final NotificationService notificationService;
+    private final BusinessRepository businessRepository;
+
 
     /// run by admin
     public void activateTP(Integer adminId, Integer taxPayerId) {
@@ -45,15 +49,15 @@ public class TaxPayerService {
         }
         taxPayer.setIsActive(true);
         taxPayerRepository.save(taxPayer);
-//
-//
-//        String subject = ": Successful Activation of Your Account ";
-//        String message = "Dear : " + taxPayer.getUser().getName() + " We are pleased to inform you that your account has been successfully activated you can now use our services :\n" +
-//                "Best regards,\n" +
-//                "[mohasil team]";
-//
-//
-//        notificationService.sendEmail(taxPayer.getUser().getEmail(), message, subject);
+
+
+        String subject = "Successful Activation of Your Account as a Taxpayer";
+        String message = "Dear : " + taxPayer.getUser().getName() + " We are pleased to inform you that your account has been successfully activated you can now use our services :\n" +
+                "Best regards,\n" +
+                "[mohasil team]";
+
+
+        notificationService.sendEmail(taxPayer.getUser().getEmail(), subject, message);
 
     }
 
@@ -143,31 +147,28 @@ public class TaxPayerService {
         Accountant accountant = new Accountant();
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
         accountant.setUser(userACC);
+        accountant.setIsActive(true);
+
+        Business business= businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
+        accountant.setBusiness(business);
         accountantRepository.save(accountant);
 
 
-//
-//        String subject=": Successful Activation of Your Account";
-//        String message="We are pleased to inform you that your account has been successfully activated. Below are your login details:\n" +
-//                "\n" +
-//                "Username: \n" +accountant.getUser().getUsername()+
-//                "\n" +
-//                "Password:\n" +accountant.getUser().getPassword()+
-//                "\n" +
-//                "Employee Code:\n" +accountant.getEmployeeId()+
-//                "\n" +
-//                "Please keep this information secure and do not share it with anyone.\n" +
-//                "\n" +
-//                "If you have any questions or need assistance, feel free to contact us.\n" +
-//                "\n" +
-//                "Best regards,\n" +
-//                "[mohasil team]";
-//
-//
-//        notificationService.sendEmail(accountant.getUser().getEmail(),message,subject);
-//    }
-//
-    }
+        String subject = "Successful Activation of Your Account";
+        String message = "We are pleased to inform you that your account has been successfully activated with the authority of an Accountant. Below are your login details:\n" +
+                "\n" +
+                "Username: \n" + accountant.getUser().getUsername() +
+                "\n" +
+                "Password:\n" + accountant.getUser().getPassword() +
+                "\n" +
+                "Employee Code:\n" + accountant.getEmployeeId() +
+                "\n" +
+                "Please keep this information secure and do not share it with anyone.\n" +
+                "\n" +
+                "If you have any questions or need assistance, feel free to contact us.\n" +
+                "\n" +
+                "Best regards,\n" +
+                "[mohasil team]";
 
     // Endpoint 40
     public void activateAccountant(Integer taxPayerId, Integer accountantId) {
@@ -178,11 +179,16 @@ public class TaxPayerService {
         if (accountant == null)
             throw new ApiException("accountant not found");
 
+        notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
         if (accountant.getIsActive())
             throw new ApiException("accountant is already active");
         accountant.setIsActive(true);
         accountantRepository.save(accountant);
     }
+
+
+}
+
 
     // Endpoint 41
     public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {

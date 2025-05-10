@@ -40,8 +40,16 @@ public class Accountant {
     @OneToMany(mappedBy = "accountant")
     private Set<CounterBox> counterBoxes;
 
+
+
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "branch_id")
+    @JoinColumn(name ="business_id")
+    private Business business;
+
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name ="branch_id")
     private Branch branch;
 }

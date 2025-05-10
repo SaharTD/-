@@ -25,19 +25,22 @@ public class Branch {
     private String region;
     @NotEmpty
     private String city;
-    private String address;
 
 
     @ManyToOne
     @JsonIgnore
     private Business business;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "branch")
     private Set<Product> products;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "branch")
     private Set<Accountant> accountants;
 
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
     private Set<CounterBox> counterBoxes;
 
