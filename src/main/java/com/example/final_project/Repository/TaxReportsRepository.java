@@ -2,6 +2,7 @@ package com.example.final_project.Repository;
 
 import com.example.final_project.Model.TaxReports;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -15,5 +16,15 @@ public interface TaxReportsRepository extends JpaRepository<TaxReports,Integer> 
     List<TaxReports> findAllByPaymentDate(LocalDate paymentDate);
 
     List<TaxReports> findAllByPaymentDateIsNotNullAndStatusNot(String status);
+
+    List<TaxReports> findAllByAuditorId(Integer auditorId);
+
+    Long countByAuditorId(Integer auditorId);
+
+    Long countByAuditorIdAndStatus(Integer auditorId, String status);
+
+    @Query("select r from TaxReports r order by r.end_date desc")
+    List<TaxReports> findTopByAuditorIdOrderByEnd_dateDesc(Integer auditorId);
+
 
 }
