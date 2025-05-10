@@ -5,6 +5,7 @@ import com.example.final_project.DTO.CounterBoxDTO;
 import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
+import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
@@ -23,6 +24,7 @@ public class CounterBoxService {
     private final CounterBoxRepository counterBoxRepository;
     private final AccountantRepository accountantRepository;
     private final BranchRepository branchRepository;
+    private final NotificationService notificationService;
 
     public void createCounterBox(CounterBoxDTO counterBoxDTO) {
 
@@ -99,6 +101,21 @@ public class CounterBoxService {
 
 
         counterBoxRepository.save(counterBox);
+    }
+
+    // Endpoint 7
+    // close counter box if still opening for 12h
+    public void closeCounterBoxAuto(){
+        List<CounterBox> counterBoxes = counterBoxRepository.findCounterBoxByOpenDatetime();
+        if (counterBoxes.isEmpty())
+            throw new ApiException("there are no boxes are open");
+        for (CounterBox cb:counterBoxes){
+            cb.setCloseDatetime(LocalDateTime.now());
+            cb.setStatus("Closed");
+            String sendTo= cb.getBranch().getBusiness().getTaxPayer().getUser().getEmail();
+            notificationService.sendEmail(sendTo,"Closing Counter Box","Dear customer \n we have closed your counter box because it was opening for 12 hours");
+        }
+        counterBoxRepository.saveAll(counterBoxes);
     }
 
 

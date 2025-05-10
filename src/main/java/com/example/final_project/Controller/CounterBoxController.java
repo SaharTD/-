@@ -53,6 +53,12 @@ public class CounterBoxController {
         return ResponseEntity.status(200).body("Counter box created successfully");
     }
 
+    // Endpoint 7
+    @PutMapping("/close-opened-counter-box")
+    public ResponseEntity closeCounterBoxAuto(){
+        counterBoxService.closeCounterBoxAuto();
+        return ResponseEntity.status(200).body(new ApiResponse("counter Box is closed"));
+    }
 
 
 
