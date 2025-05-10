@@ -42,6 +42,9 @@ public class CounterBox {
     @Pattern(regexp = "^Opened|Closed$")
     private String status;
 
+    @Column
+    private Boolean status=false;
+
     @ManyToOne
     @JsonIgnore
     private Branch branch;

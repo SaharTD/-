@@ -23,6 +23,12 @@ public class Sales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "timestamp")
+    private LocalDateTime date;
+
+
+
+
     @Column(columnDefinition = "int not null")
     @Positive(message = " sale invoice must be   positive")
     private Integer sale_invoice;

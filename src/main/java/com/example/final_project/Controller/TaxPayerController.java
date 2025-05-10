@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/taxPayer")
 @RequiredArgsConstructor
@@ -46,7 +49,7 @@ public class TaxPayerController {
 
 
     /// 13
-    @PostMapping("add-accountant/{taxPayerID}")
+    @PostMapping("/add-accountant/{taxPayerID}")
     public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID){
         taxPayerService.addAccountant(taxPayerID,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
@@ -67,5 +70,11 @@ public class TaxPayerController {
         taxPayerService.deActivateAccountant(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
+
+    @GetMapping("/tax-payers/with-accountants")
+    public ResponseEntity<List<Map<String, Object>>> getTaxPayersWithAccountants() {
+        return ResponseEntity.status(200).body(taxPayerService.getTaxPayersWithAccountants());
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
 import com.example.final_project.Model.Product;
@@ -9,10 +10,13 @@ import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
 import com.example.final_project.Repository.ProductRepository;
 import com.example.final_project.Repository.SalesRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,8 @@ public class SalesService {
     public void addSales(Integer counterBox_id,Integer branch_id,Sales sales){
         CounterBox counterBox=counterBoxRepository.findCounterBoxById(counterBox_id);
         Branch branch=branchRepository.findBranchesById(branch_id);
+        sales.setDate(LocalDateTime.now());
+
 
         if(counterBox_id==null&&branch==null){
             throw new ApiException("Branch or Counter Box not found ");
@@ -107,5 +113,90 @@ public class SalesService {
 
         salesRepository.save(sales);
     }
+
+
+    public Map<String, Double> getSalesSummaryByBranch(Integer branchId) {
+        List<Sales> salesList = salesRepository.findSalesByBranch(branchId);
+        double totalBeforeTax = 0.0;
+
+        for (Sales sale : salesList) {
+            if (sale.getTotal_amount() != null)
+                totalBeforeTax += sale.getTotal_amount();
+        }
+
+        double taxRate = 0.15;
+        double taxAmount = totalBeforeTax * taxRate;
+        double grandTotal = totalBeforeTax + taxAmount;
+
+        Map<String, Double> result = new HashMap<>();
+        result.put("total", totalBeforeTax);
+        result.put("total tax Amount is:", taxAmount);
+        result.put("grand total is:", grandTotal);
+        return result;
+    }
+
+    public Map<String, Object> addSales2(Integer counterBox_id, Integer branch_id, Sales sales) {
+        CounterBox counterBox = counterBoxRepository.findCounterBoxById(counterBox_id);
+        Branch branch = branchRepository.findBranchesById(branch_id);
+
+        if (counterBox == null || branch == null) {
+            throw new ApiException("Branch or Counter Box not found ");
+        }
+
+
+
+        sales.setDate(LocalDateTime.now());
+        LocalDate today = LocalDate.now();
+
+        List<LocalDate> discountDates = List.of(
+                LocalDate.of(2025, 5, 10),
+                LocalDate.of(2025, 5, 20)
+        );
+
+
+        double originalAmount = sales.getTotal_amount();
+        double finalAmount = originalAmount;
+        double discountPercentage = 0.20;
+        double discountAmount = 0.0;
+        boolean discountApplied = false;
+
+        if (discountDates.contains(today)) {
+            discountAmount = originalAmount * discountPercentage;
+            finalAmount = originalAmount - discountAmount;
+            discountApplied = true;
+        }
+
+
+        double tax = finalAmount * 0.15;
+        double grand = finalAmount + tax;
+
+        sales.setTotal_amount(finalAmount);
+        sales.setGrand_amount(grand);
+        salesRepository.save(sales);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        result.put("original_price", originalAmount);
+
+        if (discountApplied) {
+            result.put("discount_percentage", discountPercentage * 100 + "%");
+            result.put("discount_amount", discountAmount);
+            result.put("price_after_discount", finalAmount);
+        }
+
+        result.put("tax", tax);
+        result.put("grand_total", grand);
+
+        return result;
+    }
+
+    public List<Sales> getSalesByTaxPayerId(Integer taxPayerId) {
+        return salesRepository.findSalesByTaxPayerId(taxPayerId);
+    }
+
+
+
+
+
 
 }

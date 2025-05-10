@@ -8,6 +8,7 @@ import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
+import com.example.final_project.Model.*;
 import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BusinessRepository;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -144,6 +145,7 @@ public class TaxPayerService {
         userACC.setPassword(accountantDTO.getPassword());
         userACC.setEmail(accountantDTO.getEmail());
         myUserRepository.save(userACC);
+        //accountant.setUser(userACC);
 
         Accountant accountant = new Accountant();
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
@@ -152,6 +154,18 @@ public class TaxPayerService {
 
         Business business = businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
         accountant.setBusiness(business);
+        accountant.setUser(userACC);
+        myUserRepository.save(userACC);
+
+        accountantRepository.save(accountant);
+
+        myUserRepository.save(userACC);
+
+
+        accountant.setUser(userACC);
+
+        accountant.setId(userACC.getId());
+
         accountantRepository.save(accountant);
 
 
@@ -205,6 +219,47 @@ public class TaxPayerService {
         accountant.setIsActive(false);
         accountantRepository.save(accountant);
     }
+
+
+    public List<Map<String, Object>> getTaxPayersWithAccountants() {
+        List<TaxPayer> taxPayers = taxPayerRepository.findAll();
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (TaxPayer taxPayer : taxPayers) {
+            Map<String, Object> taxPayerData = new LinkedHashMap<>();
+            taxPayerData.put("taxPayerId", taxPayer.getId());
+            taxPayerData.put("phoneNumber", taxPayer.getPhoneNumber());
+            taxPayerData.put("commercialRegistration", taxPayer.getCommercialRegistration());
+
+            List<Map<String, Object>> accountantList = new ArrayList<>();
+
+            if (taxPayer.getBusinesses() != null) {
+                for (Business business : new HashSet<>(taxPayer.getBusinesses())) {
+                    if (business.getBranches() != null) {
+                        for (Branch branch : new HashSet<>(business.getBranches())) {
+                            if (branch.getAccountants() != null) {
+                                for (Accountant accountant : new HashSet<>(branch.getAccountants())) {
+                                    Map<String, Object> accountantData = new LinkedHashMap<>();
+                                    accountantData.put("employeeId", accountant.getEmployeeId());
+                                    accountantData.put("isActive", accountant.getIsActive());
+                                    accountantData.put("branchId", branch.getId());
+                                    accountantList.add(accountantData);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            taxPayerData.put("accountants", accountantList);
+            response.add(taxPayerData);
+        }
+
+        return response;
+    }
+
+
+
 
 
 }
