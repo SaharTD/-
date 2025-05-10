@@ -42,8 +42,8 @@ public class CounterBox {
     @Pattern(regexp = "^Opened|Closed$")
     private String status;
 
-    @Column
-    private Boolean status=false;
+//    @Column
+//    private Boolean status=false;
 
     @ManyToOne
     @JsonIgnore

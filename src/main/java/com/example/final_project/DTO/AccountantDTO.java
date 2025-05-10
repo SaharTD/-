@@ -46,7 +46,4 @@ public class AccountantDTO {
     private String businessName;
 
 
-    private Integer branchId;
-
-
 }

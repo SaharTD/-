@@ -37,7 +37,6 @@ public class CounterBoxService {
     private final ProductRepository productRepository;
     private final SalesRepository salesRepository;
 
-    public void createCounterBox(CounterBoxDTO counterBoxDTO) {
 
     //كرييت مع المحاسب
     public void createCounterBox(CounterBoxDTO counterBoxDTO) {
@@ -69,8 +68,8 @@ public class CounterBoxService {
         counterBox.setAccountant(accountant);
 
         if (counterBoxDTO.getBranchId() != null) {
-            Branch branch = branchRepository.getReferenceById(counterBoxDTO.getBranchId());
-            if (branch == null) {
+            Branch branch2 = branchRepository.getReferenceById(counterBoxDTO.getBranchId());
+            if (branch2 == null) {
                 throw new ApiException("Branch not found");
             }
             counterBox.setBranch(branch);
@@ -166,13 +165,6 @@ public class CounterBoxService {
 
         return "Counter box closed successfully.\n Total open duration: " + hours + " hours and " + minutes + " minutes.";
     }
-
-
-
-
-
-
-
 
 
     // Endpoint 7
