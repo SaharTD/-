@@ -33,7 +33,7 @@ public class Accountant {
     @OneToOne
     @MapsId
     @JsonIgnore
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private User user;
 
     @JsonIgnore

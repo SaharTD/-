@@ -36,7 +36,7 @@ public class AuditorService {
         user.setEmail(dtoAuditor.getEmail());
         user.setRole("AUDITOR");
         Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user,null);
-        user.setAuditor(auditor);
+//        user.setAuditor(auditor);
         myUserRepository.save(user);
         auditorRepository.save(auditor);
     }
@@ -67,6 +67,6 @@ public class AuditorService {
 
     // Endpoint 27
     public void createTaxReport(){
-        List<Sales> sales = salesRepository
+//        List<Sales> sales = salesRepository
     }
 }

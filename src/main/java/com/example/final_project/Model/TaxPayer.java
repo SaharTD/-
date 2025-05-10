@@ -41,7 +41,7 @@ public class TaxPayer {
 
 
     @ManyToOne
-    @JoinColumn(name = "auditor_id",referencedColumnName = "id")
+//    @JoinColumn(name = "auditor_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
 
