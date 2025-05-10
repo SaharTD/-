@@ -44,6 +44,7 @@ public class CounterBox {
     private Branch branch;
 
     @ManyToOne
+    @JsonIgnore
     private Accountant accountant;
 
     @OneToMany(mappedBy = "counterBox", cascade = CascadeType.ALL)

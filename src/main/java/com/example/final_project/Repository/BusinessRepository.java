@@ -5,11 +5,15 @@ import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface BusinessRepository extends JpaRepository<Business,Integer> {
 
+
+    @Query("select b from Business b where b.taxPayer.id=?1")
+    Business getBusinessFromTaxPayerId(Integer id);
 
     Business findBusinessById(Integer id);
 
@@ -18,6 +22,8 @@ public interface BusinessRepository extends JpaRepository<Business,Integer> {
     Business findBusinessByIdAndTaxPayer(Integer id, TaxPayer taxPayer);
 
     Business findBusinessByBusinessName( String businessName);
+
+
 
 
 }

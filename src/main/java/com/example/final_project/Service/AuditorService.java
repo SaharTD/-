@@ -24,26 +24,26 @@ public class AuditorService {
     private final BusinessRepository businessRepository;
     private final SalesRepository salesRepository;
 
-    public List<Auditor> getAllAuditors(){
+    public List<Auditor> getAllAuditors() {
         return auditorRepository.findAll();
     }
 
-    public void addAuditor(DTOAuditor dtoAuditor){
+    public void addAuditor(DTOAuditor dtoAuditor) {
         User user = new User();
         user.setName(dtoAuditor.getName());
         user.setUsername(dtoAuditor.getUsername());
         user.setPassword(dtoAuditor.getPassword());
         user.setEmail(dtoAuditor.getEmail());
         user.setRole("AUDITOR");
-        Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user,null);
-//        user.setAuditor(auditor);
+        Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user, null);
+        user.setAuditor(auditor);
         myUserRepository.save(user);
         auditorRepository.save(auditor);
     }
 
-    public void updateAuditor(Integer auditorId, DTOAuditor dtoAuditor){
+    public void updateAuditor(Integer auditorId, DTOAuditor dtoAuditor) {
         User user = myUserRepository.findUserById(auditorId);
-        if (user==null)
+        if (user == null)
             throw new ApiException("auditor not found");
         user.setName(dtoAuditor.getName());
         user.setUsername(dtoAuditor.getUsername());
@@ -56,9 +56,9 @@ public class AuditorService {
     }
 
 
-    public void deleteAuditor(Integer auditorId){
+    public void deleteAuditor(Integer auditorId) {
         User user = myUserRepository.findUserById(auditorId);
-        if (user==null)
+        if (user == null)
             throw new ApiException("auditor not found");
         myUserRepository.delete(user);
 //        auditorRepository.delete(auditor);
@@ -69,4 +69,9 @@ public class AuditorService {
     public void createTaxReport(){
 //        List<Sales> sales = salesRepository
     }
+
+
+//
+//    public void activateBusiness()
+
 }

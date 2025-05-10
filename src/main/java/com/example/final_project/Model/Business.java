@@ -73,6 +73,11 @@ public class Business {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "business")
     private Set<TaxReports> taxReports;
 
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "business")
+    private Set<Accountant> accountants;
+
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "business")
     private Set<Branch> branches;

@@ -41,7 +41,7 @@ public class BusinessService {
             throw new ApiException("Business is not found or does not belong to tax payer");
         }
 
-        BusinessDTO businessDTO = new BusinessDTO(myBusiness.getBusinessName(), myBusiness.getBusinessCategory(), myBusiness.getCommercialRegistration(), myBusiness.getTaxNumber(), myBusiness.getCity(), myBusiness.getRegion());
+        BusinessDTO businessDTO = new BusinessDTO(myBusiness.getBusinessName(), myBusiness.getBusinessCategory(), myBusiness.getCommercialRegistration(), myBusiness.getTaxNumber(), myBusiness.getCity(), myBusiness.getRegion(),myBusiness.getIsActive());
         return businessDTO;
     }
 
@@ -86,6 +86,23 @@ public class BusinessService {
     }
 
 
+
+
+
+    public void createMainBranch(Integer businessId, Branch branch){
+
+            Business business = businessRepository.findBusinessById(businessId);
+            if (business==null)
+                throw new ApiException("business not found");
+            branch.setBusiness(business);
+            branch.setBranchNumber("B1");
+            branch.setRegion(business.getRegion());
+            branch.setCity(business.getCity());
+            branchRepository.save(branch);
+
+    }
+
+
     public void addBusiness(Integer taxPayerId, BusinessDTO businessDTO) {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
@@ -121,7 +138,12 @@ public class BusinessService {
         businessRepository.save(business);
 
 
+        Branch mainBranch=new Branch();
+        createMainBranch(business.getId(),mainBranch);
+
     }
+
+
 
 
     public void updateBusiness(Integer taxPayerId, Integer businessId, BusinessDTO businessDTO) {

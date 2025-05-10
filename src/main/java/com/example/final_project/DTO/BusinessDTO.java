@@ -40,6 +40,8 @@ public class BusinessDTO {
     @NotEmpty(message = "the business located region should not be empty")
     private String region;
 
+    private Boolean isActive;
+
 
 
 }

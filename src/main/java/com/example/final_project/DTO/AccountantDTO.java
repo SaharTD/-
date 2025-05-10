@@ -36,8 +36,12 @@ public class AccountantDTO {
 //    @Pattern(regexp = "^ACC[0-9]{3,8}$",message = "the employee id must start with ACC followed by 3-8 characters")
     private String employeeId;
 
-    private Integer branchId;
 
+    @NotEmpty(message = "the business name should not be empty")
+    private String businessName;
+
+
+    private Integer branchId;
 
 
 }
