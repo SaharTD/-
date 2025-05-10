@@ -15,4 +15,7 @@ public interface SalesRepository extends JpaRepository<Sales,Integer> {
     // NOW() + INTERVAL 7 DAY
 //    @Query("select s from Sales s where s.invoiceDate")
 //    List<Sales> findSalesByDateThreeMonthsBefore();
+
+    @Query("select s from Sales s where s.branch.business.id=?1 and s.invoiceDate> now()- 90 day")
+    List<Sales> findSalesByBusinessId(Integer businessId);
 }

@@ -43,11 +43,12 @@ public class ProductController {
         return ResponseEntity.status(200).body(new ApiResponse("product deleted"));
     }
 
-    @GetMapping("/barcode/{barcode}")
-    public ResponseEntity<List<Product>> getProductsByBarcode(@PathVariable String barcode) {
-        List<Product> products = productService.getProductsByBarcode(barcode);
-        return ResponseEntity.ok(products);
-    }
+//    @GetMapping("/barcode/{barcode}")
+//    public ResponseEntity<List<Product>> getProductsByBarcode(@PathVariable String barcode) {
+//        List<Product> products = productService.getProductsByBarcode(barcode);
+//        return ResponseEntity.ok(products);
+//    }
+
 
 
 

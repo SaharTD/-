@@ -3,9 +3,11 @@ package com.example.final_project.Service;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
+import com.example.final_project.Model.Product;
 import com.example.final_project.Model.Sales;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
+import com.example.final_project.Repository.ProductRepository;
 import com.example.final_project.Repository.SalesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class SalesService {
     private final SalesRepository salesRepository;
     private final CounterBoxRepository  counterBoxRepository;
     private final BranchRepository branchRepository;
+    private final ProductRepository productRepository;
 
 
     public List<Sales> getAllSales(){
@@ -57,6 +60,52 @@ public class SalesService {
         }
 
         salesRepository.delete(sales);
+    }
+
+
+    public Product getSingleProductByBarcode(String barcode) {
+        Product product = productRepository.findProductByBarcode(barcode);
+        if (product==null) {
+            throw new ApiException("No product found with barcode: " + barcode);
+        }
+        return product;
+    }
+
+    public void addProductToSales(Integer salesId, String barcode) {
+        Sales sales = salesRepository.findSalesById(salesId);
+        if (sales == null) {
+            throw new ApiException("Sales not found");
+        }
+
+        Product product = productRepository.findProductByBarcode(barcode);
+        if (product==null) {
+            throw new ApiException("Product not found with barcode: " + barcode);
+        }
+
+        sales.getProducts().add(product);
+        productRepository.save(product);
+        salesRepository.save(sales);
+    }
+
+    public void calculateSalesAmounts(Integer salesId) {
+        Sales sales = salesRepository.findSalesById(salesId);
+        if (sales == null) {
+            throw new ApiException("Sales not found");
+        }
+
+        double total = 0;
+        for (Product product : sales.getProducts()) {
+            total += product.getPrice();
+        }
+
+        double tax = total * 0.15;
+        double grand = total + tax;
+
+        sales.setTotal_amount(total);
+        sales.setTax_amount(tax);
+        sales.setGrand_amount(grand);
+
+        salesRepository.save(sales);
     }
 
 }

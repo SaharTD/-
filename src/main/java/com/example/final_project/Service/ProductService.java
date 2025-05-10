@@ -3,9 +3,11 @@ package com.example.final_project.Service;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Product;
+import com.example.final_project.Model.Sales;
 import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.ProductRepository;
+import com.example.final_project.Repository.SalesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
     private final NotificationService notificationService;
+    private final SalesRepository salesRepository;
 
     public List<Product> getAllProduct() {
         notificationService.sendEmail("aa.ll.ii.pp5@gmail.com", "test", "dear customer");
@@ -74,10 +77,9 @@ public class ProductService {
     }
 
 
-
-    public List<Product> getProductsByBarcode(String barcode) {
-        List<Product> products = productRepository.findByBarcode(barcode);
-        if (products.isEmpty()) {
+    public Product getProductsByBarcode(String barcode) {
+        Product products = productRepository.findProductByBarcode(barcode);
+        if (products==null) {
             throw new RuntimeException("No products found with barcode: " + barcode);
         }
         return products;
@@ -85,7 +87,9 @@ public class ProductService {
 
     public Product saveProduct(Product product) {
         return productRepository.save(product);
-}
+    }
+
+
 
 
 
