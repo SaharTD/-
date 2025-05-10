@@ -42,6 +42,7 @@ public class CounterBoxService {
         }
 
 
+
         CounterBox counterBox = new CounterBox();
 
         counterBox.setType(counterBoxDTO.getType());
@@ -50,8 +51,9 @@ public class CounterBoxService {
         counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
         counterBox.setBranch(branch);
-
+        accountant.setLastActiveCounterBox(LocalDateTime.now());
         counterBoxRepository.save(counterBox);
+        accountantRepository.save(accountant);
     }
 
     public List getAllCounterBoxes() {

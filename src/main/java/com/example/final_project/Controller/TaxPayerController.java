@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/taxPayer")
+@RequestMapping("api/v1/tax-payer")
 @RequiredArgsConstructor
 public class TaxPayerController {
 
@@ -52,5 +52,13 @@ public class TaxPayerController {
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
     }
 
+
+
+    /// 15
+    @PutMapping("block-inactive-accountant/{taxPayerId}/{accountantId}")
+    public ResponseEntity blockInnActiveAccountant(@PathVariable Integer taxPayerId ,@PathVariable Integer accountantId ){
+        taxPayerService.blockUnnActiveAccountant(taxPayerId,accountantId);
+        return ResponseEntity.status(200).body(new ApiResponse("the  accountant has been inactivated"));
+    }
 
 }

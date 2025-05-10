@@ -4,6 +4,7 @@ package com.example.final_project.Controller;
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.BusinessDTO;
 import com.example.final_project.DTO.TaxPayerDTO;
+import com.example.final_project.DTOOUT.SalesDTO;
 import com.example.final_project.Model.User;
 import com.example.final_project.Service.BusinessService;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/business")
@@ -65,6 +68,20 @@ public class BusinessController {
     public ResponseEntity deleteBusiness(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
         businessService.deleteBusiness(taxPayerId,businessId);
         return ResponseEntity.status(200).body(new ApiResponse("the business has been deleted successfully "));
+    }
+
+
+    @GetMapping("sales-business/{taxPayerId}/{businessId}")
+    public ResponseEntity salesOperationOnBusiness(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        List<SalesDTO> sales= businessService.salesOperationOnBusiness(taxPayerId, businessId);
+        return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n "+sales.size()
+                +businessService.salesOperationOnBusiness(taxPayerId, businessId)));
+    }
+
+
+    @GetMapping("business-revenue/{taxPayerId}/{businessId}")
+    public ResponseEntity businessRevenue(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "+businessService.businessRevenue(taxPayerId,businessId)));
     }
 
 

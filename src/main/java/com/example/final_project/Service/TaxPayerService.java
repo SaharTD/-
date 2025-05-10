@@ -15,6 +15,7 @@ import com.example.final_project.Repository.MyUserRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.jdbc.support.JdbcAccessor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class TaxPayerService {
     private final AccountantRepository accountantRepository;
     private final NotificationService notificationService;
     private final BusinessRepository businessRepository;
+    private final JdbcAccessor jdbcAccessor;
 
 
     /// run by admin
@@ -73,21 +75,29 @@ public class TaxPayerService {
             throw new ApiException("A Taxpayer With the same commercial registration number already exit");
 
         }
-
         user.setRole("TAXPAYER");
-        user.setUsername(taxPayerDTO.getUsername());
         user.setName(taxPayerDTO.getName());
+        user.setUsername(taxPayerDTO.getUsername());
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
 //        user.setPassword(hashPassword);
         user.setPassword(taxPayerDTO.getPassword());
         user.setEmail(taxPayerDTO.getEmail());
 
+
         TaxPayer taxPayer = new TaxPayer();
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
+        taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+
+
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+        taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
+
         taxPayer.setRegistrationDate(LocalDateTime.now());
+
+        myUserRepository.save(user);
+        taxPayerRepository.save(taxPayer);
 
         myUserRepository.save(user);
         taxPayerRepository.save(taxPayer);
@@ -105,13 +115,16 @@ public class TaxPayerService {
         taxPayer.getUser().setEmail(taxPayerDTO.getEmail());
         taxPayer.getUser().setUsername(taxPayerDTO.getUsername());
 
-//        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
-//        taxPayer.getUser().setPassword(hashPassword);
+
+     //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
+     //        taxPayer.getUser().setPassword(hashPassword);
+
 
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
 
         taxPayerRepository.save(taxPayer);
+
 
     }
 
@@ -142,14 +155,18 @@ public class TaxPayerService {
         userACC.setUsername(accountantDTO.getUsername());
         userACC.setPassword(accountantDTO.getPassword());
         userACC.setEmail(accountantDTO.getEmail());
-        myUserRepository.save(userACC);
 
         Accountant accountant = new Accountant();
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
+        accountant.setRegistrationDate(LocalDateTime.now());
         accountant.setUser(userACC);
         accountant.setIsActive(true);
 
-        Business business = businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
+        Business business= businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
+        if (business==null){
+            throw new ApiException("The business is not found");
+
+        }
         accountant.setBusiness(business);
         accountantRepository.save(accountant);
 
@@ -163,47 +180,61 @@ public class TaxPayerService {
                 "\n" +
                 "Employee Code:\n" + accountant.getEmployeeId() +
                 "\n" +
-                "Please keep this information secure and do not share it with anyone.\n" +
+                "Please keep this information secure and do not share it with anyone." +
+                "\n note: Inactive accounts will be deleted in 30 \n" +
                 "\n" +
                 "If you have any questions or need assistance, feel free to contact us.\n" +
                 "\n" +
                 "Best regards,\n" +
                 "[mohasil team]";
 
+
         notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
-
-
     }
 
-    // Endpoint 40
-    public void activateAccountant(Integer taxPayerId, Integer accountantId) {
-        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-        if (taxPayer == null)
-            throw new ApiException("tax payer not found");
-        if (accountant == null)
-            throw new ApiException("accountant not found");
 
-        if (accountant.getIsActive())
-            throw new ApiException("accountant is already active");
-        accountant.setIsActive(true);
+
+
+
+    /// if accountant has not opened since the register date or not opened for a 30 days
+    public void blockUnnActiveAccountant(Integer taxPayerId, Integer accountantId) {
+
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+
+        Accountant accountant = accountantRepository.findAccountantByIsActiveAndId(true, accountantId);
+        if (accountant == null) {
+            throw new ApiException("Accountant is not found or not active");
+        }
+
+
+        Business business = businessRepository.findBusinessByIdAndTaxPayer(accountant.getBusiness().getId(), taxPayer);
+        if (!business.getIsActive()) {
+            throw new ApiException("Your business that is related to this branch is not active");
+        }
+
+        if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(20))) {
+            String subject = "Warning ! Inactivity Detected ";
+            String message = "Dear : " + accountant.getUser().getName() + " We have noticed that your account has been inactive for over 20 days since registration ." +
+                    "please ensure you resume activity within the next 10 days to avoid deactivation \n" +
+                    "Best regards,\n" +
+                    "[mohasil team]";
+
+            notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
+            throw new ApiException("The accountant is been inactive for 20 days , accountant has been notified");
+
+        }
+        if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(30))) {
+            accountant.setIsActive(false);
+        }
         accountantRepository.save(accountant);
     }
 
-    // Endpoint 41
-    public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
-        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-        if (taxPayer == null)
-            throw new ApiException("tax payer not found");
-        if (accountant == null)
-            throw new ApiException("accountant not found");
 
-        if (!accountant.getIsActive())
-            throw new ApiException("accountant is already non active");
-        accountant.setIsActive(false);
-        accountantRepository.save(accountant);
-    }
+
 
 
 }

@@ -20,7 +20,6 @@ public class TaxPayer {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
 

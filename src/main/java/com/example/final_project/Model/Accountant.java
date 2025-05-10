@@ -1,6 +1,7 @@
 package com.example.final_project.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,11 +31,20 @@ public class Accountant {
 
     private Boolean isActive;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime registrationDate;
+
+
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastActiveCounterBox;
+
 
     @OneToOne
     @MapsId
     @JsonIgnore
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private User user;
 
     @JsonIgnore

@@ -30,15 +30,15 @@ public class Sales {
 
     @Column(columnDefinition = "double not null")
     @Positive(message = "total amount  must be  positive")
-    private Double total_amount;
+    private Double total_amount=0.0;
 
     @Column(columnDefinition = "double not null")
     @Positive(message = "tax amount must be   positive")
-    private Double tax_amount;
+    private Double tax_amount=0.0;
 
     @Column(columnDefinition = "double not null")
     @Positive(message = "grand amount must be  positive")
-    private Double grand_amount;
+    private Double grand_amount=0.0;
 
 
     @ManyToOne
