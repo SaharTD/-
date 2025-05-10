@@ -43,7 +43,7 @@ public class Sales {
 
     @Column(columnDefinition = "double not null")
     @Positive(message = "grand amount must be  positive")
-    private Double grand_amount;
+
     private LocalDateTime invoiceDate;
     private Double grand_amount=0.0;
 

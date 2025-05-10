@@ -59,7 +59,7 @@ public class TaxPayerController {
     // Endpoint 40
     @PutMapping("/activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
     public ResponseEntity activateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
-        taxPayerService.activateAccountant(taxPayerId, accountantId);
+        taxPayerService.(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is active"));
     }
 

@@ -27,7 +27,6 @@ public class AuditorService {
     private final SalesRepository salesRepository;
     private final TaxReportsRepository taxReportsRepository;
     private final TaxPayerRepository taxPayerRepository;
-    private final BusinessRepository businessRepository;
 
     public List<Auditor> getAllAuditors() {
         return auditorRepository.findAll();
