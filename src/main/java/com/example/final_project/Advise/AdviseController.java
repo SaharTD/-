@@ -6,6 +6,7 @@ import com.example.final_project.Api.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.mail.MailSendException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +25,8 @@ public class AdviseController {
         String message=e.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
+
+
 
     // Server Validation Exception
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -83,4 +86,10 @@ public class AdviseController {
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
 
+
+    @ExceptionHandler(value = MailSendException.class)
+    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
 }

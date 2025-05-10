@@ -1,6 +1,6 @@
 package com.example.final_project.Controller;
 
-import com.example.final_project.Api.ApiException;
+import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.Model.User;
 import com.example.final_project.Service.MyUserService;
 import jakarta.validation.Valid;
@@ -28,20 +28,20 @@ public class MyUserController {
     public ResponseEntity addUser(@Valid @RequestBody User user){
         myUserService.addAdmin(user);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("user is added"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is added"));
     }
 
     @PutMapping("/update/{username}")
     public ResponseEntity updateUser(@PathVariable String username ,@Valid @RequestBody User user){
         myUserService.updateUser(username, user);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("user is updated"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is updated"));
     }
     
     @DeleteMapping("/delete/{username}")
     public ResponseEntity deleteUser(@PathVariable String username){
         myUserService.deleteUser(username);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("user not found"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user not found"));
     }
 
 }

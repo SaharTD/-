@@ -66,4 +66,7 @@ public class Sales {
     @ManyToOne
     @JsonIgnore
     private TaxReports taxReports;
+
+    @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ItemSale> itemSales;
 }
