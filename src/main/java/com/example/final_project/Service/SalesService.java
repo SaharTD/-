@@ -35,7 +35,7 @@ public class SalesService {
     public void addSales(Integer counterBox_id,Integer branch_id){
         CounterBox counterBox=counterBoxRepository.findCounterBoxById(counterBox_id);
         Branch branch=branchRepository.findBranchesById(branch_id);
-        sales.setDate(LocalDateTime.now());
+//        sales.setDate(LocalDateTime.now());
 
 
         if(counterBox_id==null&&branch==null){
