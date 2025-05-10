@@ -115,18 +115,29 @@ public class AccountantService {
             throw new ApiException("The Taxpayer is not found");
         }
 
+
+        Branch branch = branchRepository.findBranchesById(branchId);
+        if (branch==null) {
+            throw new ApiException("branch not found or does not belong to your business");
+        }
+
+
         Accountant accountant = accountantRepository.findAccountantById(accountantId);
         if (accountant==null){
             throw new ApiException("Accountant not found");
         }
 
-        Branch branch = branchRepository.findBranchesById(branchId);
-        if (branch==null) {
-            throw new ApiException("branch not found");
+
+        /// make sure that the business is active
+        Business business= businessRepository.findBusinessById(branch.getBusiness().getId());
+        if (!business.getIsActive()) {
+            throw new ApiException("The business related to this branch is not active");
         }
 
-        //check if the accountant business owner is the one who made this request
-        if (accountant.getBusiness().getTaxPayer().getId()!=taxPayerID){
+
+
+        ///check if the accountant business owner is the one who made this request
+        if (accountant.getBusiness().getId()!=business.getId()){
             throw new ApiException("The Accountant does not work in your business");
         }
 
