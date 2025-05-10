@@ -44,7 +44,7 @@ public class BranchController {
 
 
     /// 3
-    @GetMapping("sales-branch-sales/{taxPayerId}/{branchId}")
+    @GetMapping("branch-sales/{taxPayerId}/{branchId}")
     public ResponseEntity salesOperationOnBranch(@PathVariable Integer taxPayerId,@PathVariable Integer branchId){
        List<SalesDTO> sales= branchService.salesOperationOnBranch(taxPayerId, branchId);
         return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n "+sales.size()
