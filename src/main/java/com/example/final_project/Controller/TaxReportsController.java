@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/taxReports")
 @RequiredArgsConstructor
@@ -78,6 +80,35 @@ public class TaxReportsController {
 
 
 
+    @GetMapping("/reports/{auditorId}")
+    public ResponseEntity getReportsByAuditor(@PathVariable Integer auditorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportsByAuditor(auditorId));
+    }
+
+    // 2. Get report count by status for an auditor
+    @GetMapping("/report-count/{auditorId}/{status}")
+    public ResponseEntity getReportCountByStatus(@PathVariable Integer auditorId, @PathVariable String status) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportCountByStatus(auditorId, status));
+    }
+
+    // 4. Get approval rate for an auditor
+    @GetMapping("/approval-rate/{auditorId}")
+    public ResponseEntity getApprovalRate(@PathVariable Integer auditorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getApprovalRate(auditorId));
+    }
+
+    // 5. Bulk approve reports for an auditor
+    @PutMapping("/bulk-approve/{auditorId}")
+    public ResponseEntity bulkApproveReports(@PathVariable Integer auditorId, @RequestBody List<Integer> reportIds) {
+        taxReportsService.bulkApproveReports(auditorId, reportIds);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Reports approved successfully"));
+    }
+
+    // 7. Get latest report reviewed by auditor
+    @GetMapping("/latest-report/{auditorId}")
+    public ResponseEntity getLatestReport(@PathVariable Integer auditorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(auditorId));
+    }
 
 
 

@@ -190,6 +190,51 @@ public class TaxReportsService {
     }
 
 
+    public List<TaxReports> getReportsByAuditor(Integer auditorId) {
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor == null) {
+            throw new ApiException("Auditor not found");
+        }
+        return taxReportsRepository.findAllByAuditorId(auditorId);
+    }
+
+    public Long getReportCountByStatus(Integer auditorId, String status) {
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor == null) {
+            throw new ApiException("Auditor not found");
+        }
+        return taxReportsRepository.countByAuditorIdAndStatus(auditorId, status);
+    }
+
+    public Double getApprovalRate(Integer auditorId) {
+        Long total = taxReportsRepository.countByAuditorId(auditorId);
+        Long approved = taxReportsRepository.countByAuditorIdAndStatus(auditorId, "Approved");
+
+        if (total == 0) return 0.0;
+
+        return (approved * 100.0) / total;
+    }
+
+    public void bulkApproveReports(Integer auditorId, List<Integer> reportIds) {
+        for (Integer reportId : reportIds) {
+            TaxReports taxReport = taxReportsRepository.findTaxReportsById(reportId);
+            if (taxReport != null && taxReport.getAuditor() != null &&
+                    taxReport.getAuditor().getId().equals(auditorId)) {
+
+                taxReport.setStatus("Approved");
+                taxReportsRepository.save(taxReport);
+            }
+        }
+    }
+
+    public TaxReports getLatestReportByAuditor(Integer auditorId) {
+        List<TaxReports> reports = taxReportsRepository.findTopByAuditorIdOrderByEnd_dateDesc(auditorId);
+        if (reports.isEmpty()) {
+            throw new ApiException("No reports found for auditor");
+        }
+        return reports.get(0);
+    }
+
 
 
 
