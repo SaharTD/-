@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaxReportStatusDTO {
 
-    private Integer taxReportId;
     private String newStatus;
 }

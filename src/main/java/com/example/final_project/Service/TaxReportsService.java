@@ -66,6 +66,7 @@ public class TaxReportsService {
         taxReportsRepository.delete(taxReports);
     }
 
+    // Endpoint 28
     public void applyLatePaymentPenalty(Integer taxReportId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -97,6 +98,7 @@ public class TaxReportsService {
     }
 
 
+    // Endpoint 29
     public void applyTwoMonthLatePenalty(Integer taxReportId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -128,6 +130,7 @@ public class TaxReportsService {
     }
 
 
+    // Endpoint 30
     public void applyLegalActionForTaxEvasion(Integer taxReportId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -158,36 +161,11 @@ public class TaxReportsService {
     }
 
 
-    public void changeTaxReportStatus(Integer taxReportId,Integer auditorId, TaxReportStatusDTO taxReportStatusDTO) {
-        TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
-
-        if (taxReport == null) {
-            throw new ApiException("Tax report not found");
-        }
-        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
-        if (auditor == null) {
-            throw new ApiException("Auditor not found");
-        }
-
-
-        if (taxReport.getAuditor() == null || !taxReport.getAuditor().getId().equals(auditorId)) {
-            throw new ApiException("This report does not belong to the specified auditor");
-        }
-
-        List<String> allowedStatuses = List.of("Pending", "Approved", "Paid", "Under Legal Action", "Rejected");
-        if (!allowedStatuses.contains(taxReportStatusDTO.getNewStatus())) {
-            throw new ApiException("Invalid status value");
-        }
-
-        taxReport.setStatus(taxReportStatusDTO.getNewStatus());
-        taxReportsRepository.save(taxReport);
-    }
-
-
-
+//**************
     public List<TaxReports> getUnpaidDueTaxReports() {
         return taxReportsRepository.findAllByPaymentDateIsNotNullAndStatusNot("Paid");
     }
+//**************
 
 
     public List<TaxReports> getReportsByAuditor(Integer auditorId) {
@@ -198,6 +176,8 @@ public class TaxReportsService {
         return taxReportsRepository.findAllByAuditorId(auditorId);
     }
 
+
+//    figma
     public Long getReportCountByStatus(Integer auditorId, String status) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
         if (auditor == null) {
@@ -206,7 +186,11 @@ public class TaxReportsService {
         return taxReportsRepository.countByAuditorIdAndStatus(auditorId, status);
     }
 
+    /// //////////////////////////////////////////////////////////////////
     public Double getApprovalRate(Integer auditorId) {
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor==null)
+            throw new ApiException("auditor not found");
         Long total = taxReportsRepository.countByAuditorId(auditorId);
         Long approved = taxReportsRepository.countByAuditorIdAndStatus(auditorId, "Approved");
 
@@ -215,6 +199,8 @@ public class TaxReportsService {
         return (approved * 100.0) / total;
     }
 
+
+    // Figma
     public void bulkApproveReports(Integer auditorId, List<Integer> reportIds) {
         for (Integer reportId : reportIds) {
             TaxReports taxReport = taxReportsRepository.findTaxReportsById(reportId);
@@ -227,6 +213,7 @@ public class TaxReportsService {
         }
     }
 
+    // figma
     public TaxReports getLatestReportByAuditor(Integer auditorId) {
         List<TaxReports> reports = taxReportsRepository.findTopByAuditorIdOrderByEnd_dateDesc(auditorId);
         if (reports.isEmpty()) {

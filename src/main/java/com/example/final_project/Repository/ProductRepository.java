@@ -18,5 +18,4 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     Product findProductByBarcode(String barcode);
 
-
 }

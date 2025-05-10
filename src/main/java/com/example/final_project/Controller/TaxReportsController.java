@@ -66,12 +66,6 @@ public class TaxReportsController {
 
 
 
-//تغيير حالة تقرير
-    @PutMapping("/change-status/{taxReportId}/{auditorId}")
-    public ResponseEntity changeTaxReportStatus(@PathVariable Integer auditorId,@PathVariable Integer taxReportId,@RequestBody TaxReportStatusDTO taxReportStatusDTO) {
-        taxReportsService.changeTaxReportStatus(taxReportId,auditorId,taxReportStatusDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " + taxReportStatusDTO.getNewStatus()));
-    }
 
 // التقارير المستحقه لدفع وغير مدفوعه
     @GetMapping("/due-payment")

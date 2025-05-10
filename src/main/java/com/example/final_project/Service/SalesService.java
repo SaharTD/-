@@ -28,13 +28,15 @@ public class SalesService {
         return salesRepository.findAll();
     }
 
-    public void addSales(Integer counterBox_id,Integer branch_id,Sales sales){
+    public void addSales(Integer counterBox_id,Integer branch_id){
         CounterBox counterBox=counterBoxRepository.findCounterBoxById(counterBox_id);
         Branch branch=branchRepository.findBranchesById(branch_id);
 
         if(counterBox_id==null&&branch==null){
             throw new ApiException("Branch or Counter Box not found ");
         }
+        Sales sales = new Sales();
+//        sales.setSale_invoice();
         salesRepository.save(sales);
     }
 
