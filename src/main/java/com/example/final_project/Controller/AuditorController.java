@@ -45,4 +45,20 @@ public class AuditorController {
         return ResponseEntity.status(200).body(new ApiResponse("tax created"));
     }
 
+    @PutMapping("activate-business/{auditId}/{taxPayerId}/{businessId}")
+    public ResponseEntity activateBusiness(@PathVariable Integer auditId,@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        auditorService.activateBusiness(auditId,taxPayerId,businessId);
+        return ResponseEntity.status(200).body(new ApiResponse("The business is activated successfully "));
+    }
+
+
+    @PutMapping("block-business/{auditId}/{taxPayerId}/{businessId}")
+    public ResponseEntity blockBusiness(@PathVariable Integer auditId,@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        auditorService.blockBusiness(auditId,taxPayerId,businessId);
+        return ResponseEntity.status(200).body(new ApiResponse("The business is blocked successfully "));
+    }
+
+
+
+
 }

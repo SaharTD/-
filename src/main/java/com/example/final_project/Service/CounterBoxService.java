@@ -56,6 +56,7 @@ public class CounterBoxService {
         }
 
 
+
         CounterBox counterBox = new CounterBox();
 
         counterBox.setType(counterBoxDTO.getType());
@@ -75,7 +76,9 @@ public class CounterBoxService {
             counterBox.setBranch(branch);
         }
 
+        accountant.setLastActiveCounterBox(LocalDateTime.now());
         counterBoxRepository.save(counterBox);
+        accountantRepository.save(accountant);
     }
 
     public List getAllCounterBoxes() {
@@ -99,8 +102,8 @@ public class CounterBoxService {
         oldBox.setType(counterBox.getType());
         oldBox.setPaymentType(counterBox.getPaymentType());
         oldBox.setDailyTreasury(counterBox.getDailyTreasury());
-       // oldBox.setOpenDatetime(counterBox.getOpenDatetime());
-        //oldBox.setCloseDatetime(counterBox.getCloseDatetime());
+        oldBox.setOpenDatetime(counterBox.getOpenDatetime());
+        oldBox.setCloseDatetime(counterBox.getCloseDatetime());
 
         counterBoxRepository.save(oldBox);
     }

@@ -25,26 +25,25 @@ public class TaxReportsService {
     private final SalesRepository salesRepository;
 
 
-
-    public List<TaxReports> getAllTaxReports(){
+    public List<TaxReports> getAllTaxReports() {
         return taxReportsRepository.findAll();
     }
 
-    public void addTaxReports(Integer auditor_id,Integer business_id,TaxReports taxReports){
-        Business business=businessRepository.findBusinessById(business_id);
-         Auditor auditor =auditorRepository.findAuditorsById(auditor_id);
+    public void addTaxReports(Integer auditor_id, Integer business_id, TaxReports taxReports) {
+        Business business = businessRepository.findBusinessById(business_id);
+        Auditor auditor = auditorRepository.findAuditorsById(auditor_id);
 
-         if(auditor==null&&business==null){
-             throw new ApiException("auditor or business not found");
-         }
-         taxReports.setStatus("Pending");
-         taxReportsRepository.save(taxReports);
+        if (auditor == null && business == null) {
+            throw new ApiException("auditor or business not found");
+        }
+        taxReports.setStatus("Pending");
+        taxReportsRepository.save(taxReports);
     }
 
-    public void updateTaxReports(Integer id,TaxReports taxReports){
-        TaxReports oldTaxReports=taxReportsRepository.findTaxReportsById(id);
+    public void updateTaxReports(Integer id, TaxReports taxReports) {
+        TaxReports oldTaxReports = taxReportsRepository.findTaxReportsById(id);
 
-        if(oldTaxReports==null){
+        if (oldTaxReports == null) {
             throw new ApiException("TaxReports not found");
         }
 
@@ -58,9 +57,9 @@ public class TaxReportsService {
     }
 
 
-    public void deleteTaxReports(Integer id){
-        TaxReports taxReports=taxReportsRepository.findTaxReportsById(id);
-        if(taxReports==null){
+    public void deleteTaxReports(Integer id) {
+        TaxReports taxReports = taxReportsRepository.findTaxReportsById(id);
+        if (taxReports == null) {
             throw new ApiException("Tax Reports not found");
         }
         taxReportsRepository.delete(taxReports);
@@ -158,7 +157,7 @@ public class TaxReportsService {
     }
 
 
-    public void changeTaxReportStatus(Integer taxReportId,Integer auditorId, TaxReportStatusDTO taxReportStatusDTO) {
+    public void changeTaxReportStatus(Integer taxReportId, Integer auditorId, TaxReportStatusDTO taxReportStatusDTO) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
         if (taxReport == null) {
@@ -182,7 +181,6 @@ public class TaxReportsService {
         taxReport.setStatus(taxReportStatusDTO.getNewStatus());
         taxReportsRepository.save(taxReport);
     }
-
 
 
     public List<TaxReports> getUnpaidDueTaxReports() {
@@ -234,10 +232,6 @@ public class TaxReportsService {
         }
         return reports.get(0);
     }
-
-
-
-
 
 
 }
