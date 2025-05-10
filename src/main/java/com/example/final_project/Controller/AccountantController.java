@@ -25,14 +25,14 @@ public class AccountantController {
 
 
 
-    @GetMapping("get-accountant-by-branch/{taxPayerId}/{branchId}")
+    @GetMapping("/get-accountant-by-branch/{taxPayerId}/{branchId}")
     public ResponseEntity getBranchAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer branchId){
         return ResponseEntity.status(200).body(accountantService.getBranchAccountant(taxPayerId,branchId));
     }
 
 
 
-    @GetMapping("get-accountant-by-business/{taxPayerId}/{businessId}")
+    @GetMapping("/get-accountant-by-business/{taxPayerId}/{businessId}")
     public ResponseEntity getBusinessAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
         return ResponseEntity.status(200).body(accountantService.getBusinessAccountant(taxPayerId,businessId));
     }

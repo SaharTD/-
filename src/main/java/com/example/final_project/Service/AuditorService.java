@@ -96,6 +96,40 @@ public class AuditorService {
     }
 
 
+    public void approveTaxReportStatus(Integer taxReportId,Integer auditorId) {
+        TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
+        if (taxReport == null) {
+            throw new ApiException("Tax report not found");
+        }
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor == null) {
+            throw new ApiException("Auditor not found");
+        }
+        if (taxReport.getAuditor() == null || !taxReport.getAuditor().getId().equals(auditorId)) {
+            throw new ApiException("This report does not belong to the specified auditor");
+        }
+
+        taxReport.setStatus("Approved");
+        taxReportsRepository.save(taxReport);
+    }
+
+    public void rejectTaxReportStatus(Integer taxReportId,Integer auditorId) {
+        TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
+        if (taxReport == null) {
+            throw new ApiException("Tax report not found");
+        }
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor == null) {
+            throw new ApiException("Auditor not found");
+        }
+        if (taxReport.getAuditor() == null || !taxReport.getAuditor().getId().equals(auditorId)) {
+            throw new ApiException("This report does not belong to the specified auditor");
+        }
+
+        taxReport.setStatus("Rejected");
+        taxReportsRepository.save(taxReport);
+    }
+
 
     public void activateBusiness(Integer auditId, Integer taxPayerId, Integer businessId) {
 

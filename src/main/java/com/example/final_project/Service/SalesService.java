@@ -32,7 +32,7 @@ public class SalesService {
         return salesRepository.findAll();
     }
 
-    public void addSales(Integer counterBox_id,Integer branch_id,Sales sales){
+    public void addSales(Integer counterBox_id,Integer branch_id){
         CounterBox counterBox=counterBoxRepository.findCounterBoxById(counterBox_id);
         Branch branch=branchRepository.findBranchesById(branch_id);
         sales.setDate(LocalDateTime.now());
@@ -41,6 +41,8 @@ public class SalesService {
         if(counterBox_id==null&&branch==null){
             throw new ApiException("Branch or Counter Box not found ");
         }
+        Sales sales = new Sales();
+//        sales.setSale_invoice();
         salesRepository.save(sales);
     }
 
@@ -92,6 +94,7 @@ public class SalesService {
         productRepository.save(product);
         salesRepository.save(sales);
     }
+
 
     public void calculateSalesAmounts(Integer salesId) {
         Sales sales = salesRepository.findSalesById(salesId);
@@ -198,5 +201,16 @@ public class SalesService {
 
 
 
+
+    // Endpoint
+    public void printSale(Integer saleId){
+        Sales sales = salesRepository.findSalesById(saleId);
+    }
+
+
+    // Endpoint 33
+    public void calcuateTaxBySaleNumber(Integer salesNumber){
+
+    }
 
 }

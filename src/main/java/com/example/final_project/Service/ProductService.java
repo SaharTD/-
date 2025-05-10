@@ -52,6 +52,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+
     public void updateProduct(Integer branchId, Integer productId, Product product) {
         Branch branch = branchRepository.findBranchesById(branchId);
         Product oldProduct = productRepository.findProductById(productId);
@@ -87,12 +88,6 @@ public class ProductService {
         }
         return products;
     }
-
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
-    }
-
-
 
 
 
