@@ -56,15 +56,11 @@ public class Business {
     @NotEmpty(message = "the business located region should not be empty")
     private String region;
 
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime requestDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registrationDate;
 
 
     private Boolean isActive;
-    private String requestStatus;
 
 
 

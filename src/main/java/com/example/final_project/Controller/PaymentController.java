@@ -23,7 +23,7 @@ public class PaymentController {
     }
 
 
-    @DeleteMapping("delete /{paymentId}")
+    @DeleteMapping("delete/{paymentId}")
     public ResponseEntity deletePayment(@PathVariable Integer paymentId){
         paymentService.deletePayment(paymentId);
         return ResponseEntity.status(200).body(new ApiResponse("the payment has been deleted successfully "));
