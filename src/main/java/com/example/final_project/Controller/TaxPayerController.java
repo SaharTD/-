@@ -59,7 +59,7 @@ public class TaxPayerController {
     // Endpoint 40
     @PutMapping("/activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
     public ResponseEntity activateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
-        taxPayerService.(taxPayerId, accountantId);
+//        taxPayerService.(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is active"));
     }
 
@@ -67,7 +67,7 @@ public class TaxPayerController {
     // Endpoint 41
     @PutMapping("/de-activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
     public ResponseEntity deActivateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
-        taxPayerService.deActivateAccountant(taxPayerId, accountantId);
+//        taxPayerService.deActivateAccountant(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
 
