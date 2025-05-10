@@ -16,4 +16,13 @@ public interface TaxReportsRepository extends JpaRepository<TaxReports,Integer> 
 
     List<TaxReports> findAllByPaymentDateIsNotNullAndStatusNot(String status);
 
+    List<TaxReports> findAllByAuditorId(Integer auditorId);
+
+    Long countByAuditorId(Integer auditorId);
+
+    Long countByAuditorIdAndStatus(Integer auditorId, String status);
+
+    List<TaxReports> findTopByAuditorIdOrderByEnd_dateDesc(Integer auditorId);
+
+
 }
