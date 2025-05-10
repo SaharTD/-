@@ -26,5 +26,11 @@ public interface TaxReportsRepository extends JpaRepository<TaxReports,Integer> 
     @Query("select r from TaxReports r order by r.end_date desc")
     List<TaxReports> findTopByAuditorIdOrderByEnd_dateDesc(Integer auditorId);
 
+    @Query("select t from TaxReports t where t.business.taxPayer.id=?1")
+    List<TaxReports> findTaxReportsByTaxPayer(Integer taxPayerId);
+
+
+//    List<TaxReports> findTaxReportsByBranch(Integer branchId);
+
 
 }

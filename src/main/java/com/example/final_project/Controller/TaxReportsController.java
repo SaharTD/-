@@ -1,6 +1,7 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTOOUT.TaxReportStatusDTO;
 import com.example.final_project.Model.TaxReports;
 import com.example.final_project.Service.TaxReportsService;
@@ -111,6 +112,11 @@ public class TaxReportsController {
     }
 
 
+    // Endpoint 37
+    @GetMapping("/get-tax-reports/tax-payer/{taxPayerId}")
+    public ResponseEntity printTaxReportForEveryBusinesses(@PathVariable Integer taxPayerId){
+        return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(taxPayerId));
+    }
 
 
 }

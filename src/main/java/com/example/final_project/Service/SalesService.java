@@ -87,6 +87,7 @@ public class SalesService {
         salesRepository.save(sales);
     }
 
+
     public void calculateSalesAmounts(Integer salesId) {
         Sales sales = salesRepository.findSalesById(salesId);
         if (sales == null) {
@@ -106,6 +107,17 @@ public class SalesService {
         sales.setGrand_amount(grand);
 
         salesRepository.save(sales);
+    }
+
+    // Endpoint
+    public void printSale(Integer saleId){
+        Sales sales = salesRepository.findSalesById(saleId);
+    }
+
+
+    // Endpoint 33
+    public void calcuateTaxBySaleNumber(Integer salesNumber){
+
     }
 
 }

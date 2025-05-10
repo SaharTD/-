@@ -236,6 +236,14 @@ public class TaxReportsService {
     }
 
 
+    // Endpoint 37
+    public List<TaxReports> printTaxReportForEveryBusinesses(Integer taxPayerId){
+        List<TaxReports> taxReports = taxReportsRepository.findTaxReportsByTaxPayer(taxPayerId);
+        if (taxReports.isEmpty())
+            throw new ApiException("you don't have any tax reports");
+        return taxReports;
+    }
+
 
 
 
