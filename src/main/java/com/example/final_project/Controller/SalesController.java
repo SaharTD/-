@@ -1,6 +1,7 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.Model.Sales;
 import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
@@ -8,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/sales")
@@ -38,4 +42,25 @@ public class SalesController {
         salesService.deleteSales(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
     }
+
+    @GetMapping("/sales-summary/{branchId}")
+    public ResponseEntity<Map<String, Double>> getSalesByBranch(@PathVariable Integer branchId) {
+        return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(branchId));
+    }
+
+    @PostMapping("/adds/{counterBox_id}/{branch_id}")
+    public ResponseEntity addSales(@PathVariable Integer counterBox_id, @PathVariable Integer branch_id, @RequestBody @Valid Sales sales) {
+        Map<String, Object> result = salesService.addSales2(counterBox_id, branch_id, sales);
+        return ResponseEntity.status(200).body(result);
+    }
+
+    @GetMapping("/by-taxpayer/{taxPayerId}")
+    public ResponseEntity getSalesByTaxPayerId(@PathVariable Integer taxPayerId) {
+        List<Sales> sales = salesService.getSalesByTaxPayerId(taxPayerId);
+        return ResponseEntity.status(200).body(sales);
+    }
+
+
+
+
 }

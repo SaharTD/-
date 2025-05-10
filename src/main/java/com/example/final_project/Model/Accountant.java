@@ -22,7 +22,7 @@ import java.util.Set;
 public class Accountant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(columnDefinition = "varchar(10) not null unique")
@@ -42,7 +42,7 @@ public class Accountant {
     private Set<CounterBox> counterBoxes;
 
     @ManyToOne
-    @MapsId
+    //@MapsId
     @JsonIgnore
     @JoinColumn(name = "id")
     private Branch branch;

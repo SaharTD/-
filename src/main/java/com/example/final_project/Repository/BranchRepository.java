@@ -19,6 +19,4 @@ public interface BranchRepository extends JpaRepository<Branch,Integer> {
     List<Branch> findBranchByBusiness(Business business);
 
 
-
-
 }

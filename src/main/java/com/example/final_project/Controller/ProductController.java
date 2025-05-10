@@ -40,4 +40,15 @@ public class ProductController {
         return ResponseEntity.status(200).body(new ApiResponse("product deleted"));
     }
 
+
+    //accountant add product to branch
+    @PostMapping("/add-to-branch/{accountantId}/{branchId}")
+    public ResponseEntity<?> addProductToBranch(@PathVariable Integer accountantId, @PathVariable Integer branchId, @RequestBody Product product) {
+        productService.addProductToBranch(accountantId, branchId, product);
+        return ResponseEntity.status(200).body("Product added successfully");
+    }
+
+
+
+
 }

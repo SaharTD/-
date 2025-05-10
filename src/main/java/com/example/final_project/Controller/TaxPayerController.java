@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/tax-payer")
 @RequiredArgsConstructor
@@ -48,5 +51,11 @@ public class TaxPayerController {
         taxPayerService.addAccountant(taxPayerID,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
     }
+
+    @GetMapping("/tax-payers/with-accountants")
+    public ResponseEntity<List<Map<String, Object>>> getTaxPayersWithAccountants() {
+        return ResponseEntity.status(200).body(taxPayerService.getTaxPayersWithAccountants());
+    }
+
 
 }

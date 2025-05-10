@@ -2,6 +2,8 @@ package com.example.final_project.Repository;
 
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Product;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findAllByBranchId(Integer branchId);
 
 
+
+
+    Product findByNameAndBranchId(@NotEmpty @Size(min = 4,max = 20,message = "product name length should be between 4-20") String name, Integer branchId);
 }

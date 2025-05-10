@@ -39,6 +39,9 @@ public class CounterBox {
     @Column
     private LocalDateTime closeDatetime;
 
+    @Column
+    private Boolean status=false;
+
     @ManyToOne
     @JsonIgnore
     private Branch branch;

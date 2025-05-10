@@ -1,9 +1,11 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Notification.NotificationService;
+import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
+    private final AccountantRepository accountantRepository;
     private final NotificationService notificationService;
 
     public List<Product> getAllProduct(){
@@ -62,6 +65,24 @@ public class ProductService {
         branchRepository.save(branch);
         productRepository.delete(product);
     }
+
+
+    //by accountant
+    public void addProductToBranch(Integer accountantId, Integer branchId, Product product) {
+        Accountant accountant = accountantRepository.getReferenceById(accountantId);
+        if (accountant == null) throw new ApiException("Accountant not found");
+
+        Branch branch = branchRepository.getReferenceById(branchId);
+        if (branch == null) throw new ApiException("Branch not found");
+
+        Product existingProduct = productRepository.findByNameAndBranchId(product.getName(), branchId);
+        if (existingProduct != null)
+            throw new ApiException("The product is already exist you can edit it");
+
+        product.setBranch(branch);
+        productRepository.save(product);
+    }
+
 
 
 }

@@ -17,9 +17,9 @@ public class CounterBoxDTO {
 
     @NotNull(message = "DailyTreasury must not be null")
     private Double dailyTreasury;
-    //ليتها كومنت لين نضبط المحاسب
-   /* @NotNull(message = "accountantId is required")
-    private Integer accountantId;*/
+
+    @NotNull(message = "accountantId is required")
+    private Integer accountantId;
 
     private Integer branchId;
 }
