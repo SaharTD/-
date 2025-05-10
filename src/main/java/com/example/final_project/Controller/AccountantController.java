@@ -25,10 +25,22 @@ public class AccountantController {
 
 
 
-    @GetMapping("/getall")
-    public ResponseEntity getAll(){
-        return ResponseEntity.status(200).body(accountantService.getAllAccountants());
+    @GetMapping("get-accountant-by-branch/{taxPayerId}/{branchId}")
+    public ResponseEntity getBranchAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer branchId){
+        return ResponseEntity.status(200).body(accountantService.getBranchAccountant(taxPayerId,branchId));
     }
+
+
+
+    @GetMapping("get-accountant-by-business/{taxPayerId}/{businessId}")
+    public ResponseEntity getBusinessAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        return ResponseEntity.status(200).body(accountantService.getBusinessAccountant(taxPayerId,businessId));
+    }
+
+
+
+
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity update(@PathVariable Integer id, @RequestBody @Valid AccountantDTO accountantDTO) {
@@ -47,6 +59,11 @@ public class AccountantController {
 
 
 
+    @PutMapping("assign-accountant-to-branch/accountant/{taxPayerId}/{accountantId}/{branchId}")
+    public ResponseEntity assignAccountantToBranch(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId,@PathVariable Integer branchId){
+        accountantService.assignAccountantToBranch(taxPayerId,accountantId,branchId);
+        return ResponseEntity.status(200).body(new ApiResponse("The accountant has been assign to the branch successfully "));
+    }
 
 
     @PutMapping("/restock-product/accountant/{accountantId}/product/{productId}/amount/{amount}")

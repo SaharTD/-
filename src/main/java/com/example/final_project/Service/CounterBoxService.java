@@ -24,33 +24,35 @@ public class CounterBoxService {
     private final AccountantRepository accountantRepository;
     private final BranchRepository branchRepository;
 
-    //كرييت مع المحاسب
-    /*public void createCounterBox(CounterBoxDTO counterBoxDTO) {
+    public void createCounterBox(CounterBoxDTO counterBoxDTO) {
+
         if (counterBoxDTO.getAccountantId() == null) {
-            throw new ApiException("Accountant ID is required");
+            throw new ApiException("Valid accountant ID is required");
         }
 
-        Accountant accountant = accountantRepository.getReferenceById(counterBoxDTO.getAccountantId());
+
+        Accountant accountant = accountantRepository.findAccountantById(counterBoxDTO.getAccountantId());
         if (accountant == null) {
             throw new ApiException("Accountant not found");
         }
+
+        Branch branch = branchRepository.findBranchesById(counterBoxDTO.getBranchId());
+        if (branch == null) {
+            throw new ApiException("Branch not found");
+        }
+
+
         CounterBox counterBox = new CounterBox();
+
         counterBox.setType(counterBoxDTO.getType());
         counterBox.setPaymentType(counterBoxDTO.getPaymentType());
         counterBox.setDailyTreasury(counterBoxDTO.getDailyTreasury());
         counterBox.setOpenDatetime(LocalDateTime.now());
-       // counterBox.setAccountant(accountant);
-
-        if (counterBoxDTO.getBranchId() != null) {
-            Branch branch = branchRepository.getReferenceById(counterBoxDTO.getBranchId());
-            if (branch == null) {
-                throw new ApiException("Branch not found");
-            }
-            counterBox.setBranch(branch);
-        }
+        counterBox.setAccountant(accountant);
+        counterBox.setBranch(branch);
 
         counterBoxRepository.save(counterBox);
-    }*/
+    }
 
     public List getAllCounterBoxes() {
         return counterBoxRepository.findAll();

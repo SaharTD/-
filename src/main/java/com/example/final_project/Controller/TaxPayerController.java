@@ -19,6 +19,8 @@ public class TaxPayerController {
 
     private final TaxPayerService taxPayerService;
 
+
+
     @GetMapping("/get-all-tax-payers/{taxPayerId}")
     public ResponseEntity getAllTaxTaxPayers (@PathVariable Integer taxPayerId){
         return ResponseEntity.status(200).body(taxPayerService.getAllTaxTaxPayers(taxPayerId));
@@ -43,6 +45,7 @@ public class TaxPayerController {
     }
 
 
+    /// 13
     @PostMapping("add-accountant/{taxPayerID}")
     public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID){
         taxPayerService.addAccountant(taxPayerID,accountantDTO);

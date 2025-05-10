@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class CounterBoxDTO {
 
-    @NotEmpty(message = "type must not be empty")
+//    @NotEmpty(message = "type must not be empty")
     private String type;
 
     @NotEmpty(message = "paymentType must not be empty")
@@ -17,9 +17,10 @@ public class CounterBoxDTO {
 
     @NotNull(message = "DailyTreasury must not be null")
     private Double dailyTreasury;
-    //ليتها كومنت لين نضبط المحاسب
-   /* @NotNull(message = "accountantId is required")
-    private Integer accountantId;*/
 
+    @NotNull(message = "Accountant Id is required")
+    private Integer accountantId;
+
+    @NotNull(message = "Branch ID is required")
     private Integer branchId;
 }

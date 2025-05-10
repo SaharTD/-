@@ -28,6 +28,14 @@ public class BranchService {
         Business business = businessRepository.findBusinessById(businessId);
         if (business==null)
             throw new ApiException("business not found");
+
+
+        /// if business is not active
+        if (!branch.getBusiness().getIsActive()) {
+            throw new ApiException("The business related to this branch is not active");
+
+        }
+
         branch.setBusiness(business);
 //        business.getBranches().add(branch);
 //        businessRepository.save(business);
@@ -46,7 +54,7 @@ public class BranchService {
         oldBranch.setBranchNumber(branch.getBranchNumber());
         oldBranch.setCity(branch.getCity());
         oldBranch.setRegion(branch.getRegion());
-        oldBranch.setAddress(branch.getAddress());
+
 
         branchRepository.save(branch);
     }

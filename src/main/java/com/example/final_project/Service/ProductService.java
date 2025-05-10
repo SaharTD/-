@@ -19,29 +19,39 @@ public class ProductService {
     private final BranchRepository branchRepository;
     private final NotificationService notificationService;
 
-    public List<Product> getAllProduct(){
-        notificationService.sendEmail("aa.ll.ii.pp5@gmail.com","test","dear customer");
+    public List<Product> getAllProduct() {
+        notificationService.sendEmail("aa.ll.ii.pp5@gmail.com", "test", "dear customer");
         return productRepository.findAll();
     }
 
-    public void addProduct(Integer branchId, Product product){
+    public void addProduct(Integer branchId, Product product) {
         Branch branch = branchRepository.findBranchesById(branchId);
-        if (branch==null)
+        if (branch == null) {
             throw new ApiException("branch not found");
+        }
+
+/// if business is not active
+        if (!branch.getBusiness().getIsActive()) {
+            throw new ApiException("The business that this branch belong to is not activated");
+
+        }
+
 //        Product newProduct = new Product();
 //        newProduct.setBranch(branch);
 //        branch.getProducts().add(newProduct);
+
+
         product.setBranch(branch);
         branchRepository.save(branch);
         productRepository.save(product);
     }
 
-    public void updateProduct(Integer branchId, Integer productId, Product product){
+    public void updateProduct(Integer branchId, Integer productId, Product product) {
         Branch branch = branchRepository.findBranchesById(branchId);
         Product oldProduct = productRepository.findProductById(productId);
-        if (branch==null)
+        if (branch == null)
             throw new ApiException("branch not found");
-        if (oldProduct==null)
+        if (oldProduct == null)
             throw new ApiException("product not found");
         oldProduct.setName(product.getName());
         oldProduct.setStock(product.getStock());
@@ -50,12 +60,12 @@ public class ProductService {
         productRepository.save(oldProduct);
     }
 
-    public void deleteProduct(Integer branchId,Integer productId){
+    public void deleteProduct(Integer branchId, Integer productId) {
         Branch branch = branchRepository.findBranchesById(branchId);
         Product product = productRepository.findProductById(productId);
-        if (branch==null)
+        if (branch == null)
             throw new ApiException("branch not found");
-        if (product==null)
+        if (product == null)
             throw new ApiException("product not found");
 
         branch.getProducts().remove(product);
