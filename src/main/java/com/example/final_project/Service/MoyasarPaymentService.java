@@ -7,6 +7,10 @@ import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.TaxReports;
 import com.example.final_project.Repository.TaxPayerRepository;
 import com.example.final_project.Repository.TaxReportsRepository;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -15,6 +19,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -29,7 +35,7 @@ public class MoyasarPaymentService {
 
     private static final String MOYASAR_API_URL = "https://api.moyasar.com/v1/payments/";
 
-    public ResponseEntity<?> processPayment(Integer taxPayerId,Integer taxReportId,MoyasarPayment moyasarPayment){
+    public ResponseEntity<?> processPayment(Integer taxPayerId,Integer taxReportId,MoyasarPayment moyasarPayment) throws IOException {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         TaxReports taxReports = taxReportsRepository.findTaxReportsById(taxReportId);
         if (taxPayer==null)
@@ -69,13 +75,26 @@ public class MoyasarPaymentService {
         payment.setTaxPayer(taxPayer);
         payment.setTaxReports(taxReports);
         payment.setName(moyasarPayment.getName());
+        payment.setStatus("Pending");
 
-//        response.getBody().
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json = mapper.readTree((JsonParser) response.getBody());
+
+//        ObjectMapper mapper2 = new ObjectMapper();
+//        JsonParser json = mapper2.getFactory().createParser((File) response.getBody()); // ✅ Correct way
+
+
+        String paymentId = json.get("id").asText();
+        payment.setPaymentId(paymentId);
+
+        return ResponseEntity.status(response.getStatusCode()).body(json.get("transaction_url").asText());
     }
 
 
-    public String getPaymentStatus(String payment_id){
+    public String getPaymentStatus(Integer taxReportId) throws JsonProcessingException {
+        TaxReports taxReports = taxReportsRepository.findTaxReportsById(taxReportId);
+        if (taxReports==null)
+            throw new ApiException("The tax report not found");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(apiKey,"");
@@ -84,9 +103,19 @@ public class MoyasarPaymentService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(MOYASAR_API_URL + payment_id,
+        ResponseEntity<String> response = restTemplate.exchange(MOYASAR_API_URL + taxReports
+                        .getPayment().getPaymentId(),
                 HttpMethod.GET,entity, String.class);
 
-        return response.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json = mapper.readTree(response.getBody());
+
+        if (json.get("status").asText().equals("paid"))
+            taxReports.getPayment().setStatus("Paid");
+        return json.get("status").asText();
+    }
+
+    public void callback(){
+
     }
 }
