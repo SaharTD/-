@@ -38,5 +38,11 @@ public class AuditorController {
         return ResponseEntity.status(200).body(new ApiResponse("auditor deleted"));
     }
 
+    // Endpoint 27
+    @PostMapping("/create-tax-report/{businessId}")
+    public ResponseEntity createTaxReport(@PathVariable Integer businessId){
+        auditorService.createTaxReport(businessId);
+        return ResponseEntity.status(200).body(new ApiResponse("tax created"));
+    }
 
 }

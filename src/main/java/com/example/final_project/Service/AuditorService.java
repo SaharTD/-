@@ -1,18 +1,13 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
-import com.example.final_project.Model.Auditor;
+import com.example.final_project.Model.*;
 import com.example.final_project.DTO.DTOAuditor;
-import com.example.final_project.Model.Business;
-import com.example.final_project.Model.Sales;
-import com.example.final_project.Model.User;
-import com.example.final_project.Repository.AuditorRepository;
-import com.example.final_project.Repository.BusinessRepository;
-import com.example.final_project.Repository.MyUserRepository;
-import com.example.final_project.Repository.SalesRepository;
+import com.example.final_project.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,6 +18,7 @@ public class AuditorService {
     private final MyUserRepository myUserRepository;
     private final BusinessRepository businessRepository;
     private final SalesRepository salesRepository;
+    private final TaxReportsRepository taxReportsRepository;
 
     public List<Auditor> getAllAuditors() {
         return auditorRepository.findAll();
@@ -66,9 +62,32 @@ public class AuditorService {
 
 
     // Endpoint 27
-    public void createTaxReport(){
-//        List<Sales> sales = salesRepository
+    public void createTaxReport(Integer businessId){
+        Business business = businessRepository.findBusinessById(businessId);
+        if (business==null)
+            throw new ApiException("this business not found");
+        List<Sales> sales = salesRepository.findSalesByBusinessId(businessId);
+        if (sales.isEmpty())
+            throw new ApiException("there are no sales for this business");
+        Double totalTax=0.0;
+        TaxReports taxReports = new TaxReports();
+        for (Sales s: sales){
+//            if (s.getTaxReports()!=null)
+//                throw new ApiException("this invoice tax was paid");
+            totalTax += s.getTax_amount();
+            s.setTaxReports(taxReports);
+        }
+        taxReports.setBusiness(business);
+        taxReports.setTotalTax(totalTax);
+        taxReports.setEnd_date(LocalDateTime.now());
+        taxReports.setStatus("Pending");
+
+        businessRepository.save(business);
+        salesRepository.saveAll(sales);
+        taxReportsRepository.save(taxReports);
     }
+
+
 
 
 //
