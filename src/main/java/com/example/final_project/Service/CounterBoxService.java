@@ -175,7 +175,7 @@ public class CounterBoxService {
     public void closeCounterBoxAuto(){
         List<CounterBox> counterBoxes = counterBoxRepository.findCounterBoxByOpenDatetime();
         if (counterBoxes.isEmpty())
-            throw new ApiException("there are no boxes are open");
+            throw new ApiException("None of the boxes are open.");
         for (CounterBox cb:counterBoxes){
             cb.setCloseDatetime(LocalDateTime.now());
             cb.setStatus("Closed");
