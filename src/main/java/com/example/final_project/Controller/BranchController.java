@@ -51,6 +51,11 @@ public class BranchController {
         +branchService.salesOperationOnBranch(taxPayerId, branchId)));
     }
 
+    // Endpoint 12
+    @GetMapping("/get-tax-payer-branches/{id}")
+    public ResponseEntity getAllTaxPayerBranches(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(branchService.getTaxPayerBranches(id));
+    }
 
 
 

@@ -222,7 +222,7 @@ public class TaxReportsService {
         return taxReportsRepository.countByAuditorIdAndStatus(auditorId, status);
     }
 
-    /// //////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////
     public Double getApprovalRate(Integer auditorId) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
         if (auditor==null)
