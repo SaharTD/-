@@ -1,6 +1,7 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Model.MoyasarPayment;
+import com.example.final_project.Model.TaxReports;
 import com.example.final_project.Service.MoyasarPaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
@@ -28,6 +29,12 @@ public class MoyasarPaymentController {
     }
 
     @GetMapping("/callback")
+    public ResponseEntity<?> callbackHandler(@RequestParam String id) throws JsonProcessingException {
+        TaxReports taxReport = moyasarPaymentService.callback(id);
+        return ResponseEntity.ok(taxReport); // يرجع التقرير مع حالته سواء دفعت أو لم تدفع
+    }
+
+    @GetMapping("/callback2")
     public ResponseEntity callbackUrl(){
         return ResponseEntity.status(200).body("Paid !!");
     }

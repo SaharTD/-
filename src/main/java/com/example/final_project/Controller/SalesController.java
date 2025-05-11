@@ -87,7 +87,7 @@ public class SalesController {
     @PutMapping("/add-product-in-sale/{accountantId}/{saleId}")
     public ResponseEntity addProductInSale(@PathVariable Integer accountantId,@PathVariable Integer saleId,@Valid @RequestBody ProductDTO product){
         salesService.addProductInSale(accountantId, saleId,product);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Product is added to invoice successfully"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(" Product is added to invoice successfully"));
     }
 
     @GetMapping("/by-taxpayer/{taxPayerId}")

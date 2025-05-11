@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -114,6 +115,55 @@ public class MoyasarPaymentService {
             taxReports.getPayment().setStatus("Paid");
         return json.get("status").asText();
     }
+
+//*********************************************************************************************************
+
+    public TaxReports callback(String paymentId) throws JsonProcessingException {
+        // استدعاء الدفع من Moyasar
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(apiKey, "");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(MOYASAR_API_URL + paymentId, HttpMethod.GET, entity, String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json = mapper.readTree(response.getBody());
+
+        String status = json.get("status").asText();
+        String taxReportIdStr = json.get("metadata") != null && json.get("metadata").has("taxReportId")
+                ? json.get("metadata").get("taxReportId").asText()
+                : null;
+
+        if (taxReportIdStr == null) {
+            throw new ApiException("Metadata is missing taxReportId");
+        }
+
+        Integer taxReportId = Integer.parseInt(taxReportIdStr);
+        TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
+
+        if (taxReport == null) throw new ApiException("Tax Report not found");
+
+        if (status.equalsIgnoreCase("paid")) {
+            taxReport.setStatus("Paid");
+            taxReport.setPaymentDate(LocalDate.now());
+            if (taxReport.getPayment() != null) {
+                taxReport.getPayment().setStatus("Paid");
+            }
+        } else {
+            if (taxReport.getPayment() != null) {
+                taxReport.getPayment().setStatus("Failed");
+            }
+        }
+
+        taxReportsRepository.save(taxReport);
+        return taxReport;
+    }
+
+
+
+    //*********************************************************************************************
 
     public void callback(){
 

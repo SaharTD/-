@@ -105,6 +105,13 @@ public class TaxReportsService {
         } else {
             throw new ApiException("No penalty: payment is still within grace period");
         }
+        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String message = "Welcome, dear "+name+"\n\n Due to your failure to " +
+                "pay the value-added tax and your delay of one month, " +
+                "a financial penalty has been imposed, " +
+                "which is 5% of the total amount due.";
+        notificationService.sendEmail(emailTo,"One month late warning",message);
     }
 
 
@@ -135,6 +142,15 @@ public class TaxReportsService {
         double originalTax = taxReport.getTotalTax();
         double penalty = originalTax * 0.10;
         taxReport.setTotalTax(originalTax + penalty);
+
+
+        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String message = "Welcome, dear "+name+"\n\n Due to your failure to " +
+                "pay the value-added tax and your delay of two month, " +
+                "a financial penalty has been imposed, " +
+                "which is 10% of the total amount due.";
+        notificationService.sendEmail(emailTo,"Two month late warning",message);
 
         taxReportsRepository.save(taxReport);
     }
@@ -168,6 +184,9 @@ public class TaxReportsService {
         } else {
             throw new ApiException("Conditions for legal action not met");
         }
+
+        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
+        notificationService.sendEmail(emailTo,"One month late warning"," ");
     }
 
 
