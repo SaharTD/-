@@ -30,8 +30,10 @@ public class ItemSaleService {
 
 
     public void updateItemSale(Integer id, ItemSale newItemSale) {
-        ItemSale itemSale = itemSaleRepository.findById(id)
-                .orElseThrow(() -> new ApiException("ItemSale not found"));
+        ItemSale itemSale = itemSaleRepository.findItemSaleById(id);
+                if(itemSale==null){
+                   throw  new ApiException("ItemSale not found");
+                }
 
         itemSale.setQuantity(newItemSale.getQuantity());
         itemSale.setUnitPrice(itemSale.getProduct().getPrice()); // always based on product price
@@ -41,13 +43,15 @@ public class ItemSaleService {
     }
 
     public void deleteItemSale(Integer id) {
-        ItemSale itemSale = itemSaleRepository.findById(id)
-                .orElseThrow(() -> new ApiException("ItemSale not found"));
+        ItemSale itemSale = itemSaleRepository.findItemSaleById(id);
+                if(itemSale==null){
+                  throw new ApiException("ItemSale not found");
+                }
         itemSaleRepository.delete(itemSale);
     }
 
     public List<ItemSale> getItemSalesBySalesId(Integer salesId) {
-        return itemSaleRepository.findBySalesId(salesId);
+        return itemSaleRepository.findItemSaleBySalesId(salesId);
     }
 
 }
