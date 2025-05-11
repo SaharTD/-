@@ -27,26 +27,17 @@ public class Sales {
     @Column(columnDefinition = "timestamp")
     private LocalDateTime date;
 
-
-
-
-
-
-
-    @Column(columnDefinition = "int unique")
-//    @Positive(message = " sale invoice must be  positive")
+    @Column(columnDefinition = "int not null")
+    @PositiveOrZero(message = " sale invoice must be   positive")
     private Integer sale_invoice;
 
-    @Column(columnDefinition = "double ")
-//    @Positive(message = "total amount  must be positive")
+    @Column(columnDefinition = "double not null")
+    @PositiveOrZero(message = "total amount  must be  positive")
     private Double total_amount=0.0;
 
-    @Column(columnDefinition = "double ")
-//    @Positive(message = "tax amount must be  positive")
-    private Double tax_amount=0.0;
-
     @Column(columnDefinition = "double not null")
-    @Positive(message = "grand amount must be  positive")
+    @PositiveOrZero(message = "tax amount must be   positive")
+    private Double tax_amount=0.0;
 
     private LocalDateTime invoiceDate;
     @Column(columnDefinition = "double ")
@@ -81,6 +72,6 @@ public class Sales {
     @JsonIgnore
     private TaxReports taxReports;
 
-    @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL)
     private Set<ItemSale> itemSales;
 }

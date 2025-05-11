@@ -56,17 +56,18 @@ public class SalesController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
     }
 
-    @PostMapping("/add-product/{salesId}/barcode/{barcode}")
-    public ResponseEntity addProductToSaleByBarcode(@PathVariable Integer salesId, @PathVariable String barcode) {
-        salesService.addProductToSales(salesId, barcode);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Product added to sale"));
-    }
+//    @PostMapping("/add-product/{salesId}/barcode/{barcode}")
+//    public ResponseEntity addProductToSaleByBarcode(@PathVariable Integer salesId, @PathVariable String barcode) {
+//        salesService.addProductToSales(salesId, barcode);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Product added to sale"));
+//    }
 
-    @PutMapping("/calculate/{salesId}")
-    public ResponseEntity calculateAmountsForSale(@PathVariable Integer salesId) {
-        salesService.calculateSalesAmounts(salesId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Amounts calculated successfully"));
-    }
+
+//    @PutMapping("/calculate/{salesId}")
+//    public ResponseEntity calculateAmountsForSale(@PathVariable Integer salesId) {
+//        salesService.calculateSalesAmounts(salesId);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Amounts calculated successfully"));
+//    }
 
 
     @GetMapping("/sales-summary/{branchId}")

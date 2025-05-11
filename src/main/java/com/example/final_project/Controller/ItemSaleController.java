@@ -50,4 +50,16 @@ public class ItemSaleController {
     public ResponseEntity<List<ItemSale>> getItemSalesBySalesId(@PathVariable Integer salesId) {
         return ResponseEntity.ok(itemSaleService.getItemSalesBySalesId(salesId));
     }
+
+    @PostMapping("/add-product/{productId}")
+    public ResponseEntity addProduct(@PathVariable Integer productId){
+        itemSaleService.addProduct(productId);
+        return ResponseEntity.status(200).body(new ApiResponse("product added"));
+    }
+
+    @PostMapping("/purchase")
+    public ResponseEntity purchaseItems(){
+        itemSaleService.purchaseItems();
+        return ResponseEntity.status(200).body(new ApiResponse("new sales printed"));
+    }
 }

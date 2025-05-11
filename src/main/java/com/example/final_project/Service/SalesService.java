@@ -281,43 +281,43 @@ public class SalesService {
         return product;
     }
 
-    public void addProductToSales(Integer salesId, String barcode) {
-        Sales sales = salesRepository.findSalesById(salesId);
-        if (sales == null) {
-            throw new ApiException("Sales not found");
-        }
+//    public void addProductToSales(Integer salesId, String barcode) {
+//        Sales sales = salesRepository.findSalesById(salesId);
+//        if (sales == null) {
+//            throw new ApiException("Sales not found");
+//        }
+//
+//        Product product = productRepository.findProductByBarcode(barcode);
+//        if (product==null) {
+//            throw new ApiException("Product not found with barcode: " + barcode);
+//        }
+//
+//        sales.getProducts().add(product);
+//        productRepository.save(product);
+//        salesRepository.save(sales);
+//    }
 
-        Product product = productRepository.findProductByBarcode(barcode);
-        if (product==null) {
-            throw new ApiException("Product not found with barcode: " + barcode);
-        }
 
-        sales.getProducts().add(product);
-        productRepository.save(product);
-        salesRepository.save(sales);
-    }
-
-
-    public void calculateSalesAmounts(Integer salesId) {
-        Sales sales = salesRepository.findSalesById(salesId);
-        if (sales == null) {
-            throw new ApiException("Sales not found");
-        }
-
-        double total = 0;
-        for (Product product : sales.getProducts()) {
-            total += product.getPrice();
-        }
-
-        double tax = total * 0.15;
-        double grand = total + tax;
-
-        sales.setTotal_amount(total);
-        sales.setTax_amount(tax);
-        sales.setGrand_amount(grand);
-
-        salesRepository.save(sales);
-    }
+//    public void calculateSalesAmounts(Integer salesId) {
+//        Sales sales = salesRepository.findSalesById(salesId);
+//        if (sales == null) {
+//            throw new ApiException("Sales not found");
+//        }
+//
+//        double total = 0;
+//        for (Product product : sales.getProducts()) {
+//            total += product.getPrice();
+//        }
+//
+//        double tax = total * 0.15;
+//        double grand = total + tax;
+//
+//        sales.setTotal_amount(total);
+//        sales.setTax_amount(tax);
+//        sales.setGrand_amount(grand);
+//
+//        salesRepository.save(sales);
+//    }
 
 
     public Map<String, Double> getSalesSummaryByBranch(Integer branchId) {
