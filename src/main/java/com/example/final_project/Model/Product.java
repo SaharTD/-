@@ -47,9 +47,11 @@ public class Product {
     @JsonIgnore
     private Branch branch;
 
+//    @ManyToMany(mappedBy = "products")
+//    private Set<Sales> sales;
 
-    @ManyToMany(mappedBy = "products")
-    private Set<Sales> sales;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ItemSale> itemSales;
 
 
 }

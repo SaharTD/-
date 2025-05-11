@@ -27,10 +27,15 @@ public class ItemSale {
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn
     private Sales sales;
 
     @ManyToOne
+    @JsonIgnore
+    @JoinColumn
     private Product product;
+
+
 
 
 }
