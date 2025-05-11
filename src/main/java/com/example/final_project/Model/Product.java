@@ -47,6 +47,7 @@ public class Product {
     @Check(constraints = "stock>=0")
     private Integer stock;
 
+    @Column(columnDefinition = "varchar(13) unique")
     private String barcode;
 
 

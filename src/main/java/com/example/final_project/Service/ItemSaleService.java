@@ -28,20 +28,6 @@ public class ItemSaleService {
         return itemSaleRepository.findAll();
     }
 
-    public void addItemSale(ItemSale itemSale, Integer salesId, Integer productId) {
-        Sales sales = salesRepository.findById(salesId)
-                .orElseThrow(() -> new ApiException("Sales not found"));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ApiException("Product not found"));
-
-        itemSale.setSales(sales);
-        itemSale.setProduct(product);
-        itemSale.setUnitPrice(product.getPrice());
-        itemSale.setTotalPrice(product.getPrice() * itemSale.getQuantity());
-
-        itemSaleRepository.save(itemSale);
-    }
 
     public void updateItemSale(Integer id, ItemSale newItemSale) {
         ItemSale itemSale = itemSaleRepository.findById(id)
@@ -62,60 +48,6 @@ public class ItemSaleService {
 
     public List<ItemSale> getItemSalesBySalesId(Integer salesId) {
         return itemSaleRepository.findBySalesId(salesId);
-    }
-
-//    Set<ItemSale> itemSales= new HashSet<ItemSale>();
-
-
-    public void addProduct(Integer productId) {
-        List<ItemSale> itemSales = new ArrayList<>();
-        Product product = productRepository.findProductById(productId);
-        if (product == null)
-            throw new ApiException("product not found");
-
-        ItemSale itemSale = new ItemSale();
-//        if (!itemSales.isEmpty()) {
-//            for (ItemSale i : itemSales) {
-//                if (i.getProduct().equals(product)) {
-//                    i.setQuantity(i.getQuantity() + 1);
-//                    i.setTotalPrice(i.getUnitPrice() * i.getQuantity());
-//                    return;
-//                }
-//            }
-//        }
-        itemSale.setProduct(product);
-        itemSale.setUnitPrice(product.getPrice());
-        itemSale.setTotalPrice(product.getPrice());
-//        product.getItemSales().add(itemSale);
-//        productRepository.save(product);
-        itemSales.add(itemSale);
-        itemSaleRepository.save(itemSale);
-    }
-
-    Integer counter=1000;
-    public void purchaseItems(){
-        counter++;
-//        Set<ItemSale> itemSales1 = itemSales;
-        List<ItemSale> itemSales=new ArrayList<>();
-        Sales sales = new Sales();
-        sales.setSale_invoice(counter);
-        double totalPrice = 0.0;
-        double tax;
-        double grandPrice=0.0;
-        for (ItemSale i: itemSaleRepository.findAll()){
-            totalPrice += i.getTotalPrice();
-//            sales.getItemSales().add(i);
-        }
-        tax = totalPrice*0.15;
-        grandPrice = tax+totalPrice;
-        sales.setGrand_amount(grandPrice);
-        sales.setTax_amount(tax);
-        sales.setTotal_amount(totalPrice);
-        sales.setInvoiceDate(LocalDateTime.now());
-//        sales.setItemSales(itemSales);
-        salesRepository.save(sales);
-        itemSaleRepository.saveAll(itemSales);
-        itemSales=null;
     }
 
 }

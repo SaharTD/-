@@ -1,7 +1,7 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
-import com.example.final_project.DTO.SaleRequestDTO;
+import com.example.final_project.DTO.SaleDTO;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
 import com.example.final_project.Model.Product;
@@ -10,10 +10,10 @@ import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
 import com.example.final_project.Repository.ProductRepository;
 import com.example.final_project.Repository.SalesRepository;
-import jakarta.transaction.Transactional;
 import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
+import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,9 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,89 +35,175 @@ public class SalesService {
     private final BranchRepository branchRepository;
     private final ProductRepository productRepository;
     private final AccountantRepository accountantRepository;
-
+    private final ItemSaleRepository itemSaleRepository;
 
     public List<Sales> getAllSales() {
         return salesRepository.findAll();
     }
-//
-//    public void addSales(Integer accountantId, Integer counterBox_id, Integer branch_id, Sales sales) {
-//
-//
-//        CounterBox counterBox = counterBoxRepository.findCounterBoxById(counterBox_id);
-//        Branch branch = branchRepository.findBranchesById(branch_id);
-//
-//        if (counterBox_id == null && branch == null) {
-//            throw new ApiException("Branch or Counter Box not found ");
-//        }
-//
-//
-//        Accountant accountant = accountantRepository.findAccountantByIdAndBranch(accountantId, branch);
-//        if (accountant == null) {
-//            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
-//        }
-//
-//
-//        if (!accountant.getCounterBoxes().contains(counterBox)) {
-//            throw new ApiException("The counter  does not belong to the accountant");
-//        }
-//
-//
-//        if (!accountant.getCounterBoxes().contains(counterBox) && !counterBox.getCloseDatetime().isBefore(LocalDateTime.now()) || counterBox.getCloseDatetime() == null) {
-//            throw new ApiException("The counter box is closed");
-//        }
-//
-//
-//        sales.setBranch(branch);
-//        sales.setCounterBox(counterBox);
-//        salesRepository.save(sales);
-//    }
-//
-//
-//    public void addProductInSale(Integer accountantId, Integer saleId, ProductDTO productDTO) {
-//
-//        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-//        if (accountant == null) {
-//            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
-//        }
-//
-//        Sales thisSales=salesRepository.findSalesById(saleId);
-//        Sales currentSale = salesRepository.findSalesByIdAndCounterBox_Accountant(thisSales.getSale_invoice(), accountantId);
-//        if (currentSale == null) {
-//            throw new ApiException("the sale is not found or does not belong to this accountant");
-//        }
-//
-//
-//        Product product = productRepository.findProductByName(productDTO.getName());
-//        if (product==null){
-//            throw new ApiException("Sorry the product is not found . check the  product name again ");
-//
-//        }
-//
-//        if(product.getStock()< productDTO.getQuantity()){
-//            throw new ApiException("Sorry the product is out of stock");
-//
-//        }
-//
-//
-//
-//        product.setQuantity(productDTO.getQuantity());
-//        product.setStock(product.getStock() - productDTO.getQuantity());
-//
-//        productRepository.save(product);
-//
-//
-//        Product saleProduct=new Product();
-//        saleProduct.setName(productDTO.getName());
-//        saleProduct.setQuantity(productDTO.getQuantity());
-//        currentSale.getProducts().add(saleProduct);
-//        productRepository.save(saleProduct);
-//
-//        salesRepository.save(currentSale);
-//
-//
-//    }
-//
+
+
+
+    public void addSales(Integer accountantId, Integer counterBox_id, Integer branch_id, SaleDTO saleDTO) {
+
+
+        CounterBox counterBox = counterBoxRepository.findCounterBoxById(counterBox_id);
+        Branch branch = branchRepository.findBranchesById(branch_id);
+
+        if (counterBox == null && branch == null) {
+            throw new ApiException("Branch or Counter Box not found ");
+        }
+
+
+        Accountant accountant = accountantRepository.findAccountantByIdAndBranch(accountantId, branch);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
+        }
+
+
+        if (!accountant.getCounterBoxes().contains(counterBox)) {
+            throw new ApiException("The counter  does not belong to the accountant");
+        }
+
+
+        if (!accountant.getCounterBoxes().contains(counterBox) && counterBox.getStatus().equals("Closed")) {
+            throw new ApiException("The counter box is closed");
+        }
+
+        Sales newSale=new Sales();
+        newSale.setSalesStatus("DRAFT");
+        newSale.setBranch(branch);
+        newSale.setSale_invoice(saleDTO.getSale_invoice());
+        newSale.setCounterBox(counterBox);
+        salesRepository.save(newSale);
+    }
+
+
+    public void addProductInSale(Integer accountantId, Integer saleId, ProductDTO productDTO) {
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
+        }
+
+        Sales currentSale=salesRepository.findSalesById(saleId);
+        if (currentSale == null) {
+            throw new ApiException("the sale is not found ");
+        }
+
+        if (currentSale.getCounterBox().getAccountant().getId()!=accountantId){
+            throw new ApiException("the counter box with this sale does not belong to this accountant ");
+
+        }
+
+        Product product = productRepository.findProductByBarcode(productDTO.getBarcode());
+        if (product==null){
+            throw new ApiException("Sorry the product is not found . check the  product name again ");
+
+        }
+
+
+        if(product.getStock()< productDTO.getQuantity()){
+            throw new ApiException("Sorry the product is out of stock");
+
+        }
+
+        if (!currentSale.getSalesStatus().equals("DRAFT")){
+            throw new ApiException("Sorry can not add product to confirmed invoice ");
+
+        }
+
+
+        ItemSale itemSale=new ItemSale();
+        itemSale.setSales(currentSale);
+        itemSale.setProductName(product.getName());
+        itemSale.setProduct(product);
+        itemSale.setQuantity(productDTO.getQuantity());
+        itemSale.setUnitPrice(product.getPrice());
+        itemSale.setTotalPrice(product.getPrice()* productDTO.getQuantity());
+
+        product.setStock(product.getStock()-productDTO.getQuantity());
+        productRepository.save(product);
+
+
+        itemSaleRepository.save(itemSale);
+
+
+    }
+
+
+
+    public void updateCalculations(Integer saleId){
+
+        Sales sale=salesRepository.findSalesById(saleId);
+
+        List<ItemSale> items =itemSaleRepository.findBySalesId(saleId);
+        if (items.isEmpty()){
+            throw new ApiException("can not confirm an empty invoice ");
+        }
+
+        /// sub total before tax
+        double subTotal=0.0;
+        for(ItemSale i:items){
+            subTotal+= i.getTotalPrice();
+        }
+
+        /// calc grand with tax
+        double tax =subTotal*0.15;
+        double grandTotal =subTotal+tax;
+
+        sale.setTotal_amount(subTotal);
+        sale.setTax_amount(tax);
+        sale.setGrand_amount(grandTotal);
+
+    }
+
+
+    public void confirmSale(Integer accountantId, Integer saleId){
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
+        }
+
+        Sales currentSale=salesRepository.findSalesById(saleId);
+        if (currentSale == null) {
+            throw new ApiException("the sale is not found ");
+        }
+
+        if (currentSale.getCounterBox().getAccountant().getId()!=accountantId){
+            throw new ApiException("the counter box with this sale does not belong to this accountant ");
+
+        }
+
+        if (!currentSale.getSalesStatus().equals("DRAFT")){
+            throw new ApiException("Sorry can not add product to confirmed invoice ");
+
+        }
+
+        List<ItemSale> items =itemSaleRepository.findBySalesId(saleId);
+        if (items.isEmpty()){
+            throw new ApiException("can not confirm an empty invoice ");
+        }
+
+
+        updateCalculations(saleId);
+        currentSale.setSalesStatus("CONFIRMED");
+        currentSale.setSaleDate(LocalDateTime.now());
+        salesRepository.save(currentSale);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //    public byte[] printInvoice(Integer accountantId, Integer saleId) {
 //
@@ -226,8 +313,8 @@ public class SalesService {
 //
 //
 //    }
-//
-//
+
+
 
 
     public void addSales(Integer counterBox_id,Integer branch_id){

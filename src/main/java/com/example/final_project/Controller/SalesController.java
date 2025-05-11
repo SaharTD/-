@@ -2,6 +2,7 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.DTO.SaleDTO;
 import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.Product;
@@ -31,18 +32,18 @@ public class SalesController {
     public ResponseEntity getAllSales(){
         return ResponseEntity.status(HttpStatus.OK).body(salesService.getAllSales());
     }
-
-    @PostMapping("/add/{counterBox_id}/{branch_id}")
-    public ResponseEntity addTaxReports(@PathVariable Integer counterBox_id,@PathVariable Integer branch_id) {
-        salesService.addSales(counterBox_id, branch_id);
-        return ResponseEntity.status(200).body(new ApiResponse("new tax report added"));
-    }
-
-    @PostMapping("/add/{accountantId}/{counterBox_id}/{branch_id}")
-    public ResponseEntity addTaxReports(@PathVariable Integer accountantId,@PathVariable Integer counterBox_id,@PathVariable Integer branch_id,  @Valid @RequestBody Sales sales){
-        salesService.addSales(accountantId,counterBox_id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is added!"));
-    }
+//
+//    @PostMapping("/add/{counterBox_id}/{branch_id}")
+//    public ResponseEntity addTaxReports(@PathVariable Integer counterBox_id,@PathVariable Integer branch_id) {
+//        salesService.addSales(counterBox_id, branch_id);
+//        return ResponseEntity.status(200).body(new ApiResponse("new tax report added"));
+//    }
+//
+//    @PostMapping("/add/{accountantId}/{counterBox_id}/{branch_id}")
+//    public ResponseEntity addTaxReports(@PathVariable Integer accountantId,@PathVariable Integer counterBox_id,@PathVariable Integer branch_id,  @Valid @RequestBody Sales sales){
+//        salesService.addSales(accountantId,counterBox_id);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is added!"));
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity updateSales(@PathVariable Integer id,@Valid @RequestBody  Sales sales){
@@ -75,10 +76,18 @@ public class SalesController {
         return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(branchId));
     }
 
-    @PostMapping("/adds/{counterBox_id}/{branch_id}")
-    public ResponseEntity addSales(@PathVariable Integer counterBox_id, @PathVariable Integer branch_id, @RequestBody @Valid Sales sales) {
-        Map<String, Object> result = salesService.addSales2(counterBox_id, branch_id, sales);
-        return ResponseEntity.status(200).body(result);
+
+    @PostMapping("/adds/{accountantId}/{counterBoxId}/{branch_id}")
+    public ResponseEntity addSales(@PathVariable Integer accountantId, @PathVariable Integer counterBoxId, @PathVariable Integer branch_id, @RequestBody @Valid SaleDTO saleDTO ) {
+        salesService.addSales(accountantId,counterBoxId,branch_id,saleDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("Sale made successfully"));
+    }
+
+    /// Integer accountantId, Integer saleId, ProductDTO productDTO
+    @PutMapping("/add-product-in-sale/{accountantId}/{saleId}")
+    public ResponseEntity addProductInSale(@PathVariable Integer accountantId,@PathVariable Integer saleId,@Valid @RequestBody ProductDTO product){
+        salesService.addProductInSale(accountantId, saleId,product);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Product is added to invoice successfully"));
     }
 
     @GetMapping("/by-taxpayer/{taxPayerId}")
@@ -87,7 +96,11 @@ public class SalesController {
         return ResponseEntity.status(200).body(sales);
     }
 
-
+    @PutMapping("/confirm-sale/{accountantId}/{saleId}")
+    public ResponseEntity confirmSale(@PathVariable Integer accountantId,@PathVariable Integer saleId){
+        salesService.confirmSale(accountantId, saleId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" The sales confirmed successfully"));
+    }
 
 
 //    }

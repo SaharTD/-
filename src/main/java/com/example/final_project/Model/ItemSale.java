@@ -16,7 +16,7 @@ public class ItemSale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
+private String productName;
 
     private Integer quantity;
 

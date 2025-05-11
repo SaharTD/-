@@ -143,8 +143,7 @@ public class CounterBoxService {
 
         box.setOpenDatetime(LocalDateTime.now());
         box.setAccountant(accountant);
-        //box.setStatus(true);
-
+box.setStatus("Opened");
         counterBoxRepository.save(box);
     }
 
@@ -164,7 +163,7 @@ public class CounterBoxService {
 
         LocalDateTime now = LocalDateTime.now();
         box.setCloseDatetime(now);
-        //box.setStatus(false);
+        box.setStatus("Closed");
 
         counterBoxRepository.save(box);
 
