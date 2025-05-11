@@ -34,7 +34,6 @@ public class SalesService {
     private final BranchRepository branchRepository;
     private final ProductRepository productRepository;
     private final AccountantRepository accountantRepository;
-    private final ProductRepository productRepository;
 
 
     public List<Sales> getAllSales() {

@@ -61,9 +61,10 @@ public class CounterBoxController {
     public ResponseEntity<?> openCounterBox(@PathVariable Integer boxId, @PathVariable Integer accountantId) {
         counterBoxService.openCounterBox(boxId, accountantId);
         return ResponseEntity.status(200).body("CounterBox opened successfully");
+    }
     @PostMapping("/create-box")
     public ResponseEntity createCounterBox2(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
-        counterBoxService.createCounterBox2(counterBoxDTO);
+//        counterBoxService.createCounterBox2(counterBoxDTO);
         return ResponseEntity.status(200).body("Counter box created successfully");
     }
 

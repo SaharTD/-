@@ -73,9 +73,9 @@ public class Sales {
     @JsonIgnore
     private CounterBox counterBox;
 
-    @ManyToMany
-    @JsonIgnore
-    private Set<Product> products;
+//    @ManyToMany
+//    @JsonIgnore
+//    private Set<Product> products;
 
     @ManyToOne
     @JsonIgnore

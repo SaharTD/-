@@ -33,11 +33,14 @@ public class SalesController {
     }
 
     @PostMapping("/add/{counterBox_id}/{branch_id}")
-    public ResponseEntity addTaxReports(@PathVariable Integer counterBox_id,@PathVariable Integer branch_id){
-        salesService.addSales(counterBox_id,branch_id);
+    public ResponseEntity addTaxReports(@PathVariable Integer counterBox_id,@PathVariable Integer branch_id) {
+        salesService.addSales(counterBox_id, branch_id);
+        return ResponseEntity.status(200).body(new ApiResponse("new tax report added"));
+    }
+
     @PostMapping("/add/{accountantId}/{counterBox_id}/{branch_id}")
     public ResponseEntity addTaxReports(@PathVariable Integer accountantId,@PathVariable Integer counterBox_id,@PathVariable Integer branch_id,  @Valid @RequestBody Sales sales){
-        salesService.addSales(accountantId,counterBox_id,branch_id,sales);
+        salesService.addSales(accountantId,counterBox_id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is added!"));
     }
 
