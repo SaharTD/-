@@ -329,8 +329,7 @@ public class SalesService {
                 totalBeforeTax += sale.getTotal_amount();
         }
 
-        double taxRate = 0.15;
-        double taxAmount = totalBeforeTax * taxRate;
+        double taxAmount = totalBeforeTax * 0.15;
         double grandTotal = totalBeforeTax + taxAmount;
 
         Map<String, Double> result = new HashMap<>();

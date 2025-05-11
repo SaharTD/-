@@ -7,7 +7,9 @@ import com.example.final_project.Model.TaxReports;
 import com.example.final_project.Service.TaxReportsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,6 +107,21 @@ public class TaxReportsController {
         return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(auditorId));
     }
 
+    @GetMapping("/unapproved")
+    public ResponseEntity getUnapprovedTaxReports() {
+        return ResponseEntity.status(200).body(taxReportsService.getUnapprovedTaxReports());
+    }
+
+    @GetMapping("/{reportId}/payment-status")
+    public ResponseEntity getPaymentStatus(@PathVariable Integer reportId) {
+        return ResponseEntity.status(200).body(taxReportsService.getPaymentStatusByReportId(reportId));
+    }
+
+    @GetMapping("/notify-upcoming-payment")
+    public ResponseEntity<String> notifyUpcomingPayments() {
+        taxReportsService.notifyUpcomingPayments();
+        return ResponseEntity.status(200).body("Notifications sent to taxpayers with near-due reports.");
+    }
 
     // Endpoint 37
     @GetMapping("/get-tax-reports/tax-payer/{taxPayerId}")
@@ -112,5 +129,13 @@ public class TaxReportsController {
         return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(taxPayerId));
     }
 
+    @GetMapping("/print/{reportId}")
+    public ResponseEntity<byte[]> printTaxReportAsPdf(@PathVariable Integer reportId) {
+        byte[] pdf = taxReportsService.getTaxReportAsPdf(reportId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + reportId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
 
 }

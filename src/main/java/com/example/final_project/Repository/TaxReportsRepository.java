@@ -35,5 +35,7 @@ public interface TaxReportsRepository extends JpaRepository<TaxReports,Integer> 
 
 //    List<TaxReports> findTaxReportsByBranch(Integer branchId);
 
+    @Query("SELECT t FROM TaxReports t WHERE t.status <> 'Approved'")
+    List<TaxReports> findAllUnapproved();
 
 }

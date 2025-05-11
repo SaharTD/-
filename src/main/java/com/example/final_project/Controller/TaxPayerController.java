@@ -71,10 +71,12 @@ public class TaxPayerController {
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
 
-    @GetMapping("/tax-payers/with-accountants")
-    public ResponseEntity<List<Map<String, Object>>> getTaxPayersWithAccountants() {
-        return ResponseEntity.status(200).body(taxPayerService.getTaxPayersWithAccountants());
+    @GetMapping("/taxpayers/{taxPayerId}/accountants")
+    public ResponseEntity<List<Map<String, Object>>> getAccountantsByTaxPayerId(@PathVariable Integer taxPayerId) {
+        return ResponseEntity.ok(taxPayerService.getAccountantsByTaxPayerId(taxPayerId));
     }
+
+
 
 
 
