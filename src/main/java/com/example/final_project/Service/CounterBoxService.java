@@ -38,7 +38,7 @@ public class CounterBoxService {
     private final SalesRepository salesRepository;
 
 
-    //كرييت مع المحاسب
+    //كرييت البوكس مع المحاسب
     public void createCounterBox(CounterBoxDTO counterBoxDTO) {
         if (counterBoxDTO.getAccountantId() == null) {
             throw new ApiException("Valid accountant ID is required");
