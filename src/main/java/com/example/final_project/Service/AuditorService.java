@@ -28,7 +28,11 @@ public class AuditorService {
     private final TaxReportsRepository taxReportsRepository;
     private final TaxPayerRepository taxPayerRepository;
 
-    public List<Auditor> getAllAuditors() {
+    // authority -> ADMIN
+    public List<Auditor> getAllAuditors(Integer id) {
+        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
+        if (admin==null)
+            throw new ApiException("user not found or doesn't have permission");
         return auditorRepository.findAll();
     }
 
