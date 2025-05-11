@@ -28,7 +28,7 @@ public interface SalesRepository extends JpaRepository<Sales,Integer> {
 //    @Query("select s from Sales s where s.invoiceDate")
 //    List<Sales> findSalesByDateThreeMonthsBefore();
 
-    @Query("select s from Sales s where s.branch.business.id=?1 and s.invoiceDate> now()- 90 day")
+    @Query("select s from Sales s where s.branch.business.id=?1 and s.saleDate> now()- 90 day")
     List<Sales> findSalesByBusinessId(Integer businessId);
 
     @Query("SELECT SUM(s.grand_amount) FROM Sales s")
@@ -52,13 +52,9 @@ public interface SalesRepository extends JpaRepository<Sales,Integer> {
     List<Sales> findSalesByBranch(Branch branch);
 
 
-    @Query("select s from Sales s where s.sale_invoice=?1 and s.counterBox.accountant.id=?2")
-    Sales findSalesByIdAndCounterBox_Accountant(Integer sales_invoice, Integer accId );
-
 
     @Query("select s from Sales s where s.branch.business.id=?1 and s.saleDate between ?2 and ?3")
     List<Sales> findSalesByBranch_BusinessAndSaleDateBetween(Business branchBusiness, LocalDateTime saleDateAfter, LocalDateTime saleDateBefore);
-
 
 
 }

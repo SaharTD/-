@@ -21,7 +21,7 @@ public class Branch {
     private Integer id;
 
     @NotEmpty
-    @Column(columnDefinition = "varchar(3) not null unique")
+    @Column(columnDefinition = "varchar(3) not null ")
     private String branchNumber;
 
     @NotEmpty

@@ -23,12 +23,6 @@ public class ItemSaleController {
         return ResponseEntity.ok(itemSaleService.getAllItemSales());
     }
 
-    // إضافة عنصر جديد إلى فاتورة
-    @PostMapping("/add/{salesId}/product/{productId}")
-    public ResponseEntity<ApiResponse> addItemSale(@RequestBody @Valid ItemSale itemSale,@PathVariable Integer salesId,@PathVariable Integer productId) {
-        itemSaleService.addItemSale(itemSale, salesId, productId);
-        return ResponseEntity.ok(new ApiResponse("ItemSale added successfully"));
-    }
 
     // تعديل عنصر
     @PutMapping("/update/{id}")
@@ -51,15 +45,4 @@ public class ItemSaleController {
         return ResponseEntity.ok(itemSaleService.getItemSalesBySalesId(salesId));
     }
 
-    @PostMapping("/add-product/{productId}")
-    public ResponseEntity addProduct(@PathVariable Integer productId){
-        itemSaleService.addProduct(productId);
-        return ResponseEntity.status(200).body(new ApiResponse("product added"));
-    }
-
-    @PostMapping("/purchase")
-    public ResponseEntity purchaseItems(){
-        itemSaleService.purchaseItems();
-        return ResponseEntity.status(200).body(new ApiResponse("new sales printed"));
-    }
 }
