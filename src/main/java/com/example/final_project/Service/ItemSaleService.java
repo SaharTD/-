@@ -25,12 +25,15 @@ public class ItemSaleService {
     }
 
     public void addItemSale(ItemSale itemSale, Integer salesId, Integer productId) {
-        Sales sales = salesRepository.findById(salesId)
-                .orElseThrow(() -> new ApiException("Sales not found"));
+        Sales sales = salesRepository.findSalesById(salesId);
+                if(sales==null){
+                   throw  new ApiException("Sales not found");
+                }
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ApiException("Product not found"));
-
+        Product product = productRepository.findProductById(productId);
+                if(product==null){
+                  throw  new ApiException("Product not found");
+                }
         itemSale.setSales(sales);
         itemSale.setProduct(product);
         itemSale.setUnitPrice(product.getPrice());
@@ -40,8 +43,10 @@ public class ItemSaleService {
     }
 
     public void updateItemSale(Integer id, ItemSale newItemSale) {
-        ItemSale itemSale = itemSaleRepository.findById(id)
-                .orElseThrow(() -> new ApiException("ItemSale not found"));
+        ItemSale itemSale = itemSaleRepository.findItemSaleById(id);
+                if(itemSale==null){
+                   throw  new ApiException("ItemSale not found");
+                }
 
         itemSale.setQuantity(newItemSale.getQuantity());
         itemSale.setUnitPrice(itemSale.getProduct().getPrice()); // always based on product price
@@ -51,13 +56,15 @@ public class ItemSaleService {
     }
 
     public void deleteItemSale(Integer id) {
-        ItemSale itemSale = itemSaleRepository.findById(id)
-                .orElseThrow(() -> new ApiException("ItemSale not found"));
+        ItemSale itemSale = itemSaleRepository.findItemSaleById(id);
+                if(itemSale==null){
+                  throw new ApiException("ItemSale not found");
+                }
         itemSaleRepository.delete(itemSale);
     }
 
     public List<ItemSale> getItemSalesBySalesId(Integer salesId) {
-        return itemSaleRepository.findBySalesId(salesId);
+        return itemSaleRepository.findItemSaleBySalesId(salesId);
     }
 
 }
