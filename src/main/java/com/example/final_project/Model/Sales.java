@@ -1,5 +1,6 @@
 package com.example.final_project.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
@@ -29,25 +30,38 @@ public class Sales {
 
 
 
-    @Column(columnDefinition = "int not null")
-    @Positive(message = " sale invoice must be   positive")
+
+
+
+    @Column(columnDefinition = "int unique")
+//    @Positive(message = " sale invoice must be  positive")
     private Integer sale_invoice;
 
-    @Column(columnDefinition = "double not null")
-    @Positive(message = "total amount  must be  positive")
+    @Column(columnDefinition = "double ")
+//    @Positive(message = "total amount  must be positive")
     private Double total_amount=0.0;
 
-    @Column(columnDefinition = "double not null")
-    @Positive(message = "tax amount must be   positive")
+    @Column(columnDefinition = "double ")
+//    @Positive(message = "tax amount must be  positive")
     private Double tax_amount=0.0;
 
     @Column(columnDefinition = "double not null")
     @Positive(message = "grand amount must be  positive")
 
     private LocalDateTime invoiceDate;
+    @Column(columnDefinition = "double ")
+//    @Positive(message = "grand amount must be  positive")
     private Double grand_amount=0.0;
 
     //************???***************
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime saleDate;
+
+    @ManyToMany
+    @JsonIgnore
+    private Set<Product> products;
+
     @ManyToOne
 //    @JoinColumn(name = "branch_id",referencedColumnName = "id")
     @JsonIgnore

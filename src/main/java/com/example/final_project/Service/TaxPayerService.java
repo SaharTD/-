@@ -9,11 +9,9 @@ import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
 import com.example.final_project.Model.*;
+import com.example.final_project.Model.*;
 import com.example.final_project.Notification.NotificationService;
-import com.example.final_project.Repository.AccountantRepository;
-import com.example.final_project.Repository.BusinessRepository;
-import com.example.final_project.Repository.MyUserRepository;
-import com.example.final_project.Repository.TaxPayerRepository;
+import com.example.final_project.Repository.*;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.jdbc.support.JdbcAccessor;
@@ -24,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.time.Month;
+import java.util.List;
 
 
 @Service
@@ -38,7 +38,10 @@ public class TaxPayerService {
     private final AccountantRepository accountantRepository;
     private final NotificationService notificationService;
     private final BusinessRepository businessRepository;
+    private final SalesRepository salesRepository;
+
     private final JdbcAccessor jdbcAccessor;
+
 
 
     /// run by admin
@@ -283,6 +286,53 @@ public class TaxPayerService {
 
         return response;
     }
+
+
+
+    public Double getYearRevenue(Integer taxPayerId, Integer businessId,int year){
+
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+        Business business = businessRepository.findBusinessById(businessId);
+        if (!business.getIsActive()) {
+            throw new ApiException("The business is not found");
+        }
+
+        LocalDateTime startDate=LocalDateTime.of(year, Month.JANUARY,1,0,0);
+        LocalDateTime endDate=LocalDateTime.of(year, Month.DECEMBER,31,23,59);
+       List<Sales>yearlyRevenue=salesRepository.findSalesByBranch_BusinessAndSaleDateBetween(business,startDate,endDate);
+
+       if (yearlyRevenue.isEmpty()){
+           throw new ApiException("No sales found for this business");
+
+       }
+       Double totalR=0.0;
+       for(Sales s:yearlyRevenue){
+           totalR+=s.getGrand_amount();
+
+       }
+       return totalR;
+
+    }
+
+
+
+
+
+//
+//print public byte[] printYearlyTaxReport(){
+//
+//
+//
+//
+//    }
+
+
+
+
 
 
 

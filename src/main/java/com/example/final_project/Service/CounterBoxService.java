@@ -6,6 +6,7 @@ import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
 import com.example.final_project.Notification.NotificationService;
+import com.example.final_project.Model.Sales;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
@@ -79,6 +80,10 @@ public class CounterBoxService {
         accountant.setLastActiveCounterBox(LocalDateTime.now());
         counterBoxRepository.save(counterBox);
         accountantRepository.save(accountant);
+
+
+
+
     }
 
     public List getAllCounterBoxes() {

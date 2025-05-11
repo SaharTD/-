@@ -25,9 +25,9 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.getAllProduct());
     }
 
-    @PostMapping("/add/branch/{branchId}")
-    public ResponseEntity addProduct(@PathVariable Integer branchId, @RequestBody@Valid Product product){
-        productService.addProduct(branchId, product);
+    @PostMapping("/add/branch/{accountantId}/{branchId}")
+    public ResponseEntity addProduct(@PathVariable Integer branchId,@PathVariable Integer accountantId, @RequestBody@Valid Product product){
+        productService.addProduct(accountantId,branchId,product);
         return ResponseEntity.status(200).body(new ApiResponse("new product added"));
     }
 

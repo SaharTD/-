@@ -36,7 +36,7 @@ public class TaxPayerController {
     }
 
     @PutMapping("/update/{taxPayerId}")
-    public ResponseEntity updateTaxPayer(@PathVariable Integer taxPayerId , @RequestBody TaxPayerDTO taxPayerDTO ){
+    public ResponseEntity updateTaxPayer(@PathVariable Integer taxPayerId , @Valid@RequestBody TaxPayerDTO taxPayerDTO ){
         taxPayerService.updateTaxPayer(taxPayerId,taxPayerDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer information has been updated successfully "));
     }
