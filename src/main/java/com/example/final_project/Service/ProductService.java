@@ -1,9 +1,11 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Notification.NotificationService;
+import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +20,25 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
     private final NotificationService notificationService;
+    private final AccountantRepository accountantRepository;
 
     public List<Product> getAllProduct() {
         notificationService.sendEmail("aa.ll.ii.pp5@gmail.com", "test", "dear customer");
         return productRepository.findAll();
     }
 
-    public void addProduct(Integer branchId, Product product) {
+    public void addProduct(Integer accountantId,Integer branchId, Product product) {
+
         Branch branch = branchRepository.findBranchesById(branchId);
         if (branch == null) {
             throw new ApiException("branch not found");
         }
+
+        Accountant accountant = accountantRepository.findAccountantByIdAndBranch(accountantId,branch);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found or does not belong to the branch");
+        }
+
 
 /// if business is not active
         if (!branch.getBusiness().getIsActive()) {

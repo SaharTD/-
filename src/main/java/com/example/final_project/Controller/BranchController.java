@@ -24,14 +24,14 @@ public class BranchController {
         return ResponseEntity.status(200).body(branchService.getAllBranches());
     }
 
-    @PostMapping("/add/{businessId}")
-    public ResponseEntity addBranch(@PathVariable Integer businessId, @RequestBody@Valid Branch branch){
-        branchService.addBranch(businessId, branch);
+    @PostMapping("/add/{businessId}/{taxPayerID}")
+    public ResponseEntity addBranch(@PathVariable Integer businessId,@PathVariable Integer taxPayerID, @RequestBody @Valid Branch branch){
+        branchService.addBranch(businessId,taxPayerID,branch);
         return ResponseEntity.status(200).body(new ApiResponse("new branch added"));
     }
 
     @PutMapping("/update/{businessId}/branch/{branchId}")
-    public ResponseEntity updateBranch(@PathVariable Integer businessId,@PathVariable Integer branchId, @RequestBody@Valid Branch branch){
+    public ResponseEntity updateBranch(@PathVariable Integer businessId,@PathVariable Integer branchId, @RequestBody @Valid Branch branch){
         branchService.updateBranch(businessId, branchId, branch);
         return ResponseEntity.status(200).body(new ApiResponse("branch updated"));
     }

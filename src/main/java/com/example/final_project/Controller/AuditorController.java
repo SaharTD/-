@@ -27,7 +27,7 @@ public class AuditorController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity updateAuditor(@PathVariable Integer id,@RequestBody@Valid DTOAuditor dtoAuditor){
+    public ResponseEntity updateAuditor(@PathVariable Integer id,@RequestBody @Valid DTOAuditor dtoAuditor){
         auditorService.updateAuditor(id, dtoAuditor);
         return ResponseEntity.status(200).body(new ApiResponse("auditor updated"));
     }

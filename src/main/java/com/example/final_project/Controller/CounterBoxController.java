@@ -36,7 +36,7 @@ public class CounterBoxController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody CounterBox counterBox, @PathVariable Integer id){
+    public ResponseEntity update(@RequestBody @Valid CounterBox counterBox, @PathVariable Integer id){
         counterBoxService.updateCounterBox(counterBox, id);
         return ResponseEntity.status(200).body(new ApiResponse("Updated successfully"));
     }
@@ -48,7 +48,7 @@ public class CounterBoxController {
     }
 
     @PostMapping("/create-box")
-    public ResponseEntity createCounterBox2(@RequestBody CounterBoxDTO counterBoxDTO) {
+    public ResponseEntity createCounterBox2(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
         counterBoxService.createCounterBox2(counterBoxDTO);
         return ResponseEntity.status(200).body("Counter box created successfully");
     }

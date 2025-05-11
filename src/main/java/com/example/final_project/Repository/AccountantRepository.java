@@ -20,5 +20,7 @@ public interface AccountantRepository extends JpaRepository<Accountant,Integer>{
 
     Accountant findAccountantByIsActiveAndId(Boolean isActive, Integer id);
 
+    Accountant findAccountantByIdAndBranch(Integer id, Branch branch);
+
 
 }
