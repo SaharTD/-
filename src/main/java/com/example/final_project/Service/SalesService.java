@@ -136,7 +136,7 @@ public class SalesService {
 
         Sales sale=salesRepository.findSalesById(saleId);
 
-        List<ItemSale> items =itemSaleRepository.findBySalesId(saleId);
+        List<ItemSale> items =itemSaleRepository.findItemSaleBySalesId(saleId);
         if (items.isEmpty()){
             throw new ApiException("can not confirm an empty invoice ");
         }
@@ -179,7 +179,7 @@ public class SalesService {
 
         }
 
-        List<ItemSale> items =itemSaleRepository.findBySalesId(saleId);
+        List<ItemSale> items =itemSaleRepository.findItemSaleBySalesId(saleId);
         if (items.isEmpty()){
             throw new ApiException("can not confirm an empty invoice ");
         }
