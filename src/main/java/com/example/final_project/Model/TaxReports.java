@@ -3,6 +3,8 @@ package com.example.final_project.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -42,6 +44,7 @@ public class TaxReports {
     private LocalDate paymentDate;
 
 
+    @NotEmpty(message = "satatus of tax report must be not empty")
     @Pattern(regexp = "Pending|Approved|Paid|Under Legal Action|Rejected")
     private String status;
 
@@ -51,12 +54,12 @@ public class TaxReports {
     private Payment payment;
 
     @ManyToOne
-//    @JoinColumn(name = "business_id",referencedColumnName = "id")
+    @JoinColumn(name = "business_id",referencedColumnName = "id")
     @JsonIgnore
     private Business business;
 
     @ManyToOne
-//    @JoinColumn(name = "audit_id",referencedColumnName = "id")
+    @JoinColumn(name = "audit_id",referencedColumnName = "id")
     @JsonIgnore
     private Auditor auditor;
 

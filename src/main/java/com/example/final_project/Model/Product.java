@@ -31,14 +31,15 @@ public class Product {
     @Check(constraints = "length(name)>=4 and length(name)<=20")
     private String name;
 
-    @NotNull
+    @NotNull(message = "price must be not empty")
     @PositiveOrZero(message = "price cannot be negative")
     @Column(columnDefinition = "double not null")
     @Check(constraints = "price>=0.0")
     private Double price;
 
 
-    @Column(columnDefinition = "int ")
+    @Column(columnDefinition = "int not null")
+    @NotNull(message = "quantity must be not null")
     private Integer quantity;
 
 
@@ -55,8 +56,7 @@ public class Product {
     @JsonIgnore
     private Branch branch;
 
-//    @ManyToMany(mappedBy = "products")
-//    private Set<Sales> sales;
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ItemSale> itemSales;
