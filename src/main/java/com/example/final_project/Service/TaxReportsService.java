@@ -41,6 +41,8 @@ public class TaxReportsService {
         return taxReportsRepository.findAll();
     }
 
+
+
     public void addTaxReports(Integer auditor_id, Integer business_id, TaxReports taxReports) {
         Business business = businessRepository.findBusinessById(business_id);
         Auditor auditor = auditorRepository.findAuditorsById(auditor_id);
