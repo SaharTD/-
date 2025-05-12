@@ -7,6 +7,7 @@ import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Model.Sales;
+import com.example.final_project.Model.User;
 import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,14 +47,14 @@ public class SalesController {
 //    }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity updateSales(@PathVariable Integer id,@Valid @RequestBody  Sales sales){
-        salesService.updateSales(id, sales);
+    public ResponseEntity updateSales(@AuthenticationPrincipal User user, @PathVariable Integer id, @Valid @RequestBody  Sales sales){
+        salesService.updateSales(user.getId(),id, sales);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales  is updated"));
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteSales(@PathVariable Integer id){
-        salesService.deleteSales(id);
+    public ResponseEntity deleteSales(@AuthenticationPrincipal User user,@PathVariable Integer id){
+        salesService.deleteSales(user.getId(),id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
     }
 

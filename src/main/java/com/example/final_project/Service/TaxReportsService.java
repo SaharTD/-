@@ -5,11 +5,9 @@ import com.example.final_project.DTOOUT.TaxReportStatusDTO;
 import com.example.final_project.Model.Auditor;
 import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxReports;
+import com.example.final_project.Model.User;
 import com.example.final_project.Notification.NotificationService;
-import com.example.final_project.Repository.AuditorRepository;
-import com.example.final_project.Repository.BusinessRepository;
-import com.example.final_project.Repository.SalesRepository;
-import com.example.final_project.Repository.TaxReportsRepository;
+import com.example.final_project.Repository.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +32,14 @@ public class TaxReportsService {
     private final AuditorRepository auditorRepository;
     private final SalesRepository salesRepository;
     private final NotificationService notificationService;
+    private final MyUserRepository myUserRepository;
 
 
-    public List<TaxReports> getAllTaxReports() {
+    public List<TaxReports> getAllTaxReports(Integer id) {
+        Auditor auditor=auditorRepository.findAuditorsById(id);
+        if(auditor==null){
+            throw new ApiException("auditor not found");
+        }
         return taxReportsRepository.findAll();
     }
 
