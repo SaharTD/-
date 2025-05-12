@@ -38,13 +38,9 @@ public class CounterBoxService {
 
 
     //كرييت البوكس مع المحاسب
-    public void createCounterBox(CounterBoxDTO counterBoxDTO) {
-        if (counterBoxDTO.getAccountantId() == null) {
-            throw new ApiException("Valid accountant ID is required");
-        }
+    public void createCounterBox(Integer accountantId,CounterBoxDTO counterBoxDTO) {
 
-
-        Accountant accountant = accountantRepository.findAccountantById(counterBoxDTO.getAccountantId());
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
         if (accountant == null) {
             throw new ApiException("Accountant not found");
         }
@@ -54,21 +50,17 @@ public class CounterBoxService {
             throw new ApiException("Branch not found");
         }
 
-
-
         CounterBox counterBox = new CounterBox();
 
         counterBox.setType(counterBoxDTO.getType());
-        counterBox.setPaymentType(counterBoxDTO.getPaymentType());
         counterBox.setDailyTreasury(counterBoxDTO.getDailyTreasury());
         counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
         counterBox.setBranch(branch);
-       // counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
 
         if (counterBoxDTO.getBranchId() != null) {
-            Branch branch2 = branchRepository.getReferenceById(counterBoxDTO.getBranchId());
+            Branch branch2 = branchRepository.findBranchesById(counterBoxDTO.getBranchId());
             if (branch2 == null) {
                 throw new ApiException("Branch not found");
             }

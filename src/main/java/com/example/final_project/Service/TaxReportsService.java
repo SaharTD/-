@@ -34,8 +34,8 @@ public class TaxReportsService {
 
 
     public List<TaxReports> getAllTaxReports(Integer id) {
-        Auditor auditor=auditorRepository.findAuditorsById(id);
-        if(auditor==null){
+        Auditor auditor = auditorRepository.findAuditorsById(id);
+        if (auditor == null) {
             throw new ApiException("auditor not found");
         }
         return taxReportsRepository.findAll();
@@ -54,9 +54,9 @@ public class TaxReportsService {
         taxReportsRepository.save(taxReports);
     }
 
-    public void updateTaxReports(Integer id,Integer taxReportId, TaxReports taxReports) {
+    public void updateTaxReports(Integer id, Integer taxReportId, TaxReports taxReports) {
         Auditor auditor = auditorRepository.findAuditorsById(id);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("Auditor not found");
         TaxReports oldTaxReports = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -74,9 +74,9 @@ public class TaxReportsService {
     }
 
 
-    public void deleteTaxReports(Integer id,Integer taxReportId) {
-        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
-        if (admin==null)
+    public void deleteTaxReports(Integer id, Integer taxReportId) {
+        User admin = myUserRepository.findUserByIdAndRole(id, "ADMIN");
+        if (admin == null)
             throw new ApiException("Auditor not found");
         TaxReports taxReports = taxReportsRepository.findTaxReportsById(taxReportId);
         if (taxReports == null) {
@@ -86,9 +86,9 @@ public class TaxReportsService {
     }
 
     // Endpoint 28
-    public void applyLatePaymentPenalty(Integer id,Integer taxReportId) {
+    public void applyLatePaymentPenalty(Integer id, Integer taxReportId) {
         Auditor auditor = auditorRepository.findAuditorsById(id);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("Auditor not found");
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -129,9 +129,9 @@ public class TaxReportsService {
 
 
     // Endpoint 29
-    public void applyTwoMonthLatePenalty(Integer id,Integer taxReportId) {
+    public void applyTwoMonthLatePenalty(Integer id, Integer taxReportId) {
         Auditor auditor = auditorRepository.findAuditorsById(id);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("Auditor not found");
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -174,7 +174,7 @@ public class TaxReportsService {
 
 
     // Endpoint 30
-    public void applyLegalActionForTaxEvasion(Integer id,Integer taxReportId) {
+    public void applyLegalActionForTaxEvasion(Integer id, Integer taxReportId) {
 
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -244,11 +244,10 @@ public class TaxReportsService {
     }
 
 
-
-//**************
+    //**************
     public List<TaxReports> getUnpaidDueTaxReports(Integer id) {
         Auditor auditor = auditorRepository.findAuditorsById(id);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("Auditor not found");
         return taxReportsRepository.findAllByPaymentDateIsNotNullAndStatusNot("Paid");
     }
@@ -264,7 +263,7 @@ public class TaxReportsService {
     }
 
 
-//    figma
+    //    figma
     public Long getReportCountByStatus(Integer auditorId, String status) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
         if (auditor == null) {
@@ -273,10 +272,10 @@ public class TaxReportsService {
         return taxReportsRepository.countByAuditorIdAndStatus(auditorId, status);
     }
 
-    /////////////////////////////////////////////
+    /// //////////////////////////////////////////
     public Double getApprovalRate(Integer auditorId) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("auditor not found");
         Long total = taxReportsRepository.countByAuditorId(auditorId);
         Long approved = taxReportsRepository.countByAuditorIdAndStatus(auditorId, "Approved");
@@ -303,7 +302,7 @@ public class TaxReportsService {
     // figma
     public TaxReports getLatestReportByAuditor(Integer auditorId) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("Auditor not found");
         List<TaxReports> reports = taxReportsRepository.findTopByAuditorIdOrderByEnd_dateDesc(auditorId);
         if (reports.isEmpty()) {
@@ -314,9 +313,9 @@ public class TaxReportsService {
 
 
     // Endpoint 37
-    public List<TaxReports> printTaxReportForEveryBusinesses(Integer taxPayerId){
+    public List<TaxReports> printTaxReportForEveryBusinesses(Integer taxPayerId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        if (taxPayer==null)
+        if (taxPayer == null)
             throw new ApiException("Tax Payer not found");
         List<TaxReports> taxReports = taxReportsRepository.findTaxReportsByTaxPayer(taxPayerId);
         if (taxReports.isEmpty())
@@ -325,10 +324,9 @@ public class TaxReportsService {
     }
 
 
-
     public List<TaxReports> getUnapprovedTaxReports(Integer auditorId) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
-        if (auditor==null)
+        if (auditor == null)
             throw new ApiException("Auditor not found");
         return taxReportsRepository.findAllUnapproved();
     }
@@ -336,7 +334,7 @@ public class TaxReportsService {
 
     public Map<String, Object> getPaymentStatusByReportId(Integer taxPayerId, Integer reportId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        if (taxPayer==null)
+        if (taxPayer == null)
             throw new ApiException("Tax Payer not found");
         TaxReports report = taxReportsRepository.findTaxReportsById(reportId);
         if (report == null) {
@@ -379,10 +377,9 @@ public class TaxReportsService {
     }
 
 
-
-    public byte[] getTaxReportAsPdf(Integer userId,Integer reportId) {
-        User user = myUserRepository.findUserByIdAndRole(userId,"TAXPAYER");
-        if (user==null)
+    public byte[] getTaxReportAsPdf(Integer userId, Integer reportId) {
+        User user = myUserRepository.findUserByIdAndRole(userId, "TAXPAYER");
+        if (user == null)
             throw new ApiException("User not found or doesn't have permission");
         TaxReports report = taxReportsRepository.findTaxReportsById(reportId);
         if (report == null) throw new ApiException("Tax report not found.");
@@ -425,7 +422,7 @@ public class TaxReportsService {
             document.add(new Paragraph("Report Period:"));
             document.add(new Paragraph("   • From: " + report.getStart_date()));
             document.add(new Paragraph("   • To  : " + report.getEnd_date()));
-            document.add(new Paragraph("Created At: " +LocalDateTime.now()));
+            document.add(new Paragraph("Created At: " + LocalDateTime.now()));
 
             if (report.getBusiness() != null) {
                 document.add(new Paragraph("Business Name: " + report.getBusiness().getBusinessName()));
@@ -448,11 +445,6 @@ public class TaxReportsService {
             throw new RuntimeException("Failed to generate PDF", e);
         }
     }
-
-
-
-
-
 
 
 }
