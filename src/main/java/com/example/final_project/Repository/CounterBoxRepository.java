@@ -1,5 +1,6 @@
 package com.example.final_project.Repository;
 
+import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,7 @@ public interface CounterBoxRepository extends JpaRepository<CounterBox,Integer> 
 
     @Query("select c from CounterBox c where c.openDatetime + 11 hour <now() and c.status='Opened'")
     List<CounterBox> findCounterBoxByOpenDatetime();
+
+    CounterBox findByBranch(Branch branch);
 
 }

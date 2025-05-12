@@ -42,6 +42,12 @@ public class AdviseController {
 
     //Concurrent Modification Exception
 
+    @ExceptionHandler(value = MailSendException.class)
+    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
+
     // Server Validation Exception
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<ApiResponse> ConstraintViolationException(ConstraintViolationException e) {

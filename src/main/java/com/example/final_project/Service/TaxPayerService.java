@@ -10,10 +10,7 @@ import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
 import com.example.final_project.Model.*;
 import com.example.final_project.Notification.NotificationService;
-import com.example.final_project.Repository.AccountantRepository;
-import com.example.final_project.Repository.BusinessRepository;
-import com.example.final_project.Repository.MyUserRepository;
-import com.example.final_project.Repository.TaxPayerRepository;
+import com.example.final_project.Repository.*;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +34,9 @@ public class TaxPayerService {
     private final AccountantRepository accountantRepository;
     private final NotificationService notificationService;
     private final BusinessRepository businessRepository;
+    private final BranchRepository branchRepository;
+    private final CounterBoxRepository counterBoxRepository;
+    private final WhatsAppService whatsAppService;
 
 
     /// run by admin
@@ -128,13 +128,18 @@ public class TaxPayerService {
     }
 
 
-    public void addAccountant(Integer taxPayerID, AccountantDTO accountantDTO) {
+    public void addAccountant(Integer taxPayerID,Integer branchId ,AccountantDTO accountantDTO) {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
         if (taxPayer == null) {
             throw new ApiException("The Taxpayer is not found");
         }
 
+
+        Branch branch = branchRepository.findBranchesById(branchId);
+        if (branch == null) {
+            throw new ApiException("Branch not found");
+        }
 
         User userACC = new User();
         userACC.setRole("ACCOUNTANT");
@@ -151,6 +156,8 @@ public class TaxPayerService {
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
         accountant.setUser(userACC);
         accountant.setIsActive(true);
+        accountant.setBranch(branch);
+
 
         Business business = businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
         accountant.setBusiness(business);
@@ -158,6 +165,17 @@ public class TaxPayerService {
         myUserRepository.save(userACC);
 
         accountantRepository.save(accountant);
+
+        CounterBox counterBox = counterBoxRepository.findByBranch(branch);
+        if (counterBox == null) {
+            throw new ApiException("No counter box found for this branch");
+        }
+
+
+        counterBox.setAccountant(accountant);
+        counterBox.setStatus("Closed");
+        counterBoxRepository.save(counterBox);
+
 
         myUserRepository.save(userACC);
 
@@ -169,23 +187,20 @@ public class TaxPayerService {
         accountantRepository.save(accountant);
 
 
-        String subject = "Successful Activation of Your Account";
-        String message = "We are pleased to inform you that your account has been successfully activated with the authority of an Accountant. Below are your login details:\n" +
-                "\n" +
-                "Username: \n" + accountant.getUser().getUsername() +
-                "\n" +
-                "Password:\n" + accountant.getUser().getPassword() +
-                "\n" +
-                "Employee Code:\n" + accountant.getEmployeeId() +
-                "\n" +
-                "Please keep this information secure and do not share it with anyone.\n" +
-                "\n" +
-                "If you have any questions or need assistance, feel free to contact us.\n" +
-                "\n" +
-                "Best regards,\n" +
-                "[mohasil team]";
 
-        notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
+        String phone=accountantDTO.getPhoneNumber();
+        if (phone.startsWith("0")){
+            phone=phone.substring(1);
+        }
+        String fullPhoneNumber="966"+phone;
+
+        whatsAppService.sendAccountantActivationMessage(
+                accountant.getUser().getUsername(),
+                accountant.getUser().getPassword(),
+                accountant.getEmployeeId(),
+                fullPhoneNumber,
+                LocalDate.now()
+        );
 
 
     }

@@ -35,6 +35,11 @@ public class AccountantDTO {
     //@NotEmpty(message = "role must not be empty")
     private String role;
 
+    @Pattern(regexp = "^0?5\\d{8}$", message = "Phone number must start with 05 and be 10 digits.")
+    @NotEmpty(message = "Phone number must not be empty")
+    @Column (unique = true)
+    private String phoneNumber;
+
     private Integer branchId;
 
     @NotEmpty(message = "the employee id should not be empty")

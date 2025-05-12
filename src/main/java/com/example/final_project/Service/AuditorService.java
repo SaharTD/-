@@ -39,8 +39,8 @@ public class AuditorService {
 
     public void updateAuditor(Integer auditorId, DTOAuditor dtoAuditor) {
         User user = myUserRepository.findUserById(auditorId);
-        if (user == null)
-            throw new ApiException("auditor not found");
+        if (user == null){
+            throw new ApiException("auditor not found");}
         user.setName(dtoAuditor.getName());
         user.setUsername(dtoAuditor.getUsername());
         user.setPassword(dtoAuditor.getPassword());
