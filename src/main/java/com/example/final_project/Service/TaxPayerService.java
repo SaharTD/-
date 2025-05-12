@@ -36,7 +36,7 @@ public class TaxPayerService {
     private final BusinessRepository businessRepository;
     private final BranchRepository branchRepository;
     private final CounterBoxRepository counterBoxRepository;
-    private final WhatsAppService whatsAppService;
+  //  private final WhatsAppService whatsAppService;
 
 
     /// run by admin
@@ -194,13 +194,13 @@ public class TaxPayerService {
         }
         String fullPhoneNumber="966"+phone;
 
-        whatsAppService.sendAccountantActivationMessage(
+        /*whatsAppService.sendAccountantActivationMessage(
                 accountant.getUser().getUsername(),
                 accountant.getUser().getPassword(),
                 accountant.getEmployeeId(),
                 fullPhoneNumber,
                 LocalDate.now()
-        );
+        );*/
 
 
     }
