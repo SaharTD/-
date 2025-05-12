@@ -18,6 +18,6 @@ public class MoyasarPayment {
         private String description;
         private String postalCode;
         private String country;
-        private Integer studentId;
+        private Integer taxPayerId;
 
 }

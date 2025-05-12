@@ -59,7 +59,7 @@ public class MoyasarPaymentService {
         params.add("amount", stAmount); // in halalas = 100 SAR
         params.add("currency", "SAR");
         params.add("description", moyasarPayment.getDescription());
-        params.add("callback_url", "http://localhost:5000/api/v1/moyasar-payment/callback");
+        params.add("callback_url", "http://localhost:5000/api/v1/moyasar-payment/callback?taxPayerId="+taxPayerId);
         params.add("source[type]", "card"); // or "sadad", "mada", "applepay" "creditcard"
         params.add("source[name]", taxPayer.getUser().getName());
         params.add("source[number]", moyasarPayment.getNumber());
@@ -85,6 +85,7 @@ public class MoyasarPaymentService {
 //        JsonParser json = mapper2.getFactory().createParser((File) response.getBody()); // ✅ Correct way
 
 
+        taxReports.setPaymentDate(LocalDate.now());
         String paymentId = json.get("id").asText();
         payment.setPaymentId(paymentId);
 

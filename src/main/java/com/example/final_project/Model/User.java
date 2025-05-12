@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Check;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -43,7 +45,8 @@ public class User implements UserDetails {
     private String email;
 
     @Check(constraints = "role in ('TAXPAYER','AUDIT','ACCOUNTANT')")
-    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))") @NotEmpty(message = "role must ne not empty")
+    @Column(columnDefinition ="varchar(20)")
+    @NotEmpty(message = "role must ne not empty")
     @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
     private String role;
 
@@ -63,7 +66,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+//        return List.of();
+        return Collections.singleton(new SimpleGrantedAuthority(this.role));
     }
 
     @Override
