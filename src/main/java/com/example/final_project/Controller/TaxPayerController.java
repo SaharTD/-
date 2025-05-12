@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/taxPayer")
+@RequestMapping("api/v1/tax-payer")
 @RequiredArgsConstructor
 public class TaxPayerController {
 
@@ -36,7 +36,7 @@ public class TaxPayerController {
     }
 
     @PutMapping("/update/{taxPayerId}")
-    public ResponseEntity updateTaxPayer(@PathVariable Integer taxPayerId , @RequestBody TaxPayerDTO taxPayerDTO ){
+    public ResponseEntity updateTaxPayer(@PathVariable Integer taxPayerId , @Valid@RequestBody TaxPayerDTO taxPayerDTO ){
         taxPayerService.updateTaxPayer(taxPayerId,taxPayerDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer information has been updated successfully "));
     }
@@ -49,7 +49,7 @@ public class TaxPayerController {
 
 
     /// 13
-    @PostMapping("/add-accountant/{taxPayerID}")
+    @PostMapping("/add-accountant/{taxPayerID}/{branchId}")
     public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID,@PathVariable Integer branchId){
         taxPayerService.addAccountant(taxPayerID,branchId,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
@@ -59,7 +59,7 @@ public class TaxPayerController {
     // Endpoint 40
     @PutMapping("/activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
     public ResponseEntity activateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
-        taxPayerService.activateAccountant(taxPayerId, accountantId);
+//        taxPayerService.(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is active"));
     }
 
@@ -67,7 +67,7 @@ public class TaxPayerController {
     // Endpoint 41
     @PutMapping("/de-activate-accountant/tax-payer/{taxPayerId}/accountant/{accountantId}")
     public ResponseEntity deActivateAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer accountantId){
-        taxPayerService.deActivateAccountant(taxPayerId, accountantId);
+//        taxPayerService.deActivateAccountant(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
 
@@ -78,5 +78,13 @@ public class TaxPayerController {
 
 
 
+
+
+    /// 15
+    @PutMapping("block-inactive-accountant/{taxPayerId}/{accountantId}")
+    public ResponseEntity blockInnActiveAccountant(@PathVariable Integer taxPayerId ,@PathVariable Integer accountantId ){
+        taxPayerService.blockUnnActiveAccountant(taxPayerId,accountantId);
+        return ResponseEntity.status(200).body(new ApiResponse("the  accountant has been inactivated"));
+    }
 
 }

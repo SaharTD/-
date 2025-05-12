@@ -19,6 +19,10 @@ public interface AccountantRepository extends JpaRepository<Accountant,Integer>{
     List<Accountant> findAccountantByBusiness(Business business);
     List<Accountant> findAccountantByBusinessAndBranch(Business business, Branch branch);
 
+    Accountant findAccountantByIsActiveAndId(Boolean isActive, Integer id);
+
+    Accountant findAccountantByIdAndBranch(Integer id, Branch branch);
+
 
     @Query(value = """
     SELECT 

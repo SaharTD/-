@@ -6,6 +6,7 @@ import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
 import com.example.final_project.Notification.NotificationService;
+import com.example.final_project.Model.Sales;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
@@ -54,10 +55,10 @@ public class CounterBoxService {
         }
 
 
+
         CounterBox counterBox = new CounterBox();
 
         counterBox.setType(counterBoxDTO.getType());
-        counterBox.setPaymentType(counterBoxDTO.getPaymentType());
         counterBox.setDailyTreasury(counterBoxDTO.getDailyTreasury());
         counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
@@ -73,7 +74,13 @@ public class CounterBoxService {
             counterBox.setBranch(branch);
         }
 
+        accountant.setLastActiveCounterBox(LocalDateTime.now());
         counterBoxRepository.save(counterBox);
+        accountantRepository.save(accountant);
+
+
+
+
     }
 
     public List getAllCounterBoxes() {
@@ -95,10 +102,9 @@ public class CounterBoxService {
         }
 
         oldBox.setType(counterBox.getType());
-        oldBox.setPaymentType(counterBox.getPaymentType());
         oldBox.setDailyTreasury(counterBox.getDailyTreasury());
-       // oldBox.setOpenDatetime(counterBox.getOpenDatetime());
-        //oldBox.setCloseDatetime(counterBox.getCloseDatetime());
+        oldBox.setOpenDatetime(counterBox.getOpenDatetime());
+        oldBox.setCloseDatetime(counterBox.getCloseDatetime());
 
         counterBoxRepository.save(oldBox);
     }
@@ -133,8 +139,7 @@ public class CounterBoxService {
 
         box.setOpenDatetime(LocalDateTime.now());
         box.setAccountant(accountant);
-        //box.setStatus(true);
-
+box.setStatus("Opened");
         counterBoxRepository.save(box);
     }
 
@@ -154,7 +159,7 @@ public class CounterBoxService {
 
         LocalDateTime now = LocalDateTime.now();
         box.setCloseDatetime(now);
-        //box.setStatus(false);
+        box.setStatus("Closed");
 
         counterBoxRepository.save(box);
 
@@ -170,7 +175,7 @@ public class CounterBoxService {
     public void closeCounterBoxAuto(){
         List<CounterBox> counterBoxes = counterBoxRepository.findCounterBoxByOpenDatetime();
         if (counterBoxes.isEmpty())
-            throw new ApiException("there are no boxes are open");
+            throw new ApiException("None of the boxes are open.");
         for (CounterBox cb:counterBoxes){
             cb.setCloseDatetime(LocalDateTime.now());
             cb.setStatus("Closed");

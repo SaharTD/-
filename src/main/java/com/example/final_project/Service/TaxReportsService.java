@@ -36,26 +36,25 @@ public class TaxReportsService {
     private final NotificationService notificationService;
 
 
-
-    public List<TaxReports> getAllTaxReports(){
+    public List<TaxReports> getAllTaxReports() {
         return taxReportsRepository.findAll();
     }
 
-    public void addTaxReports(Integer auditor_id,Integer business_id,TaxReports taxReports){
-        Business business=businessRepository.findBusinessById(business_id);
-         Auditor auditor =auditorRepository.findAuditorsById(auditor_id);
+    public void addTaxReports(Integer auditor_id, Integer business_id, TaxReports taxReports) {
+        Business business = businessRepository.findBusinessById(business_id);
+        Auditor auditor = auditorRepository.findAuditorsById(auditor_id);
 
-         if(auditor==null&&business==null){
-             throw new ApiException("auditor or business not found");
-         }
-         taxReports.setStatus("Pending");
-         taxReportsRepository.save(taxReports);
+        if (auditor == null && business == null) {
+            throw new ApiException("auditor or business not found");
+        }
+        taxReports.setStatus("Pending");
+        taxReportsRepository.save(taxReports);
     }
 
-    public void updateTaxReports(Integer id,TaxReports taxReports){
-        TaxReports oldTaxReports=taxReportsRepository.findTaxReportsById(id);
+    public void updateTaxReports(Integer id, TaxReports taxReports) {
+        TaxReports oldTaxReports = taxReportsRepository.findTaxReportsById(id);
 
-        if(oldTaxReports==null){
+        if (oldTaxReports == null) {
             throw new ApiException("TaxReports not found");
         }
 
@@ -69,14 +68,15 @@ public class TaxReportsService {
     }
 
 
-    public void deleteTaxReports(Integer id){
-        TaxReports taxReports=taxReportsRepository.findTaxReportsById(id);
-        if(taxReports==null){
+    public void deleteTaxReports(Integer id) {
+        TaxReports taxReports = taxReportsRepository.findTaxReportsById(id);
+        if (taxReports == null) {
             throw new ApiException("Tax Reports not found");
         }
         taxReportsRepository.delete(taxReports);
     }
 
+    // Endpoint 28
     public void applyLatePaymentPenalty(Integer taxReportId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -105,9 +105,17 @@ public class TaxReportsService {
         } else {
             throw new ApiException("No penalty: payment is still within grace period");
         }
+        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String message = "Welcome, dear "+name+"\n\n Due to your failure to " +
+                "pay the value-added tax and your delay of one month, " +
+                "a financial penalty has been imposed, " +
+                "which is 5% of the total amount due.";
+        notificationService.sendEmail(emailTo,"One month late warning",message);
     }
 
 
+    // Endpoint 29
     public void applyTwoMonthLatePenalty(Integer taxReportId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -135,10 +143,20 @@ public class TaxReportsService {
         double penalty = originalTax * 0.10;
         taxReport.setTotalTax(originalTax + penalty);
 
+
+        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String message = "Welcome, dear "+name+"\n\n Due to your failure to " +
+                "pay the value-added tax and your delay of two month, " +
+                "a financial penalty has been imposed, " +
+                "which is 10% of the total amount due.";
+        notificationService.sendEmail(emailTo,"Two month late warning",message);
+
         taxReportsRepository.save(taxReport);
     }
 
 
+    // Endpoint 30
     public void applyLegalActionForTaxEvasion(Integer taxReportId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
@@ -166,10 +184,13 @@ public class TaxReportsService {
         } else {
             throw new ApiException("Conditions for legal action not met");
         }
+
+        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
+        notificationService.sendEmail(emailTo,"One month late warning"," ");
     }
 
 
-    public void changeTaxReportStatus(Integer taxReportId,Integer auditorId, TaxReportStatusDTO taxReportStatusDTO) {
+    public void changeTaxReportStatus(Integer taxReportId, Integer auditorId, TaxReportStatusDTO taxReportStatusDTO) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
         if (taxReport == null) {
@@ -195,10 +216,11 @@ public class TaxReportsService {
     }
 
 
-
+//**************
     public List<TaxReports> getUnpaidDueTaxReports() {
         return taxReportsRepository.findAllByPaymentDateIsNotNullAndStatusNot("Paid");
     }
+//**************
 
 
     public List<TaxReports> getReportsByAuditor(Integer auditorId) {
@@ -209,6 +231,8 @@ public class TaxReportsService {
         return taxReportsRepository.findAllByAuditorId(auditorId);
     }
 
+
+//    figma
     public Long getReportCountByStatus(Integer auditorId, String status) {
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
         if (auditor == null) {
@@ -217,7 +241,11 @@ public class TaxReportsService {
         return taxReportsRepository.countByAuditorIdAndStatus(auditorId, status);
     }
 
+    /////////////////////////////////////////////
     public Double getApprovalRate(Integer auditorId) {
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor==null)
+            throw new ApiException("auditor not found");
         Long total = taxReportsRepository.countByAuditorId(auditorId);
         Long approved = taxReportsRepository.countByAuditorIdAndStatus(auditorId, "Approved");
 
@@ -226,6 +254,8 @@ public class TaxReportsService {
         return (approved * 100.0) / total;
     }
 
+
+    // Figma
     public void bulkApproveReports(Integer auditorId, List<Integer> reportIds) {
         for (Integer reportId : reportIds) {
             TaxReports taxReport = taxReportsRepository.findTaxReportsById(reportId);
@@ -238,6 +268,7 @@ public class TaxReportsService {
         }
     }
 
+    // figma
     public TaxReports getLatestReportByAuditor(Integer auditorId) {
         List<TaxReports> reports = taxReportsRepository.findTopByAuditorIdOrderByEnd_dateDesc(auditorId);
         if (reports.isEmpty()) {
@@ -246,6 +277,14 @@ public class TaxReportsService {
         return reports.get(0);
     }
 
+
+    // Endpoint 37
+    public List<TaxReports> printTaxReportForEveryBusinesses(Integer taxPayerId){
+        List<TaxReports> taxReports = taxReportsRepository.findTaxReportsByTaxPayer(taxPayerId);
+        if (taxReports.isEmpty())
+            throw new ApiException("you don't have any tax reports");
+        return taxReports;
+    }
 
 
 

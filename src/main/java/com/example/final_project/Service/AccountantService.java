@@ -20,11 +20,10 @@ public class AccountantService {
     private final TaxPayerRepository taxPayerRepository;
     private final ProductRepository productRepository;
     private final BusinessRepository businessRepository;
+    private final CounterBoxRepository counterBoxRepository;
 
 
-
-
-/// get all accountant for 1 branch
+    /// get all accountant for 1 branch
     public List<Accountant> getBranchAccountant(Integer taxPayerID , Integer branchId) {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
@@ -80,14 +79,19 @@ public class AccountantService {
     //Delete the accountant if it is not associated with any counterBox
     public void deleteAccountant(Integer id) {
         Accountant accountant = accountantRepository.getReferenceById(id);
-
+        CounterBox counterBox =counterBoxRepository.findCounterBoxByAccountantId(id);
         if (accountant == null) {
             throw new ApiException("Accountant not found");
         }
         if (accountant.getCounterBoxes() != null && !accountant.getCounterBoxes().isEmpty()) {
             throw new ApiException("Cannot delete accountant with assigned counter boxes");
         }
+
+        if (counterBox.getStatus()=="Opened"){
+            throw new ApiException("You can't delete the accountant when the counter box is open!");
+        }
         accountantRepository.delete(accountant);
+
     }
 
 

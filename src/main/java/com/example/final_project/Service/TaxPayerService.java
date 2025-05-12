@@ -9,10 +9,12 @@ import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Model.User;
 import com.example.final_project.Model.*;
+import com.example.final_project.Model.*;
 import com.example.final_project.Notification.NotificationService;
 import com.example.final_project.Repository.*;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.jdbc.support.JdbcAccessor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.time.Month;
+import java.util.List;
 
 
 @Service
@@ -34,9 +38,12 @@ public class TaxPayerService {
     private final AccountantRepository accountantRepository;
     private final NotificationService notificationService;
     private final BusinessRepository businessRepository;
-    private final BranchRepository branchRepository;
+    private final SalesRepository salesRepository;
+    private final JdbcAccessor jdbcAccessor;
+    private final WhatsAppService whatsAppService;
     private final CounterBoxRepository counterBoxRepository;
-  //  private final WhatsAppService whatsAppService;
+    private final BranchRepository branchRepository;
+
 
 
     /// run by admin
@@ -74,20 +81,25 @@ public class TaxPayerService {
             throw new ApiException("A Taxpayer With the same commercial registration number already exit");
 
         }
-
         user.setRole("TAXPAYER");
-        user.setUsername(taxPayerDTO.getUsername());
         user.setName(taxPayerDTO.getName());
+        user.setUsername(taxPayerDTO.getUsername());
 //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
 //        user.setPassword(hashPassword);
         user.setPassword(taxPayerDTO.getPassword());
         user.setEmail(taxPayerDTO.getEmail());
 
+
         TaxPayer taxPayer = new TaxPayer();
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
+        taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+
+
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+        taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
+
         taxPayer.setRegistrationDate(LocalDateTime.now());
 
         myUserRepository.save(user);
@@ -107,13 +119,16 @@ public class TaxPayerService {
         taxPayer.getUser().setEmail(taxPayerDTO.getEmail());
         taxPayer.getUser().setUsername(taxPayerDTO.getUsername());
 
-//        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
-//        taxPayer.getUser().setPassword(hashPassword);
+
+     //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
+     //        taxPayer.getUser().setPassword(hashPassword);
+
 
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
 
         taxPayerRepository.save(taxPayer);
+
 
     }
 
@@ -128,7 +143,7 @@ public class TaxPayerService {
     }
 
 
-    public void addAccountant(Integer taxPayerID,Integer branchId ,AccountantDTO accountantDTO) {
+    public void addAccountant(Integer taxPayerID, Integer branchId, AccountantDTO accountantDTO) {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
         if (taxPayer == null) {
@@ -194,44 +209,55 @@ public class TaxPayerService {
         }
         String fullPhoneNumber="966"+phone;
 
-        /*whatsAppService.sendAccountantActivationMessage(
+        whatsAppService.sendAccountantActivationMessage(
                 accountant.getUser().getUsername(),
                 accountant.getUser().getPassword(),
                 accountant.getEmployeeId(),
                 fullPhoneNumber,
                 LocalDate.now()
-        );*/
+        );
 
 
     }
 
-    // Endpoint 40
-    public void activateAccountant(Integer taxPayerId, Integer accountantId) {
+
+
+
+
+    /// if accountant has not opened since the register date or not opened for a 30 days
+    public void blockUnnActiveAccountant(Integer taxPayerId, Integer accountantId) {
+
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-        if (taxPayer == null)
-            throw new ApiException("tax payer not found");
-        if (accountant == null)
-            throw new ApiException("accountant not found");
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
 
-        if (accountant.getIsActive())
-            throw new ApiException("accountant is already active");
-        accountant.setIsActive(true);
-        accountantRepository.save(accountant);
-    }
 
-    // Endpoint 41
-    public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
-        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-        if (taxPayer == null)
-            throw new ApiException("tax payer not found");
-        if (accountant == null)
-            throw new ApiException("accountant not found");
+        Accountant accountant = accountantRepository.findAccountantByIsActiveAndId(true, accountantId);
+        if (accountant == null) {
+            throw new ApiException("Accountant is not found or not active");
+        }
 
-        if (!accountant.getIsActive())
-            throw new ApiException("accountant is already non active");
-        accountant.setIsActive(false);
+
+        Business business = businessRepository.findBusinessByIdAndTaxPayer(accountant.getBusiness().getId(), taxPayer);
+        if (!business.getIsActive()) {
+            throw new ApiException("Your business that is related to this branch is not active");
+        }
+
+        if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(20))) {
+            String subject = "Warning ! Inactivity Detected ";
+            String message = "Dear : " + accountant.getUser().getName() + " We have noticed that your account has been inactive for over 20 days since registration ." +
+                    "please ensure you resume activity within the next 10 days to avoid deactivation \n" +
+                    "Best regards,\n" +
+                    "[mohasil team]";
+
+            notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
+            throw new ApiException("The accountant is been inactive for 20 days , accountant has been notified");
+
+        }
+        if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(30))) {
+            accountant.setIsActive(false);
+        }
         accountantRepository.save(accountant);
     }
 
@@ -252,6 +278,53 @@ public class TaxPayerService {
 
         return result;
     }
+
+
+
+    public Double getYearRevenue(Integer taxPayerId, Integer businessId,int year){
+
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+        Business business = businessRepository.findBusinessById(businessId);
+        if (!business.getIsActive()) {
+            throw new ApiException("The business is not found");
+        }
+
+        LocalDateTime startDate=LocalDateTime.of(year, Month.JANUARY,1,0,0);
+        LocalDateTime endDate=LocalDateTime.of(year, Month.DECEMBER,31,23,59);
+       List<Sales>yearlyRevenue=salesRepository.findSalesByBranch_BusinessAndSaleDateBetween(business,startDate,endDate);
+
+       if (yearlyRevenue.isEmpty()){
+           throw new ApiException("No sales found for this business");
+
+       }
+       Double totalR=0.0;
+       for(Sales s:yearlyRevenue){
+           totalR+=s.getGrand_amount();
+
+       }
+       return totalR;
+
+    }
+
+
+
+
+
+//
+//print public byte[] printYearlyTaxReport(){
+//
+//
+//
+//
+//    }
+
+
+
+
 
 
 

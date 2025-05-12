@@ -19,10 +19,14 @@ public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @NotEmpty
+    @Column(columnDefinition = "varchar(3) not null ")
     private String branchNumber;
+
     @NotEmpty
     private String region;
+
     @NotEmpty
     private String city;
 

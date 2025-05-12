@@ -1,4 +1,3 @@
-/*
 package com.example.final_project.Service;
 
 import com.twilio.Twilio;
@@ -15,9 +14,9 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class WhatsAppService {
 
-    private static final String ACCOUNT_SID = "";
-    private static final String AUTH_TOKEN = "";
-    private static final String FROM_WHATSAPP_NUMBER = "";
+    private static final String ACCOUNT_SID = "ACa388ab380d41adc951177a7a3331b53f";
+    private static final String AUTH_TOKEN = "4f438842df56281a1e1bb6df6ab31fdb";
+    private static final String FROM_WHATSAPP_NUMBER = "+17759426544";
 
 
     public void sendAccountantActivationMessage(String username, String password, String employeeId, String phoneNumber, LocalDate createdDate) {
@@ -40,4 +39,3 @@ public class WhatsAppService {
         ).create();
     }
 }
-*/

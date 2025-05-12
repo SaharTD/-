@@ -30,11 +30,18 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void addProduct(Integer branchId, Product product) {
+    public void addProduct(Integer accountantId,Integer branchId, Product product) {
+
         Branch branch = branchRepository.findBranchesById(branchId);
         if (branch == null) {
             throw new ApiException("branch not found");
         }
+
+        Accountant accountant = accountantRepository.findAccountantByIdAndBranch(accountantId,branch);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found or does not belong to the branch");
+        }
+
 
 /// if business is not active
         if (!branch.getBusiness().getIsActive()) {
@@ -51,6 +58,7 @@ public class ProductService {
         branchRepository.save(branch);
         productRepository.save(product);
     }
+
 
     public void updateProduct(Integer branchId, Integer productId, Product product) {
         Branch branch = branchRepository.findBranchesById(branchId);
@@ -87,12 +95,6 @@ public class ProductService {
         }
         return products;
     }
-
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
-    }
-
-
 
 
 

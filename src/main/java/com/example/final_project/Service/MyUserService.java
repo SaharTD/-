@@ -14,7 +14,7 @@ import java.util.List;
 public class MyUserService {
 
 
-    private MyUserRepository myUserRepository;
+    private final MyUserRepository myUserRepository;
 
     public List<User> getAllUser(){
        return myUserRepository.findAll();
@@ -25,6 +25,9 @@ public class MyUserService {
        //String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
        // user.setPassword(hashPassword);
         user.setRole("ADMIN");
+        user.setAccountant(null);
+        user.setAuditor(null);
+        user.setTaxPayer(null);
         myUserRepository.save(user);
     }
 

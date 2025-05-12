@@ -57,7 +57,6 @@ public class Business {
     private LocalDateTime registrationDate;
 
     private Boolean isActive;
-    private String requestStatus;
 
 
 
