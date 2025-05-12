@@ -336,9 +336,14 @@ public class TaxReportsService {
 
 
 
-    public byte[] getTaxReportAsPdf(Integer reportId) {
+    public byte[] getTaxReportAsPdf(Integer reportId,Integer taxPayerId) {
         TaxReports report = taxReportsRepository.findTaxReportsById(reportId);
         if (report == null) throw new ApiException("Tax report not found.");
+
+        if (!report.getBusiness().getTaxPayer().getId().equals(taxPayerId)) {
+            throw new ApiException("You don't have access to this tax report!");
+        }
+
 
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

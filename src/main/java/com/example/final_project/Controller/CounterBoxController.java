@@ -24,11 +24,11 @@ public class CounterBoxController {
     private final CounterBoxService counterBoxService;
     private final SalesService salesService;
 
-    //كرييت مع المحاسب
+
     @PostMapping("/create")
-    public ResponseEntity<?> createCounterBox(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
+    public ResponseEntity createCounterBox(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
         counterBoxService.createCounterBox(counterBoxDTO);
-        return ResponseEntity.ok("Counter box created successfully");
+        return ResponseEntity.status(200).body("Counter box created successfully");
     }
 
 

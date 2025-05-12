@@ -4,6 +4,7 @@ import com.example.final_project.Api.ApiException;
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTOOUT.TaxReportStatusDTO;
 import com.example.final_project.Model.TaxReports;
+import com.example.final_project.Model.User;
 import com.example.final_project.Service.TaxReportsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -129,9 +131,10 @@ public class TaxReportsController {
         return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(taxPayerId));
     }
 
+    ///Auth-> TaxPayer
     @GetMapping("/print/{reportId}")
-    public ResponseEntity<byte[]> printTaxReportAsPdf(@PathVariable Integer reportId) {
-        byte[] pdf = taxReportsService.getTaxReportAsPdf(reportId);
+    public ResponseEntity<byte[]> printTaxReportAsPdf(@AuthenticationPrincipal User TaxPayer, @PathVariable Integer reportId) {
+        byte[] pdf = taxReportsService.getTaxReportAsPdf(TaxPayer.getId(),reportId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + reportId + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
