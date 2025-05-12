@@ -36,7 +36,10 @@ public class AuditorService {
         return auditorRepository.findAll();
     }
 
-    public void addAuditor(DTOAuditor dtoAuditor) {
+    public void addAuditor(Integer adminId, DTOAuditor dtoAuditor) {
+        User admin = myUserRepository.findUserByIdAndRole(adminId,"ADMIN");
+        if (admin==null)
+            throw new ApiException("user not found or does have permission");
         User user = new User();
         user.setName(dtoAuditor.getName());
         user.setUsername(dtoAuditor.getUsername());
@@ -74,7 +77,10 @@ public class AuditorService {
 
 
     // Endpoint 27
-    public void createTaxReport(Integer businessId){
+    public void createTaxReport(Integer auditorId ,Integer businessId){
+        Auditor auditor = auditorRepository.findAuditorsById(auditorId);
+        if (auditor==null)
+            throw new ApiException("auditor not found");
         Business business = businessRepository.findBusinessById(businessId);
         if (business==null)
             throw new ApiException("this business not found");

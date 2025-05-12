@@ -33,14 +33,14 @@ public class AuditorController {
 
     // authority -> Auditor
     @PutMapping("/update")
-    public ResponseEntity updateAuditor(@AuthenticationPrincipal User user,@PathVariable Integer id,@RequestBody@Valid DTOAuditor dtoAuditor){
+    public ResponseEntity updateAuditor(@AuthenticationPrincipal User user,@RequestBody@Valid DTOAuditor dtoAuditor){
         auditorService.updateAuditor(user.getId(), dtoAuditor);
         return ResponseEntity.status(200).body(new ApiResponse("auditor updated"));
     }
 
     // authority -> ADMIN
     @DeleteMapping("/delete")
-    public ResponseEntity deleteAuditor(@AuthenticationPrincipal User user,@PathVariable Integer id){
+    public ResponseEntity deleteAuditor(@AuthenticationPrincipal User user){
         auditorService.deleteAuditor(user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("auditor deleted"));
     }
@@ -49,7 +49,7 @@ public class AuditorController {
     // Endpoint 27
     @PostMapping("/create-tax-report/{businessId}")
     public ResponseEntity createTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer businessId){
-        auditorService.createTaxReport(user.getId()),businessId);
+        auditorService.createTaxReport(user.getId(),businessId);
         return ResponseEntity.status(200).body(new ApiResponse("tax created"));
     }
 
@@ -70,14 +70,14 @@ public class AuditorController {
 
     //اعتماد التقرير
     @PutMapping("/approve-tax-report/{taxReportId}/{auditorId}")
-    public ResponseEntity approveTaxReport(@PathVariable Integer auditorId,@PathVariable Integer taxReportId) {
-        auditorService.approveTaxReportStatus(taxReportId,auditorId);
+    public ResponseEntity approveTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
+        auditorService.approveTaxReportStatus(taxReportId, user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " ));
     }
 
     @PutMapping("/reject-tax-report/{taxReportId}/{auditorId}")
-    public ResponseEntity rejectTaxReport(@PathVariable Integer auditorId,@PathVariable Integer taxReportId) {
-        auditorService.rejectTaxReportStatus(taxReportId,auditorId);
+    public ResponseEntity rejectTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
+        auditorService.rejectTaxReportStatus(taxReportId, user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " ));
     }
 
