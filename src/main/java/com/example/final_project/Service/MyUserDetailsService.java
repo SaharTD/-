@@ -1,9 +1,9 @@
 package com.example.final_project.Service;
 
 
-import com.example.spring_security.Api.ApiException;
-import com.example.spring_security.Model.User;
-import com.example.spring_security.Repository.AuthRepository;
+import com.example.final_project.Api.ApiException;
+import com.example.final_project.Model.User;
+import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final AuthRepository authRepository;
+    private final MyUserRepository authRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

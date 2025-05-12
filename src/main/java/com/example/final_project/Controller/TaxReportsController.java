@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -131,7 +132,7 @@ public class TaxReportsController {
     }
 
     @GetMapping("/print/{reportId}")
-    public ResponseEntity<byte[]> printTaxReportAsPdf(@AuthenticationPrincipal User user,@PathVariable Integer reportId) {
+    public ResponseEntity<byte[]> printTaxReportAsPdf(@AuthenticationPrincipal User user, @PathVariable Integer reportId) {
         byte[] pdf = taxReportsService.getTaxReportAsPdf(user.getId(),reportId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + reportId + ".pdf")
