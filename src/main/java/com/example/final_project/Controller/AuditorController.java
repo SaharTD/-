@@ -3,6 +3,7 @@ package com.example.final_project.Controller;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.DTOAuditor;
+import com.example.final_project.Model.User;
 import com.example.final_project.Service.AuditorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,64 +18,69 @@ public class AuditorController {
 
     private final AuditorService auditorService;
 
+    // authority -> ADMIN
     @GetMapping("/get")
-    public ResponseEntity getAll(){
-        return ResponseEntity.status(200).body(auditorService.getAllAuditors());
+    public ResponseEntity getAll(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(200).body(auditorService.getAllAuditors(user.getId()));
     }
 
+    // authority -> ADMIN
     @PostMapping("/add")
-    public ResponseEntity addBranch(@RequestBody@Valid DTOAuditor dtoAuditor){
-        auditorService.addAuditor(dtoAuditor);
+    public ResponseEntity addAuditor(@AuthenticationPrincipal User user,@RequestBody@Valid DTOAuditor dtoAuditor){
+        auditorService.addAuditor(user.getId(),dtoAuditor);
         return ResponseEntity.status(200).body(new ApiResponse("new auditor added"));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity updateAuditor(@PathVariable Integer id,@RequestBody @Valid DTOAuditor dtoAuditor){
         auditorService.updateAuditor(id, dtoAuditor);
+    // authority -> Auditor
+    @PutMapping("/update")
+    public ResponseEntity updateAuditor(@AuthenticationPrincipal User user,@RequestBody@Valid DTOAuditor dtoAuditor){
+        auditorService.updateAuditor(user.getId(), dtoAuditor);
         return ResponseEntity.status(200).body(new ApiResponse("auditor updated"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteAuditor(@PathVariable Integer id){
-        auditorService.deleteAuditor(id);
+    // authority -> ADMIN
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteAuditor(@AuthenticationPrincipal User user){
+        auditorService.deleteAuditor(user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("auditor deleted"));
     }
 
+    // authority -> Auditor
     // Endpoint 27
     @PostMapping("/create-tax-report/{businessId}")
-    public ResponseEntity createTaxReport(@PathVariable Integer businessId){
-        auditorService.createTaxReport(businessId);
+    public ResponseEntity createTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer businessId){
+        auditorService.createTaxReport(user.getId(),businessId);
         return ResponseEntity.status(200).body(new ApiResponse("tax created"));
     }
 
-    @PutMapping("activate-business/{auditId}/{taxPayerId}/{businessId}")
-    public ResponseEntity activateBusiness(@PathVariable Integer auditId,@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
-        auditorService.activateBusiness(auditId,taxPayerId,businessId);
+    // authority -> Auditor
+    @PutMapping("activate-business/{taxPayerId}/{businessId}")
+    public ResponseEntity activateBusiness(@AuthenticationPrincipal User user,@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        auditorService.activateBusiness(user.getId(),taxPayerId,businessId);
         return ResponseEntity.status(200).body(new ApiResponse("The business is activated successfully "));
     }
 
-
-    @PutMapping("block-business/{auditId}/{taxPayerId}/{businessId}")
-    public ResponseEntity blockBusiness(@PathVariable Integer auditId,@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
-        auditorService.blockBusiness(auditId,taxPayerId,businessId);
+    // authority -> Auditor
+    @PutMapping("block-business/{taxPayerId}/{businessId}")
+    public ResponseEntity blockBusiness(@AuthenticationPrincipal User user,@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+        auditorService.blockBusiness(user.getId(), taxPayerId,businessId);
         return ResponseEntity.status(200).body(new ApiResponse("The business is blocked successfully "));
     }
 
 
-
-
-
-
     //اعتماد التقرير
     @PutMapping("/approve-tax-report/{taxReportId}/{auditorId}")
-    public ResponseEntity approveTaxReport(@PathVariable Integer auditorId,@PathVariable Integer taxReportId) {
-        auditorService.approveTaxReportStatus(taxReportId,auditorId);
+    public ResponseEntity approveTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
+        auditorService.approveTaxReportStatus(taxReportId, user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " ));
     }
 
     @PutMapping("/reject-tax-report/{taxReportId}/{auditorId}")
-    public ResponseEntity rejectTaxReport(@PathVariable Integer auditorId,@PathVariable Integer taxReportId) {
-        auditorService.rejectTaxReportStatus(taxReportId,auditorId);
+    public ResponseEntity rejectTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
+        auditorService.rejectTaxReportStatus(taxReportId, user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " ));
     }
 
