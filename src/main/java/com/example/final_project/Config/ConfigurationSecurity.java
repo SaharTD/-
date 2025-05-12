@@ -38,12 +38,7 @@ public class ConfigurationSecurity {
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/register","/api/v1/auth/assign-admin").permitAll() // .requestMatchers("/api/v1/auth/**").hasAnyAuthority("USER","ADMIN")
-                .requestMatchers("/api/v1/todo/add-todo","/api/v1/todo/get-my-todos",
-                        "/api/v1/auth/update","/api/v1/todo/update-todo/{todo_id}",
-                        "/api/v1/todo/delete-todo/{todo_id}").hasAuthority("USER")
-                .requestMatchers("/api/v1/auth/delete/user/{username}",
-                        "/api/v1/auth/get-all","/api/v1/todo/get-all").hasAuthority("ADMIN")
+                .requestMatchers("/api/v1/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout().logoutUrl("/api/v1/user/logout")

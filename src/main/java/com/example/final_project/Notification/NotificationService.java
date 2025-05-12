@@ -25,6 +25,7 @@ public class NotificationService {
         simpleMailMessage.setSubject(subject);
 //        simpleMailMessage.setSentDate(Date.from(Instant.now()));
         javaMailSender.send(simpleMailMessage);
-
     }
+
+
 }

@@ -32,12 +32,12 @@ public class CounterBoxController {
     }
 
 
-    @GetMapping("/get")
+    @GetMapping("/get-all")
     public ResponseEntity getAll(){
         return ResponseEntity.status(200).body(counterBoxService.getAllCounterBoxes());
     }
 
-    @GetMapping("get")
+    @GetMapping("/get")
     public ResponseEntity getById(@AuthenticationPrincipal User account){
         return ResponseEntity.status(200).body(counterBoxService.getCounterBox(account.getId()));
     }
