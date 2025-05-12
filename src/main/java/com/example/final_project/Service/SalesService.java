@@ -335,8 +335,11 @@ public class SalesService {
 
 
 
-    public void updateSales(Integer id,Sales sales){
-        Sales oldSales=salesRepository.findSalesById(id);
+    public void updateSales(Integer accountantId,Integer saleId,Sales sales){
+        Accountant accountant1 = accountantRepository.findAccountantById(accountantId);
+        if (accountant1==null)
+            throw new ApiException("accountant not found");
+        Sales oldSales=salesRepository.findSalesById(saleId);
 
         if(oldSales==null){
 

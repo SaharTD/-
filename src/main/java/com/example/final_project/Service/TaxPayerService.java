@@ -44,7 +44,7 @@ public class TaxPayerService {
 
     private final BranchRepository branchRepository;
     private final CounterBoxRepository counterBoxRepository;
-  //  private final WhatsAppService whatsAppService;
+    //  private final WhatsAppService whatsAppService;
 
 
     /// run by admin
@@ -85,22 +85,16 @@ public class TaxPayerService {
         user.setRole("TAXPAYER");
         user.setName(taxPayerDTO.getName());
         user.setUsername(taxPayerDTO.getUsername());
-//        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
-//        user.setPassword(hashPassword);
-        user.setPassword(taxPayerDTO.getPassword());
+        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
+        user.setPassword(hashPassword);
         user.setEmail(taxPayerDTO.getEmail());
 
 
         TaxPayer taxPayer = new TaxPayer();
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
-        taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
-
-
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
-        taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
-
         taxPayer.setRegistrationDate(LocalDateTime.now());
 
         myUserRepository.save(user);
@@ -119,10 +113,8 @@ public class TaxPayerService {
 
         taxPayer.getUser().setEmail(taxPayerDTO.getEmail());
         taxPayer.getUser().setUsername(taxPayerDTO.getUsername());
-
-
-     //        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
-     //        taxPayer.getUser().setPassword(hashPassword);
+        String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
+        taxPayer.getUser().setPassword(hashPassword);
 
 
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
@@ -144,7 +136,7 @@ public class TaxPayerService {
     }
 
 
-    public void addAccountant(Integer taxPayerID,Integer branchId ,AccountantDTO accountantDTO) {
+    public void addAccountant(Integer taxPayerID, Integer branchId, AccountantDTO accountantDTO) {
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
         if (taxPayer == null) {
@@ -176,8 +168,8 @@ public class TaxPayerService {
         accountant.setBranch(branch);
 
 
-        Business business= businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
-        if (business==null){
+        Business business = businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
+        if (business == null) {
             throw new ApiException("The business is not found");
 
         }
@@ -226,11 +218,11 @@ public class TaxPayerService {
                 "[mohasil team]";
 
 
-        String phone=accountantDTO.getPhoneNumber();
-        if (phone.startsWith("0")){
-            phone=phone.substring(1);
+        String phone = accountantDTO.getPhoneNumber();
+        if (phone.startsWith("0")) {
+            phone = phone.substring(1);
         }
-        String fullPhoneNumber="966"+phone;
+        String fullPhoneNumber = "966" + phone;
 
         /*whatsAppService.sendAccountantActivationMessage(
                 accountant.getUser().getUsername(),
@@ -245,11 +237,9 @@ public class TaxPayerService {
     }
 
 
-
-
     /// if accountant has not opened since the register date or not opened for a 30 days
     public void blockUnnActiveAccountant(Integer taxPayerId, Integer accountantId) {
-
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
         if (taxPayer == null) {
             throw new ApiException("The Taxpayer is not found");
         }
@@ -277,39 +267,36 @@ public class TaxPayerService {
         if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(30))) {
             accountant.setIsActive(false);
         }
-
-
-    public Double getYearRevenue(Integer taxPayerId, Integer businessId,int year){
-
-        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-        if (taxPayer == null) {
-            throw new ApiException("The Taxpayer is not found");
-        }
-
-        Business business = businessRepository.findBusinessById(businessId);
-        if (!business.getIsActive()) {
-            throw new ApiException("The business is not found");
-        }
-
-        LocalDateTime startDate=LocalDateTime.of(year, Month.JANUARY,1,0,0);
-        LocalDateTime endDate=LocalDateTime.of(year, Month.DECEMBER,31,23,59);
-       List<Sales>yearlyRevenue=salesRepository.findSalesByBranch_BusinessAndSaleDateBetween(business,startDate,endDate);
-
-       if (yearlyRevenue.isEmpty()){
-           throw new ApiException("No sales found for this business");
-
-       }
-       Double totalR=0.0;
-       for(Sales s:yearlyRevenue){
-           totalR+=s.getGrand_amount();
-
-       }
-       return totalR;
-
     }
 
+        public Double getYearRevenue (Integer taxPayerId, Integer businessId,int year){
 
+            TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+            if (taxPayer == null) {
+                throw new ApiException("The Taxpayer is not found");
+            }
 
+            Business business = businessRepository.findBusinessById(businessId);
+            if (!business.getIsActive()) {
+                throw new ApiException("The business is not found");
+            }
+
+            LocalDateTime startDate = LocalDateTime.of(year, Month.JANUARY, 1, 0, 0);
+            LocalDateTime endDate = LocalDateTime.of(year, Month.DECEMBER, 31, 23, 59);
+            List<Sales> yearlyRevenue = salesRepository.findSalesByBranch_BusinessAndSaleDateBetween(business, startDate, endDate);
+
+            if (yearlyRevenue.isEmpty()) {
+                throw new ApiException("No sales found for this business");
+
+            }
+            Double totalR = 0.0;
+            for (Sales s : yearlyRevenue) {
+                totalR += s.getGrand_amount();
+
+            }
+            return totalR;
+
+        }
 
 
 //
@@ -321,61 +308,53 @@ public class TaxPayerService {
 //    }
 
 
-// Endpoint 40
-//    public void activateAccountant(Integer taxPayerId, Integer accountantId) {
-//        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-//        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-//        if (taxPayer == null)
-//            throw new ApiException("tax payer not found");
-//        if (accountant == null)
-//            throw new ApiException("accountant not found");
-//
-//        if (accountant.getIsActive())
-//            throw new ApiException("accountant is already active");
-//        accountant.setIsActive(true);
-//        accountantRepository.save(accountant);
-//    }
-//
-//    // Endpoint 41
-//    public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
-//        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-//        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-//        if (taxPayer == null)
-//            throw new ApiException("tax payer not found");
-//        if (accountant == null)
-//            throw new ApiException("accountant not found");
-//
-//        if (!accountant.getIsActive())
-//            throw new ApiException("accountant is already non active");
-//        accountant.setIsActive(false);
-//        accountantRepository.save(accountant);
-//    }
-//
-//    // Displays all accountants associated with the TB across all branches affiliated with him
-//    public List<Map<String, Object>> getAccountantsByTaxPayerId(Integer taxPayerId) {
-//        List<Object[]> rows = accountantRepository.findAccountantsByTaxPayerId(taxPayerId);
-//        List<Map<String, Object>> result = new ArrayList<>();
-//
-//        for (Object[] row : rows) {
-//            Map<String, Object> map = new LinkedHashMap<>();
-//            map.put("taxPayerId", row[0]);
-//            map.put("commercialRegistration", row[1]);
-//            map.put("employeeId", row[2]);
-//            map.put("isActive", row[3]);
-//            map.put("branchId", row[4]);
-//            result.add(map);
-//        }
-//
-//        return result;
-//    }
+    // Endpoint 40
+    public void activateAccountant(Integer taxPayerId, Integer accountantId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (taxPayer == null)
+            throw new ApiException("tax payer not found");
+        if (accountant == null)
+            throw new ApiException("accountant not found");
+
+        if (accountant.getIsActive())
+            throw new ApiException("accountant is already active");
+        accountant.setIsActive(true);
+        accountantRepository.save(accountant);
+    }
+
+    // Endpoint 41
+    public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (taxPayer == null)
+            throw new ApiException("tax payer not found");
+        if (accountant == null)
+            throw new ApiException("accountant not found");
+
+        if (!accountant.getIsActive())
+            throw new ApiException("accountant is already non active");
+        accountant.setIsActive(false);
+        accountantRepository.save(accountant);
+    }
+
+    // Displays all accountants associated with the TB across all branches affiliated with him
+    public List<Map<String, Object>> getAccountantsByTaxPayerId(Integer taxPayerId) {
+        List<Object[]> rows = accountantRepository.findAccountantsByTaxPayerId(taxPayerId);
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Object[] row : rows) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("taxPayerId", row[0]);
+            map.put("commercialRegistration", row[1]);
+            map.put("employeeId", row[2]);
+            map.put("isActive", row[3]);
+            map.put("branchId", row[4]);
+            result.add(map);
+        }
+
+        return result;
+    }
 
 
-
-
-
-
-
-
-
-
-}
+    }

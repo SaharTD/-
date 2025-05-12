@@ -79,33 +79,33 @@ public class TaxReportsController {
 
 
     @GetMapping("/reports/{auditorId}")
-    public ResponseEntity getReportsByAuditor(@AuthenticationPrincipal User user,@PathVariable Integer auditorId) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportsByAuditor(user.getId(),auditorId));
+    public ResponseEntity getReportsByAuditor(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportsByAuditor(user.getId()));
     }
 
     // 2. Get report count by status for an auditor
     @GetMapping("/report-count/{auditorId}/{status}")
-    public ResponseEntity getReportCountByStatus(@AuthenticationPrincipal User user,@PathVariable Integer auditorId, @PathVariable String status) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportCountByStatus(user.getId(),auditorId, status));
+    public ResponseEntity getReportCountByStatus(@AuthenticationPrincipal User user, @PathVariable String status) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportCountByStatus(user.getId(), status));
     }
 
     // 4. Get approval rate for an auditor
     @GetMapping("/approval-rate/{auditorId}")
-    public ResponseEntity getApprovalRate(@AuthenticationPrincipal User user,@PathVariable Integer auditorId) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getApprovalRate(user.getId(),auditorId));
+    public ResponseEntity getApprovalRate(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getApprovalRate(user.getId()));
     }
 
     // 5. Bulk approve reports for an auditor
     @PutMapping("/bulk-approve/{auditorId}")
-    public ResponseEntity bulkApproveReports(@AuthenticationPrincipal User user,@PathVariable Integer auditorId, @RequestBody List<Integer> reportIds) {
-        taxReportsService.bulkApproveReports(user.getId(),auditorId, reportIds);
+    public ResponseEntity bulkApproveReports(@AuthenticationPrincipal User user, @RequestBody List<Integer> reportIds) {
+        taxReportsService.bulkApproveReports(user.getId(), reportIds);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Reports approved successfully"));
     }
 
     // 7. Get latest report reviewed by auditor
     @GetMapping("/latest-report/{auditorId}")
-    public ResponseEntity getLatestReport(@AuthenticationPrincipal User user,@PathVariable Integer auditorId) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(user.getId(),auditorId));
+    public ResponseEntity getLatestReport(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(user.getId()));
     }
 
     @GetMapping("/unapproved")
@@ -126,8 +126,8 @@ public class TaxReportsController {
 
     // Endpoint 37
     @GetMapping("/get-tax-reports/tax-payer/{taxPayerId}")
-    public ResponseEntity printTaxReportForEveryBusinesses(@AuthenticationPrincipal User user,@PathVariable Integer taxPayerId){
-        return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(user.getId(),taxPayerId));
+    public ResponseEntity printTaxReportForEveryBusinesses(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(user.getId()));
     }
 
     @GetMapping("/print/{reportId}")
