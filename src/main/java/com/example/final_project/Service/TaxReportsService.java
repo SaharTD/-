@@ -33,6 +33,7 @@ public class TaxReportsService {
     private final TaxPayerRepository taxPayerRepository;
 
 
+
     public List<TaxReports> getAllTaxReports(Integer id) {
         Auditor auditor = auditorRepository.findAuditorsById(id);
         if (auditor == null) {
