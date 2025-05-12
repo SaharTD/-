@@ -50,8 +50,8 @@ public class TaxPayerController {
 
     /// 13
     @PostMapping("/add-accountant/{taxPayerID}")
-    public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID){
-        taxPayerService.addAccountant(taxPayerID,accountantDTO);
+    public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID,@PathVariable Integer branchId){
+        taxPayerService.addAccountant(taxPayerID,branchId,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
     }
 
