@@ -26,7 +26,7 @@ public class BranchController {
         return ResponseEntity.status(200).body(branchService.getAllBranches());
     }
 
-    @PostMapping("/add/{businessId")
+    @PostMapping("/add/{businessId}")
     public ResponseEntity addBranch(@AuthenticationPrincipal User user,@PathVariable Integer businessId,@RequestBody @Valid Branch branch){
         branchService.addBranch(businessId, user.getId(), branch);
         return ResponseEntity.status(200).body(new ApiResponse("new branch added"));

@@ -26,7 +26,6 @@ public class ProductService {
     private final SalesRepository salesRepository;
 
     public List<Product> getAllProduct() {
-        notificationService.sendEmail("aa.ll.ii.pp5@gmail.com", "test", "dear customer");
         return productRepository.findAll();
     }
 

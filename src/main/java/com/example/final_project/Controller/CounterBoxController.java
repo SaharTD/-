@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/counterbox")
+@RequestMapping("/api/v1/counterbox")
 public class CounterBoxController {
 
 

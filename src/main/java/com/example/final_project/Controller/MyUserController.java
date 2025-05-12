@@ -43,4 +43,9 @@ public class MyUserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user not found"));
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity logout(){
+        return ResponseEntity.status(200).body(new ApiResponse("log out"));
+    }
+
 }

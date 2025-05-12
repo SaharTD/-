@@ -21,7 +21,7 @@ public class MyUserDetailsService implements UserDetailsService {
         User user = authRepository.findUserByUsername(username);
         if (user==null)
             throw new ApiException("wrong username or password"); //must be like this because security by agreement
-
         return user;
     }
+
 }
