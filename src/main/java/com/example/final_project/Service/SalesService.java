@@ -36,6 +36,7 @@ public class SalesService {
     private final ProductRepository productRepository;
     private final AccountantRepository accountantRepository;
     private final ItemSaleRepository itemSaleRepository;
+    private final MyUserRepository myUserRepository;
 
     public List<Sales> getAllSales() {
         return salesRepository.findAll();
@@ -353,6 +354,9 @@ public class SalesService {
     }
 
     public void deleteSales(Integer id){
+        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
+        if (admin==null)
+            throw new ApiException("you don't have permission");
         Sales sales=salesRepository.findSalesById(id);
 
         if(sales==null){
