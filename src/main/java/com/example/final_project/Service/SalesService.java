@@ -15,6 +15,7 @@ import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -180,7 +181,6 @@ public class SalesService {
 
         if (!currentSale.getSalesStatus().equals("DRAFT")){
             throw new ApiException("Sorry can not add product to confirmed invoice ");
-
         }
 
         List<ItemSale> items =itemSaleRepository.findItemSaleBySalesId(saleId);
@@ -198,6 +198,56 @@ public class SalesService {
 
 //
 //
+    //create
+    public ItemSale updateProductQuantity(Integer accounterId, Integer SalesId, Integer quantity){
+        ItemSale itemSale = itemSaleRepository.findById(SalesId)
+                .orElseThrow(() -> new ApiException("Item sale not found"));
+
+        Accountant accountant = accountantRepository.findAccountantById(accounterId);
+        if (accountant == null) {
+            throw new ApiException("Accountant not found");
+        }
+
+        Sales currentSale = salesRepository.findSalesById(SalesId);
+        if (currentSale == null) {
+            throw new ApiException("Sale not found");
+        }
+
+        if (!currentSale.getSalesStatus().equals("CONFIRMED")) {
+            throw new ApiException("Cannot update quantity of a confirmed invoice");
+        }
+
+        Product product = itemSale.getProduct();
+        int quantityDifference = quantity -itemSale.getQuantity();
+
+        if (product.getStock() < quantityDifference) {
+            throw new ApiException("Insufficient stock");
+        }
+
+
+        product.setStock(product.getStock()-quantityDifference);
+        productRepository.save(product);
+
+        itemSale.setQuantity(quantity);
+        itemSale = itemSaleRepository.save(itemSale);
+
+        return itemSale;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //    public byte[] printInvoice(Integer accountantId, Integer saleId) {
 //
@@ -462,24 +512,6 @@ public class SalesService {
 //    }
 
 
-    public Map<String, Double> getSalesSummaryByBranch(Integer branchId) {
-        List<Sales> salesList = salesRepository.findSalesByBranch(branchId);
-        double totalBeforeTax = 0.0;
-
-        for (Sales sale : salesList) {
-            if (sale.getTotal_amount() != null)
-                totalBeforeTax += sale.getTotal_amount();
-        }
-
-        double taxAmount = totalBeforeTax * 0.15;
-        double grandTotal = totalBeforeTax + taxAmount;
-
-        Map<String, Double> result = new HashMap<>();
-        result.put("total", totalBeforeTax);
-        result.put("total tax Amount is:", taxAmount);
-        result.put("grand total is:", grandTotal);
-        return result;
-    }
 
     public Map<String, Object> addSales2(Integer counterBox_id, Integer branch_id, Sales sales) {
         CounterBox counterBox = counterBoxRepository.findCounterBoxById(counterBox_id);

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.jdbc.support.JdbcAccessor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.jdbc.support.JdbcAccessor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,9 +44,14 @@ public class TaxPayerService {
 
     private final JdbcAccessor jdbcAccessor;
 
+    private final SalesRepository salesRepository;
+    private final JdbcAccessor jdbcAccessor;
+//    private final WhatsAppService whatsAppService;
+    private final CounterBoxRepository counterBoxRepository;
     private final BranchRepository branchRepository;
     private final CounterBoxRepository counterBoxRepository;
     //  private final WhatsAppService whatsAppService;
+
 
 
     /// run by admin
@@ -93,9 +99,14 @@ public class TaxPayerService {
 
         TaxPayer taxPayer = new TaxPayer();
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
+        taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+
+
         taxPayer.setUser(user);
         taxPayer.setIsActive(false);
         taxPayer.setCommercialRegistration(taxPayerDTO.getCommercialRegistration());
+        taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
+
         taxPayer.setRegistrationDate(LocalDateTime.now());
 
         myUserRepository.save(user);
@@ -116,6 +127,7 @@ public class TaxPayerService {
         taxPayer.getUser().setUsername(taxPayerDTO.getUsername());
         String hashPassword = new BCryptPasswordEncoder().encode(taxPayerDTO.getPassword());
         taxPayer.getUser().setPassword(hashPassword);
+
 
 
         taxPayer.setPhoneNumber(taxPayerDTO.getPhoneNumber());
@@ -287,7 +299,6 @@ public class TaxPayerService {
         accountant.setIsActive(true);
         accountantRepository.save(accountant);
     }
-
     // Endpoint 41
     public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
@@ -302,6 +313,40 @@ public class TaxPayerService {
         accountant.setIsActive(false);
         accountantRepository.save(accountant);
     }
+
+
+    /// if accountant has not opened since the register date or not opened for a 30 days
+    public void blockUnnActiveAccountant(Integer taxPayerId, Integer accountantId) {
+
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+
+        Accountant accountant = accountantRepository.findAccountantByIsActiveAndId(true, accountantId);
+        if (accountant == null) {
+            throw new ApiException("Accountant is not found or not active");
+        }
+
+
+        Business business = businessRepository.findBusinessByIdAndTaxPayer(accountant.getBusiness().getId(), taxPayer);
+        if (!business.getIsActive()) {
+            throw new ApiException("Your business that is related to this branch is not active");
+        }
+        if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(20))) {
+            String subject = "Warning ! Inactivity Detected ";
+            String message = "Dear : " + accountant.getUser().getName() + " We have noticed that your account has been inactive for over 20 days since registration ." +
+                    "please ensure you resume activity within the next 10 days to avoid deactivation \n" +
+                    "Best regards,\n" +
+                    "[mohasil team]";
+
+            notificationService.sendEmail(accountant.getUser().getEmail(), subject, message);
+            throw new ApiException("The accountant is been inactive for 20 days , accountant has been notified");
+
+        }
+        if (accountant.getLastActiveCounterBox() == null || accountant.getLastActiveCounterBox().isBefore(accountant.getRegistrationDate().minusDays(30))) {
+            accountant.setIsActive(false);
+        }
 
     // Displays all accountants associated with the TB across all branches affiliated with him
     public List<Map<String, Object>> getAccountantsByTaxPayerId(Integer taxPayerId) {
@@ -323,3 +368,57 @@ public class TaxPayerService {
 
 
     }
+
+    public Double getYearRevenue(Integer taxPayerId, Integer businessId,int year){
+
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+        Business business = businessRepository.findBusinessById(businessId);
+        if (!business.getIsActive()) {
+            throw new ApiException("The business is not found");
+        }
+
+        LocalDateTime startDate=LocalDateTime.of(year, Month.JANUARY,1,0,0);
+        LocalDateTime endDate=LocalDateTime.of(year, Month.DECEMBER,31,23,59);
+       List<Sales>yearlyRevenue=salesRepository.findSalesByBranch_BusinessAndSaleDateBetween(business,startDate,endDate);
+
+       if (yearlyRevenue.isEmpty()){
+           throw new ApiException("No sales found for this business");
+
+       }
+       Double totalR=0.0;
+       for(Sales s:yearlyRevenue){
+           totalR+=s.getGrand_amount();
+
+       }
+       return totalR;
+
+    }
+
+
+
+
+
+//
+//print public byte[] printYearlyTaxReport(){
+//
+//
+//
+//
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+}

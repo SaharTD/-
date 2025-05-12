@@ -58,4 +58,7 @@ public class Branch {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "branch")
     private Set<Sales> sales;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
+    private Set<Sales> sales ;
 }

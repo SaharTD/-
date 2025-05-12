@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -91,34 +93,36 @@ public class BranchService {
     }
 
 
+    public Map<String,Double> getSalesSummaryByBranch(Integer taxPayerID, Integer branchId) {
 
-     public  List<SalesDTO> salesOperationOnBranch(Integer taxPayerId,Integer branchId){
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+        Branch branch=branchRepository.findBranchesById(branchId);
+        if (branch==null){
+            throw new ApiException("branch not found");
+        }
+
+        double totalBeforeTax = 0.0;
 
 
-         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-         if (taxPayer == null) {
-             throw new ApiException("The Taxpayer is not found");
-         }
+        for (Sales sale : branch.getSales()) {
+            if (sale.getTotal_amount() != null)
+                totalBeforeTax += sale.getTotal_amount();
+        }
 
-         Branch branch = branchRepository.findBranchesById(branchId);
-         if (branch==null) {
-             throw new ApiException("branch not found");
-         }
+        double taxAmount = totalBeforeTax * 0.15;
+        double grandTotal = totalBeforeTax + taxAmount;
 
-        List<Sales> branchSales= salesRepository.findSalesByBranch(branch);
-         if (branchSales.isEmpty()){
-             throw new ApiException("sales not found for branch");
-         }
-         List<SalesDTO> branchSalesDTO= new ArrayList<>();
+        Map<String, Double> result = new HashMap<>();
+        result.put("total", totalBeforeTax);
+        result.put("total tax Amount is:", taxAmount);
+        result.put("grand total is:", grandTotal);
 
-         for (Sales s :branchSales ){
-             SalesDTO salesDTO = new SalesDTO(s.getSale_invoice(), s.getGrand_amount());
-             branchSalesDTO.add(salesDTO);
-         }
-
-         return branchSalesDTO;
-
-     }
+        return result;
+    }
 
 
 

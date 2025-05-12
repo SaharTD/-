@@ -26,12 +26,6 @@ public class CounterBox {
     @NotEmpty(message = "type can not be empty")
     private String type;
 
-    @Column(columnDefinition = "varchar(20) not null")
-    private String paymentType;
-
-    @Column(columnDefinition = "int not null")
-    @NotNull(message = "Daily Treasury ")
-    private Double DailyTreasury;
 
     @Column
     private LocalDateTime openDatetime;

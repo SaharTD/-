@@ -25,6 +25,24 @@ public class ProductService {
     private final NotificationService notificationService;
     private final SalesRepository salesRepository;
 
+
+    //by accountant
+    public void addProductToBranch(Integer accountantId, Integer branchId, Product product) {
+        Accountant accountant = accountantRepository.getReferenceById(accountantId);
+        if (accountant == null) throw new ApiException("Accountant not found");
+
+        Branch branch = branchRepository.getReferenceById(branchId);
+        if (branch == null) throw new ApiException("Branch not found");
+
+        Product existingProduct = productRepository.findByNameAndBranchId(product.getName(), branchId);
+        if (existingProduct != null)
+            throw new ApiException("The product is already exist you can edit it");
+
+        product.setBranch(branch);
+        productRepository.save(product);
+    }
+
+
     public List<Product> getAllProduct() {
         return productRepository.findAll();
     }
@@ -93,21 +111,6 @@ public class ProductService {
 
 
 
-    //by accountant
-    public void addProductToBranch(Integer accountantId, Integer branchId, Product product) {
-        Accountant accountant = accountantRepository.getReferenceById(accountantId);
-        if (accountant == null) throw new ApiException("Accountant not found");
-
-        Branch branch = branchRepository.getReferenceById(branchId);
-        if (branch == null) throw new ApiException("Branch not found");
-
-        Product existingProduct = productRepository.findByNameAndBranchId(product.getName(), branchId);
-        if (existingProduct != null)
-            throw new ApiException("The product is already exist you can edit it");
-
-        product.setBranch(branch);
-        productRepository.save(product);
-    }
 
 
 

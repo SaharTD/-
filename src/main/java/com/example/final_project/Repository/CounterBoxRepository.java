@@ -22,4 +22,5 @@ public interface CounterBoxRepository extends JpaRepository<CounterBox,Integer> 
 
     CounterBox findByBranch(Branch branch);
 
+    CounterBox findCounterBoxByAccountantId(Integer id);
 }

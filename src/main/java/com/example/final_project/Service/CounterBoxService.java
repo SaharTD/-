@@ -57,6 +57,8 @@ public class CounterBoxService {
         counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
         counterBox.setBranch(branch);
+        counterBox.setStatus("Closed");
+       // counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
 
         if (counterBoxDTO.getBranchId() != null) {
@@ -92,8 +94,6 @@ public class CounterBoxService {
         }
 
         oldBox.setType(counterBox.getType());
-        oldBox.setPaymentType(counterBox.getPaymentType());
-        oldBox.setDailyTreasury(counterBox.getDailyTreasury());
         oldBox.setOpenDatetime(counterBox.getOpenDatetime());
         oldBox.setCloseDatetime(counterBox.getCloseDatetime());
 
@@ -130,7 +130,7 @@ public class CounterBoxService {
 
         box.setOpenDatetime(LocalDateTime.now());
         box.setAccountant(accountant);
-box.setStatus("Opened");
+        box.setStatus("Opened");
         counterBoxRepository.save(box);
     }
 

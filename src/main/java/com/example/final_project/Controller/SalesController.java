@@ -5,9 +5,11 @@ import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.SaleDTO;
 import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.DTO.ProductDTO;
+import com.example.final_project.Model.ItemSale;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Model.Sales;
 import com.example.final_project.Model.User;
+import com.example.final_project.Service.ItemSaleService;
 import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 public class SalesController {
 
     private final SalesService salesService;
+    private final ItemSaleService itemSaleService;
 
     @GetMapping("/get")
     public ResponseEntity getAllSales(){
@@ -54,6 +57,7 @@ public class SalesController {
     public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User accountant) {
         return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(accountant.getId()));
     }
+
 
 
     @PostMapping("/adds/{counterBoxId}/{branch_id}")
@@ -90,6 +94,14 @@ public class SalesController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + saleId + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
+    }
+
+
+    @PutMapping("/update-product-quantity/{accountantId}/{itemSaleId}/{quantity}")
+    public ResponseEntity updateProductQuantity(@PathVariable Integer accountantId, @PathVariable Integer itemSaleId, @PathVariable Integer quantity) {
+
+        ItemSale updatedItemSale = salesService.updateProductQuantity(accountantId, itemSaleId, quantity);
+        return ResponseEntity.status(200).body(updatedItemSale);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.ItemSale;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Model.Sales;
@@ -41,6 +42,7 @@ public class ItemSaleService {
 
         itemSaleRepository.save(itemSale);
     }
+
 
     public void deleteItemSale(Integer id) {
         ItemSale itemSale = itemSaleRepository.findItemSaleById(id);

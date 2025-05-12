@@ -15,9 +15,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class WhatsAppService {
 
-    private static final String ACCOUNT_SID = "";
-    private static final String AUTH_TOKEN = "";
-    private static final String FROM_WHATSAPP_NUMBER = "";
+
 
 
     public void sendAccountantActivationMessage(String username, String password, String employeeId, String phoneNumber, LocalDate createdDate) {

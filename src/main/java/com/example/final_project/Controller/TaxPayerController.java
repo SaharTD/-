@@ -51,9 +51,9 @@ public class TaxPayerController {
 
 
     /// 13
-    @PostMapping("/add-accountant")
-    public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @AuthenticationPrincipal User taxPayer,@PathVariable Integer branchId){
-        taxPayerService.addAccountant(taxPayer.getId(), branchId,accountantDTO);
+    @PostMapping("/add-accountant/{taxPayerID}/{branchId}") //last edit
+    public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID,@PathVariable Integer branchId){
+        taxPayerService.addAccountant(taxPayerID,branchId,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
     }
 
@@ -72,10 +72,10 @@ public class TaxPayerController {
         taxPayerService.deActivateAccountant(taxPayer.getId(), accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
-
-    @GetMapping("/taxpayers/accountants")
-    public ResponseEntity<List<Map<String, Object>>> getAccountantsByTaxPayerId(@AuthenticationPrincipal User taxPayer) {
-        return ResponseEntity.ok(taxPayerService.getAccountantsByTaxPayerId(taxPayer.getId()));
+    //last update
+    @GetMapping("/taxpayers/{taxPayerId}/accountants")
+    public ResponseEntity<List<Map<String, Object>>> getAccountantsByTaxPayerId(@PathVariable Integer taxPayerId) {
+        return ResponseEntity.status(200).body(taxPayerService.getAccountantsByTaxPayerId(taxPayerId));
     }
 
     /// 15

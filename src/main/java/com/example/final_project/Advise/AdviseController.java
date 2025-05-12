@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.mail.MailSendException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.mail.MailSendException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -18,7 +19,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ConcurrentModificationException;
 
 @ControllerAdvice
 public class AdviseController {
@@ -31,12 +31,6 @@ public class AdviseController {
 
 
 
-    /*@ExceptionHandler(value = MailSendException.class)
-    public ResponseEntity<ApiResponse> MailSendException(MailSendException e){
-        String msg= String.valueOf(e.getFailedMessages());
-        return ResponseEntity.status(400).body(new ApiResponse((msg)));
-    }*/
-
     // Server Validation Exception
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> MethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -44,25 +38,10 @@ public class AdviseController {
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
 
-    //Concurrent Modification Exception
-
-    @ExceptionHandler(value = MailSendException.class)
-    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
-        String msg = e.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(msg));
-    }
-
     // Server Validation Exception
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<ApiResponse> ConstraintViolationException(ConstraintViolationException e) {
         String msg =e.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(msg));
-    }
-
-    //Concurrent Modification Exception
-    @ExceptionHandler(value = ConcurrentModificationException.class)
-    public ResponseEntity<ApiResponse> ConcurrentModificationException(ConcurrentModificationException e){
-        String msg= String.valueOf(e.getCause().getMessage());
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
 
@@ -111,11 +90,11 @@ public class AdviseController {
     }
 
 
-//    @ExceptionHandler(value = MailSendException.class)
-//    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
-//        String msg = e.getMessage();
-//        return ResponseEntity.status(400).body(new ApiResponse(msg));
-//    }
+    @ExceptionHandler(value = MailSendException.class)
+    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
 
     @ExceptionHandler(value = HttpMessageNotWritableException.class)
     public ResponseEntity<ApiResponse> HttpMessageNotWritableException(HttpMessageNotWritableException e) {
