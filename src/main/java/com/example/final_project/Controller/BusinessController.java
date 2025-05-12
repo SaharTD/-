@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,63 +26,81 @@ public class BusinessController {
 
 
 
+
+    /// sahar
+    /// TP
     @GetMapping("/get-all-business/{auditId}")
-    public ResponseEntity getAllBusiness (@PathVariable Integer auditId){
-        return ResponseEntity.status(200).body(businessService.getAllBusiness(auditId));
+    public ResponseEntity getAllBusiness (@AuthenticationPrincipal User  audit){
+        return ResponseEntity.status(200).body(businessService.getAllBusiness(audit.getId()));
     }
 
 
 
-    @GetMapping("/get-my-business/{taxPayerId}/{bId}")
-    public ResponseEntity getMyBusiness (@PathVariable Integer taxPayerId,@PathVariable Integer bId){
-        return ResponseEntity.status(200).body(businessService.getMyBusiness(taxPayerId,bId));
-    }
-
-    @GetMapping("/get-number-of-branches/{taxPayerId}/{bI}")
-    public ResponseEntity getMyBranches (@PathVariable Integer taxPayerId,@PathVariable Integer bI){
-        return ResponseEntity.status(200).body(new ApiResponse("The number of branches for the business : "+businessService.getMyBranches(taxPayerId,bI)));
+    /// sahar
+    /// TP
+    @GetMapping("/get-my-business/{bId}")
+    public ResponseEntity getMyBusiness (@AuthenticationPrincipal User taxPayer, @PathVariable Integer bId){
+        return ResponseEntity.status(200).body(businessService.getMyBusiness(taxPayer.getId(),bId));
     }
 
 
-    @GetMapping("/get-my-businesses/{taxPayerId}")
-    public ResponseEntity getMyBusinesses (@PathVariable Integer taxPayerId){
-        return ResponseEntity.status(200).body(businessService.getMyBusinesses(taxPayerId));
+
+    /// sahar
+    /// TP
+    @GetMapping("/get-number-of-branches/{bI}")
+    public ResponseEntity getMyBranches (@AuthenticationPrincipal User taxPayer,@PathVariable Integer bI){
+        return ResponseEntity.status(200).body(new ApiResponse("The number of branches for the business : "+businessService.getMyBranches(taxPayer.getId(), bI)));
     }
 
 
-    @PostMapping("/add-business/{taxPayerId}")
-    public ResponseEntity addBusiness (@RequestBody @Valid BusinessDTO businessDTO , @PathVariable Integer taxPayerId){
-        businessService.addBusiness(taxPayerId,businessDTO);
+    /// sahar
+    /// TP
+    @GetMapping("/get-my-businesses")
+    public ResponseEntity getMyBusinesses (@AuthenticationPrincipal User  taxPayer){
+        return ResponseEntity.status(200).body(businessService.getMyBusinesses(taxPayer.getId()));
+    }
+
+
+    /// sahar
+    /// TP
+    @PostMapping("/add-business")
+    public ResponseEntity addBusiness (@RequestBody @Valid BusinessDTO businessDTO , @AuthenticationPrincipal User  taxPayer){
+        businessService.addBusiness(taxPayer.getId(), businessDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the business is added successfully "));
     }
 
 
-    @PutMapping("/update/{taxPayerId}/{businessId}")
-    public ResponseEntity updateBusiness(@PathVariable Integer taxPayerId , @PathVariable Integer businessId , @RequestBody BusinessDTO businessDTO ){
-        businessService.updateBusiness(taxPayerId,businessId,businessDTO);
+    @PutMapping("/update/{businessId}")
+    public ResponseEntity updateBusiness(@AuthenticationPrincipal User taxPayer , @PathVariable Integer businessId , @RequestBody BusinessDTO businessDTO ){
+        businessService.updateBusiness(taxPayer.getId(), businessId,businessDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the business information has been updated successfully "));
     }
 
 
 
-    @DeleteMapping("delete/{taxPayerId}/{businessId}")
-    public ResponseEntity deleteBusiness(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
-        businessService.deleteBusiness(taxPayerId,businessId);
+    @DeleteMapping("delete/{businessId}")
+    public ResponseEntity deleteBusiness(@AuthenticationPrincipal User taxPayer,@PathVariable Integer businessId){
+        businessService.deleteBusiness(taxPayer.getId(),businessId);
         return ResponseEntity.status(200).body(new ApiResponse("the business has been deleted successfully "));
     }
 
 
-    @GetMapping("sales-business/{taxPayerId}/{businessId}")
-    public ResponseEntity salesOperationOnBusiness(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
-        List<SalesDTO> sales= businessService.salesOperationOnBusiness(taxPayerId, businessId);
+
+    /// sahar
+    /// TP
+    @GetMapping("sales-business/{businessId}")
+    public ResponseEntity salesOperationOnBusiness(@AuthenticationPrincipal User taxPayer,@PathVariable Integer businessId){
+        List<SalesDTO> sales= businessService.salesOperationOnBusiness(taxPayer.getId(), businessId);
         return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n "+sales.size()
-                +businessService.salesOperationOnBusiness(taxPayerId, businessId)));
+                +businessService.salesOperationOnBusiness(taxPayer.getId(), businessId)));
     }
 
 
-    @GetMapping("business-revenue/{taxPayerId}/{businessId}")
-    public ResponseEntity businessRevenue(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
-        return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "+businessService.businessRevenue(taxPayerId,businessId)));
+    /// sahar
+    /// TP
+    @GetMapping("business-revenue/{businessId}")
+    public ResponseEntity businessRevenue(@AuthenticationPrincipal User taxPayer,@PathVariable Integer businessId){
+        return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "+businessService.businessRevenue(taxPayer.getId(), businessId)));
     }
 
 

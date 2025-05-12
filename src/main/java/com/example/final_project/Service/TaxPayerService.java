@@ -156,10 +156,10 @@ public class TaxPayerService {
 
         userACC.setName(accountantDTO.getName());
         userACC.setUsername(accountantDTO.getUsername());
-        userACC.setPassword(accountantDTO.getPassword());
+        String hashPassword = new BCryptPasswordEncoder().encode(accountantDTO.getPassword());
+        userACC.setPassword(hashPassword);
         userACC.setEmail(accountantDTO.getEmail());
         myUserRepository.save(userACC);
-        //accountant.setUser(userACC);
 
         Accountant accountant = new Accountant();
         accountant.setEmployeeId(accountantDTO.getEmployeeId());
@@ -238,6 +238,7 @@ public class TaxPayerService {
     }
 
 
+
     /// if accountant has not opened since the register date or not opened for a 30 days
     public void blockUnnActiveAccountant(Integer taxPayerId, Integer accountantId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
@@ -270,43 +271,6 @@ public class TaxPayerService {
         }
     }
 
-        public Double getYearRevenue (Integer taxPayerId, Integer businessId,int year){
-
-            TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-            if (taxPayer == null) {
-                throw new ApiException("The Taxpayer is not found");
-            }
-
-            Business business = businessRepository.findBusinessById(businessId);
-            if (!business.getIsActive()) {
-                throw new ApiException("The business is not found");
-            }
-
-            LocalDateTime startDate = LocalDateTime.of(year, Month.JANUARY, 1, 0, 0);
-            LocalDateTime endDate = LocalDateTime.of(year, Month.DECEMBER, 31, 23, 59);
-            List<Sales> yearlyRevenue = salesRepository.findSalesByBranch_BusinessAndSaleDateBetween(business, startDate, endDate);
-
-            if (yearlyRevenue.isEmpty()) {
-                throw new ApiException("No sales found for this business");
-
-            }
-            Double totalR = 0.0;
-            for (Sales s : yearlyRevenue) {
-                totalR += s.getGrand_amount();
-
-            }
-            return totalR;
-
-        }
-
-
-//
-//print public byte[] printYearlyTaxReport(){
-//
-//
-//
-//
-//    }
 
 
     // Endpoint 40

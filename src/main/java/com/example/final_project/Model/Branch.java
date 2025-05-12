@@ -54,5 +54,8 @@ public class Branch {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
     private Set<CounterBox> counterBoxes;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "branch")
+    private Set<Sales> sales;
 
 }

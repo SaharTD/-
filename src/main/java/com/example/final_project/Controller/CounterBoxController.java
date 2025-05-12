@@ -56,18 +56,22 @@ public class CounterBoxController {
 
     //--------------------------------------------
 
-    //open  the counter box
-    @PatchMapping("/open/{boxId}/{accountantId}")
-    public ResponseEntity<?> openCounterBox(@PathVariable Integer boxId, @PathVariable Integer accountantId) {
-        counterBoxService.openCounterBox(boxId, accountantId);
-        return ResponseEntity.status(200).body("CounterBox opened successfully");
-    }
+
+
     @PostMapping("/create-box")
     public ResponseEntity createCounterBox2(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
 //        counterBoxService.createCounterBox2(counterBoxDTO);
         return ResponseEntity.status(200).body("Counter box created successfully");
     }
 
+
+
+    //open  the counter box
+    @PatchMapping("/open/{boxId}/{accountantId}")
+    public ResponseEntity<?> openCounterBox(@PathVariable Integer boxId, @PathVariable Integer accountantId) {
+        counterBoxService.openCounterBox(boxId, accountantId);
+        return ResponseEntity.status(200).body("CounterBox opened successfully");
+    }
 
     //close the counter box
     @PostMapping("/close/{id}/{accountantId}")

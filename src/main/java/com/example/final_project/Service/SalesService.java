@@ -13,13 +13,16 @@ import com.example.final_project.Repository.SalesRepository;
 import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.Document;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.*;
@@ -193,21 +196,10 @@ public class SalesService {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+//
+//
 //
 //    public byte[] printInvoice(Integer accountantId, Integer saleId) {
-//
 //
 //        Accountant accountant = accountantRepository.findAccountantById(accountantId);
 //        if (accountant == null) {
@@ -314,25 +306,81 @@ public class SalesService {
 //
 //
 //    }
+//
 
 
 
+    public byte[] printInvoice(Integer accountantId, Integer saleId) {
 
-    public void addSales(Integer counterBox_id,Integer branch_id){
-        CounterBox counterBox=counterBoxRepository.findCounterBoxById(counterBox_id);
-        Branch branch=branchRepository.findBranchesById(branch_id);
-//        sales.setDate(LocalDateTime.now());
-
-
-        if(counterBox_id==null&&branch==null){
-            throw new ApiException("Branch or Counter Box not found ");
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
         }
-        Sales sales = new Sales();
-//        sales.setSale_invoice();
-        salesRepository.save(sales);
+
+        Sales currentSale = salesRepository.findSalesById(saleId);
+        if (currentSale == null) {
+            throw new ApiException("the Invoice is not found ");
+        }
+
+        if (currentSale.getCounterBox().getAccountant().getId()!=accountantId){
+            throw new ApiException("the counter box with this sale does not belong to this accountant ");
+
+        }
+
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            PdfWriter.getInstance(document, baos);
+            document.open();
+
+
+            try {
+                InputStream is = getClass().getResourceAsStream("/logo.png");
+                if (is != null) {
+                    Image logo = Image.getInstance(is.readAllBytes());
+                    logo.scaleToFit(120, 120);
+                    logo.setAlignment(Element.ALIGN_CENTER);
+                    document.add(logo);
+                    document.add(Chunk.NEWLINE);
+                }
+            } catch (Exception e) {
+                System.out.println("Logo not found or failed to load.");
+            }
+
+
+            Paragraph title = new Paragraph("SALE INVOICE", new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(Chunk.NEWLINE);
+
+
+            document.add(new Paragraph("Generated on: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+
+            document.add(new Paragraph("------------------------------------------------------------"));
+
+            document.add(new Paragraph("INVOICE ID: " + currentSale.getId()));
+            document.add(new Paragraph("Date: " + currentSale.getSaleDate() ));
+            document.add(new Paragraph("Branch: " + currentSale.getBranch()));
+            document.add(new Paragraph("------------------------------------------------------------"));
+
+
+            document.add(Chunk.NEWLINE);
+
+
+            document.add(new Paragraph("This document summarizes your tax obligations as submitted."));
+            document.add(new Paragraph("Please ensure payment is completed before the due date to avoid penalties."));
+            document.add(Chunk.NEWLINE);
+            document.add(new Paragraph("Signature: ___________________________"));
+            document.add(new Paragraph("Mohasil Team", new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC)));
+
+            document.close();
+            return baos.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate PDF", e);
+        }
     }
-
-
 
 
 

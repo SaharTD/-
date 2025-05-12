@@ -49,10 +49,6 @@ public class ProductService {
 
         }
 
-//        Product newProduct = new Product();
-//        newProduct.setBranch(branch);
-//        branch.getProducts().add(newProduct);
-
 
         product.setBranch(branch);
         branchRepository.save(branch);

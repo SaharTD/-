@@ -57,8 +57,6 @@ public class BranchService {
         }
 
         branch.setBusiness(business);
-//        business.getBranches().add(branch);
-//        businessRepository.save(business);
         branchRepository.save(branch);
     }
 
@@ -121,6 +119,36 @@ public class BranchService {
          return branchSalesDTO;
 
      }
+
+
+
+
+    public Double branchRevenue(Integer taxPayerId, Integer branchId) {
+
+        TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
+        if (taxPayer == null) {
+            throw new ApiException("The Taxpayer is not found");
+        }
+
+        Branch branch = branchRepository.findBranchesById(branchId);
+        if (branch==null) {
+            throw new ApiException("branch not found");
+        }
+
+        Double totalRevenue = 0.0;
+
+
+        for (Sales s : branch.getSales()) {
+            totalRevenue = totalRevenue + s.getGrand_amount();
+        }
+
+
+
+
+        return totalRevenue;
+    }
+
+
 
      public List<Branch> getTaxPayerBranches(Integer taxPayerId){
         List<Branch> branches = branchRepository.findBranchesByBusinessTaxPayerId(taxPayerId);

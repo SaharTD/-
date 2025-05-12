@@ -44,6 +44,7 @@ public class ConfigurationSecurity {
                         "/api/v1/todo/delete-todo/{todo_id}").hasAuthority("USER")
                 .requestMatchers("/api/v1/auth/delete/user/{username}",
                         "/api/v1/auth/get-all","/api/v1/todo/get-all").hasAuthority("ADMIN")
+                .requestMatchers()
                 .anyRequest().authenticated()
                 .and()
                 .logout().logoutUrl("/api/v1/auth/logout")
