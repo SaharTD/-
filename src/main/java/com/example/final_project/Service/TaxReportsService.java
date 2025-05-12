@@ -41,6 +41,8 @@ public class TaxReportsService {
         return taxReportsRepository.findAll();
     }
 
+
+
     public void addTaxReports(Integer auditor_id, Integer business_id, TaxReports taxReports) {
         Business business = businessRepository.findBusinessById(business_id);
         Auditor auditor = auditorRepository.findAuditorsById(auditor_id);
@@ -117,11 +119,12 @@ public class TaxReportsService {
         }
         String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
         String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
-        String message = "Welcome, dear "+name+"\n\n Due to your failure to " +
+        String message = "Dear"+name+"\n\n Due to your failure to " +
                 "pay the value-added tax and your delay of one month, " +
                 "a financial penalty has been imposed, " +
                 "which is 5% of the total amount due.";
-        notificationService.sendEmail(emailTo,"One month late warning",message);
+        notificationService.sendEmail(emailTo,"Due to VAT Non-Payment\n" +
+                "\n",message);
     }
 
 
@@ -159,11 +162,12 @@ public class TaxReportsService {
 
         String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
         String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
-        String message = "Welcome, dear "+name+"\n\n Due to your failure to " +
+        String message = "Dear"+name+"\n\n Due to your failure to " +
                 "pay the value-added tax and your delay of two month, " +
                 "a financial penalty has been imposed, " +
                 "which is 10% of the total amount due.";
-        notificationService.sendEmail(emailTo,"Two month late warning",message);
+        notificationService.sendEmail(emailTo,"Due to VAT Non-Payment\n" +
+                "\n",message);
 
         taxReportsRepository.save(taxReport);
     }
@@ -200,8 +204,18 @@ public class TaxReportsService {
         }
 
         String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
-        notificationService.sendEmail(emailTo,"One month late warning"," ");
+        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String message = "Dear "+name+"\n\n  " +
+                "We regret to inform you that, due to your failure to settle the due value-added tax (VAT) \n" +
+                "and a delay exceeding three months, your case has been officially referred for legal action and the initiation of a lawsuit. \n" +
+                "Please be advised that, in addition to the outstanding tax amount, you will also be held responsible for all associated legal costs.\n" +
+                "\n" +
+                "Sincerely,";
+        notificationService.sendEmail(emailTo,"Due to VAT Non-Payment\n" +
+                "\n"," ");
     }
+
+
 
 
     public void changeTaxReportStatus(Integer taxReportId, Integer auditorId, TaxReportStatusDTO taxReportStatusDTO) {
