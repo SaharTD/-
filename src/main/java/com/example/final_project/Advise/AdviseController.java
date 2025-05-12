@@ -111,11 +111,11 @@ public class AdviseController {
     }
 
 
-    @ExceptionHandler(value = MailSendException.class)
-    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
-        String msg = e.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(msg));
-    }
+//    @ExceptionHandler(value = MailSendException.class)
+//    public ResponseEntity<ApiResponse> MailSendException(MailSendException e) {
+//        String msg = e.getMessage();
+//        return ResponseEntity.status(400).body(new ApiResponse(msg));
+//    }
 
     @ExceptionHandler(value = HttpMessageNotWritableException.class)
     public ResponseEntity<ApiResponse> HttpMessageNotWritableException(HttpMessageNotWritableException e) {

@@ -46,9 +46,6 @@ public class CounterBox {
 //    private Boolean status=false;
 
 
-
-
-
     @ManyToOne
     @JsonIgnore
     private Branch branch;

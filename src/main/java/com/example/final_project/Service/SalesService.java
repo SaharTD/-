@@ -353,11 +353,11 @@ public class SalesService {
         salesRepository.save(oldSales);
     }
 
-    public void deleteSales(Integer id){
+    public void deleteSales(Integer id,Integer saleId){
         User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
         if (admin==null)
             throw new ApiException("you don't have permission");
-        Sales sales=salesRepository.findSalesById(id);
+        Sales sales=salesRepository.findSalesById(saleId);
 
         if(sales==null){
             throw new ApiException("Sales not found");
