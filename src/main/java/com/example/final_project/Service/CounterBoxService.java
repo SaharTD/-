@@ -79,9 +79,6 @@ public class CounterBoxService {
         counterBoxRepository.save(counterBox);
         accountantRepository.save(accountant);
 
-
-
-
     }
 
     public List getAllCounterBoxes() {

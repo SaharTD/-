@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,33 +15,31 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MyUserController {
 
-
     private final MyUserService myUserService;
 
-
+    // authority -> ADMIN
     @GetMapping("/get")
-    public ResponseEntity getAllUser(){
-        return ResponseEntity.status(HttpStatus.OK).body(myUserService.getAllUser());
+    public ResponseEntity getAllUser(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(HttpStatus.OK).body(myUserService.getAllUser(user.getId()));
     }
-
 
     @PostMapping("/add")
     public ResponseEntity addUser(@Valid @RequestBody User user){
         myUserService.addAdmin(user);
-
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is added"));
     }
 
-    @PutMapping("/update/{username}")
-    public ResponseEntity updateUser(@PathVariable String username ,@Valid @RequestBody User user){
-        myUserService.updateUser(username, user);
-
+    // authority -> any
+    @PutMapping("/update")
+    public ResponseEntity updateUser(@AuthenticationPrincipal User user ,@Valid @RequestBody User user2){
+        myUserService.updateUser(user.getId(), user2);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is updated"));
     }
-    
+
+    // authority -> ADMIN
     @DeleteMapping("/delete/{username}")
-    public ResponseEntity deleteUser(@PathVariable String username){
-        myUserService.deleteUser(username);
+    public ResponseEntity deleteUser(@AuthenticationPrincipal User user,@PathVariable String username){
+        myUserService.deleteUser(user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user not found"));
     }
 

@@ -5,6 +5,7 @@ import com.example.final_project.Model.User;
 import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,14 +17,16 @@ public class MyUserService {
 
     private final MyUserRepository myUserRepository;
 
-    public List<User> getAllUser(){
-       return myUserRepository.findAll();
+    // authority -> ADMIN
+    public List<User> getAllUser(Integer id) {
+        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
+        return myUserRepository.findAll();
     }
 
-    public void addAdmin(User user){
+    public void addAdmin(User user) {
 
-       //String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-       // user.setPassword(hashPassword);
+        String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(hashPassword);
         user.setRole("ADMIN");
         user.setAccountant(null);
         user.setAuditor(null);
@@ -31,30 +34,28 @@ public class MyUserService {
         myUserRepository.save(user);
     }
 
-    public void updateUser(String username,User user){
-        User oldUser=myUserRepository.findUserByUsername(username);
-
-        if(oldUser==null){
+    public void updateUser(Integer username, User user) {
+        User oldUser = myUserRepository.findUserById(username);
+        if (oldUser == null) {
             throw new ApiException("user not found");
         }
 
         oldUser.setUsername(user.getUsername());
-        oldUser.setPassword(user.getPassword());
+        String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        oldUser.setPassword(hashPassword);
         oldUser.setEmail(user.getEmail());
         oldUser.setName(user.getName());
-        oldUser.setRole(user.getRole());
 
         myUserRepository.save(oldUser);
     }
 
 
-    public void deleteUser(String username ){
-        User user=myUserRepository.findUserByUsername(username);
-
-        if(user==null){
+    public void deleteUser(Integer username) {
+        User user = myUserRepository.findUserById(username);
+        if (user == null) {
             throw new ApiException("user not found");
         }
         myUserRepository.delete(user);
     }
-    
+
 }

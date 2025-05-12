@@ -2,11 +2,13 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Model.MoyasarPayment;
 import com.example.final_project.Model.TaxReports;
+import com.example.final_project.Model.User;
 import com.example.final_project.Service.MoyasarPaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -18,9 +20,9 @@ public class MoyasarPaymentController {
 
     private final MoyasarPaymentService moyasarPaymentService;
 
-    @PostMapping("/pay-tax/tax-payer/{taxPayerId}/tax-report/{taxReportId}")
-    public ResponseEntity<?> processPayment(@PathVariable Integer taxPayerId,@PathVariable Integer taxReportId,@RequestBody @Valid MoyasarPayment moyasarPayment) throws IOException {
-        return ResponseEntity.status(200).body(moyasarPaymentService.processPayment(taxPayerId, taxReportId, moyasarPayment));
+    @PostMapping("/pay-tax/tax-report/{taxReportId}")
+    public ResponseEntity<?> processPayment(@AuthenticationPrincipal User user, @PathVariable Integer taxReportId, @RequestBody @Valid MoyasarPayment moyasarPayment) throws IOException {
+        return ResponseEntity.status(200).body(moyasarPaymentService.processPayment(user.getId(), taxReportId, moyasarPayment));
     }
 
     @GetMapping("/get-status/{id}")

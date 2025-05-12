@@ -52,8 +52,6 @@ public class CounterBoxController {
         return ResponseEntity.status(200).body(new ApiResponse("Deleted successfully"));
     }
 
-
-
     //--------------------------------------------
 
     //open  the counter box
@@ -77,16 +75,11 @@ public class CounterBoxController {
     }
 
 
-
-
-
     // Endpoint 7
     @PutMapping("/close-opened-counter-box")
     public ResponseEntity closeCounterBoxAuto(){
         counterBoxService.closeCounterBoxAuto();
         return ResponseEntity.status(200).body(new ApiResponse("counter Box is closed"));
     }
-
-
 
 }
