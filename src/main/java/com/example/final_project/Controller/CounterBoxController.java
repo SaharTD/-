@@ -5,12 +5,14 @@ import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.CounterBoxDTO;
 import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.Model.CounterBox;
+import com.example.final_project.Model.User;
 import com.example.final_project.Repository.SalesRepository;
 import com.example.final_project.Service.CounterBoxService;
 import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -24,8 +26,8 @@ public class CounterBoxController {
 
     //كرييت مع المحاسب
     @PostMapping("/create")
-    public ResponseEntity<?> createCounterBox(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
-        counterBoxService.createCounterBox(counterBoxDTO);
+    public ResponseEntity createCounterBox(@AuthenticationPrincipal User account,@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
+        counterBoxService.createCounterBox(account.getId(),counterBoxDTO);
         return ResponseEntity.ok("Counter box created successfully");
     }
 
@@ -35,20 +37,20 @@ public class CounterBoxController {
         return ResponseEntity.status(200).body(counterBoxService.getAllCounterBoxes());
     }
 
-    @GetMapping("get/{id}")
-    public ResponseEntity getById(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(counterBoxService.getCounterBox(id));
+    @GetMapping("get")
+    public ResponseEntity getById(@AuthenticationPrincipal User account){
+        return ResponseEntity.status(200).body(counterBoxService.getCounterBox(account.getId()));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody @Valid CounterBox counterBox, @PathVariable Integer id){
-        counterBoxService.updateCounterBox(counterBox, id);
+    @PutMapping("/update")
+    public ResponseEntity update(@RequestBody @Valid CounterBox counterBox,@AuthenticationPrincipal User account){
+        counterBoxService.updateCounterBox(counterBox, account.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Updated successfully"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id){
-        counterBoxService.deleteCounterBox(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity delete(@AuthenticationPrincipal User account){
+        counterBoxService.deleteCounterBox(account.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Deleted successfully"));
     }
 
