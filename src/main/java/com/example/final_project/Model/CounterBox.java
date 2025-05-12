@@ -22,23 +22,23 @@ public class CounterBox {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(columnDefinition = "varchar(20) not null")
     @NotEmpty(message = "type can not be empty")
     private String type;
 
-    @Column
-    @NotEmpty
+    @Column(columnDefinition = "varchar(20) not null")
     private String paymentType;
 
-    @Column
-    @NotNull
+    @Column(columnDefinition = "int not null")
+    @NotNull(message = "Daily Treasury ")
     private Double DailyTreasury;
 
     @Column
     private LocalDateTime openDatetime;
 
-    @Column
+    @Column(name = "close_datetime", columnDefinition = "TIMESTAMP COMMENT 'time of close the box'")
     private LocalDateTime closeDatetime;
+
     @Pattern(regexp = "^Opened|Closed$")
     private String status;
 
@@ -49,7 +49,7 @@ public class CounterBox {
 
 
 
-     @ManyToOne
+    @ManyToOne
     @JsonIgnore
     private Branch branch;
 

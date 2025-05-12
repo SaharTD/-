@@ -46,17 +46,17 @@ public class SalesController {
 //        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is added!"));
 //    }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity updateSales(@AuthenticationPrincipal User user, @PathVariable Integer id, @Valid @RequestBody  Sales sales){
-        salesService.updateSales(user.getId(),id, sales);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales  is updated"));
-    }
-
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteSales(@AuthenticationPrincipal User user,@PathVariable Integer id){
-        salesService.deleteSales(user.getId(),id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
-    }
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity updateSales(@AuthenticationPrincipal User user, @PathVariable Integer id, @Valid @RequestBody  Sales sales){
+//        salesService.updateSales(user.getId(),id, sales);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales  is updated"));
+//    }
+//
+//    @DeleteMapping("delete/{id}")
+//    public ResponseEntity deleteSales(@AuthenticationPrincipal User user,@PathVariable Integer id){
+//        salesService.deleteSales(user.getId(),id);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
+//    }
 
 //    @PostMapping("/add-product/{salesId}/barcode/{barcode}")
 //    public ResponseEntity addProductToSaleByBarcode(@PathVariable Integer salesId, @PathVariable String barcode) {

@@ -23,15 +23,17 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(40) not null")
     @NotEmpty(message = "the tax payer name can not be empty")
     private String name;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime paymentDate;
 
+    @Column(columnDefinition = "varchar(40) not null")
     @Pattern(regexp = "^(Paid|Pending)$")
     private String status;
+
     private String paymentId;
 
     @ManyToOne

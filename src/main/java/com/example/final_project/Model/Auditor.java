@@ -17,6 +17,8 @@ public class Auditor {
 
     @Id
     private Integer id;
+
+   @Column(columnDefinition = "varchar(40) not null")
     @NotEmpty
     private String SOCPA;
 

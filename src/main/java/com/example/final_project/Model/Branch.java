@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,14 +22,18 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty
-    @Column(columnDefinition = "varchar(3) not null ")
+    @NotEmpty(message = "branch Number must be noy empty")
+    @Column(columnDefinition = "varchar(30) not null ")
     private String branchNumber;
 
-    @NotEmpty
+    @NotEmpty(message = "region must be noy empty")
+    @Column(columnDefinition = "varchar(50) not null")
+    @Size(min = 4)
     private String region;
 
-    @NotEmpty
+    @NotEmpty(message ="city must be noy empty" )
+    @Column(columnDefinition = "varchar(50) not null")
+    @Size(min = 4)
     private String city;
 
 
