@@ -53,7 +53,6 @@ public class CounterBoxService {
         CounterBox counterBox = new CounterBox();
 
         counterBox.setType(counterBoxDTO.getType());
-        counterBox.setDailyTreasury(counterBoxDTO.getDailyTreasury());
         counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
         counterBox.setBranch(branch);

@@ -53,10 +53,10 @@ public class SalesController {
 
 
 
-    @GetMapping("/sales-summary/{branchId}")
-    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User accountant) {
-        return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(accountant.getId()));
-    }
+//    @GetMapping("/sales-summary/{branchId}")
+//    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User accountant) {
+//        return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(accountant.getId()));
+//    }
 
 
 

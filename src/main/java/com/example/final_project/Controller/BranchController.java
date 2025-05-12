@@ -45,12 +45,14 @@ public class BranchController {
         return ResponseEntity.status(200).body(new ApiResponse("branch deleted"));
     }
 
-    /// 3
-    @GetMapping("branch-sales/{branchId}")
-    public ResponseEntity salesOperationOnBranch(@AuthenticationPrincipal User user,@PathVariable Integer branchId){
-       List<SalesDTO> sales= branchService.salesOperationOnBranch(user.getId(), branchId);
-        return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n "+sales.size()
-        +branchService.salesOperationOnBranch(user.getId(), branchId)));
+//    /// 3
+//    @GetMapping("branch-sales/{branchId}")
+//    public ResponseEntity salesOperationOnBranch(@AuthenticationPrincipal User user,@PathVariable Integer branchId) {
+//        List<SalesDTO> sales = branchService.salesOperationOnBranch(user.getId(), branchId);
+//        return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n " + sales.size()
+//                + branchService.salesOperationOnBranch(user.getId(), branchId)));
+//    }
+
     @GetMapping("/sales-summary/{branchId}")
     //    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User taxPayer, @PathVariable Integer branchId) {
     public ResponseEntity<Map<String, Double>> getSalesByBranch(User taxPayer, @PathVariable Integer branchId) {
