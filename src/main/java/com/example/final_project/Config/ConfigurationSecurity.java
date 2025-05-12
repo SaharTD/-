@@ -31,28 +31,49 @@ public class ConfigurationSecurity {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/**").permitAll()
+
+                //   AUDITOR
+                .requestMatchers(
+                        "/api/v1/taxReports/add/**",
+                        "/api/v1/taxReports/get",
+                        "/api/v1/taxReports/update/**",
+                        "/api/v1/taxReports/delete/**",
+                        "/api/v1/taxReports/apply-penalty/**",
+                        "/api/v1/taxReports/apply-2month-penalty/**",
+                        "/api/v1/taxReports/apply-legal-action/**",
+                        "/api/v1/taxReports/due-payment",
+                        "/api/v1/taxReports/reports/**",
+                        "/api/v1/taxReports/report-count/**",
+                        "/api/v1/taxReports/approval-rate/**",
+                        "/api/v1/taxReports/bulk-approve/**",
+                        "/api/v1/taxReports/latest-report",
+                        "/api/v1/taxReports/unapproved",
+                        "/api/v1/taxReports/*/payment-status",
+                        "/api/v1/auditor/create-tax-report/**",
+                        "/api/v1/auditor/activate-business/**",
+                        "/api/v1/auditor/approve-tax-report/**",
+                        "/api/v1/auditor/reject-tax-report/**"
+                ).hasRole("AUDITOR")
+
                 .anyRequest().authenticated()
+
                 .and()
-                .logout().logoutUrl("/api/v1/user/logout")
+                .logout()
+                .logoutUrl("/api/v1/user/logout")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .and()
                 .httpBasic();
 
         return httpSecurity.build();
-
-        // requestMatcher for all users like (user / admin / customer...etc)
-        // without duplication
-
-
     }
+
 
 }

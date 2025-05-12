@@ -84,5 +84,31 @@ public class AuditorServiceTest{
 //    }
 
 
+    @Test
+    public void getAllAuditors_success(){
+        when(myUserRepository.findUserByIdAndRole(user.getId(), "ADMIN")).thenReturn(user);
+        when(auditorRepository.findAll()).thenReturn(auditors);
+
+        List<Auditor> result = auditorService.getAllAuditors(user.getId());
+
+        Assertions.assertEquals(3, result.size());
+        Assertions.assertEquals("Aa", result.get(0).getSOCPA());
+        verify(myUserRepository, times(1)).findUserByIdAndRole(user.getId(), "ADMIN");
+        verify(auditorRepository, times(1)).findAll();
+    }
+
+
+
+    @Test
+    public void addAuditor(){
+        when(myUserRepository.findUserByIdAndRole(user.getId(), "ADMIN")).thenReturn(user);
+
+        auditorService.addAuditor(user.getId(), dtoAuditor);
+
+        verify(myUserRepository, times(1)).findUserByIdAndRole(user.getId(), "ADMIN");
+        verify(auditorRepository, times(1)).save(any(Auditor.class));
+    }
+
+
 
 }
