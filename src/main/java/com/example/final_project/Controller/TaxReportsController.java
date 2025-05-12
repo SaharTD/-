@@ -104,7 +104,7 @@ public class TaxReportsController {
     }
 
     // 7. Get latest report reviewed by auditor
-    @GetMapping("/latest-report/{auditorId}")
+    @GetMapping("/latest-report")
     public ResponseEntity getLatestReport(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(user.getId()));
     }
@@ -118,7 +118,7 @@ public class TaxReportsController {
     public ResponseEntity getPaymentStatus(@AuthenticationPrincipal User user,@PathVariable Integer reportId) {
         return ResponseEntity.status(200).body(taxReportsService.getPaymentStatusByReportId(user.getId(),reportId));
     }
-
+//888888888888888888 دجى
     @GetMapping("/notify-upcoming-payment")
     public ResponseEntity<String> notifyUpcomingPayments() {
         taxReportsService.notifyUpcomingPayments();
