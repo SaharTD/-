@@ -74,10 +74,7 @@ public class SalesController {
 //    }
 
 
-    @GetMapping("/sales-summary/{branchId}")
-    public ResponseEntity<Map<String, Double>> getSalesByBranch(@PathVariable Integer branchId) {
-        return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(branchId));
-    }
+
 
 
     @PostMapping("/adds/{accountantId}/{counterBoxId}/{branch_id}")

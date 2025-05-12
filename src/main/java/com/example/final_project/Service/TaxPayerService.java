@@ -40,7 +40,7 @@ public class TaxPayerService {
     private final BusinessRepository businessRepository;
     private final SalesRepository salesRepository;
     private final JdbcAccessor jdbcAccessor;
-    private final WhatsAppService whatsAppService;
+//    private final WhatsAppService whatsAppService;
     private final CounterBoxRepository counterBoxRepository;
     private final BranchRepository branchRepository;
 
@@ -209,13 +209,13 @@ public class TaxPayerService {
         }
         String fullPhoneNumber="966"+phone;
 
-        whatsAppService.sendAccountantActivationMessage(
+        /*whatsAppService.sendAccountantActivationMessage(
                 accountant.getUser().getUsername(),
                 accountant.getUser().getPassword(),
                 accountant.getEmployeeId(),
                 fullPhoneNumber,
                 LocalDate.now()
-        );
+        );*/
 
 
     }

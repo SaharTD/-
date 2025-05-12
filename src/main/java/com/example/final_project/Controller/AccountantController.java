@@ -3,10 +3,12 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.DTO.AccountantDTO;
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.Model.TaxPayer;
 import com.example.final_project.Service.AccountantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +26,7 @@ public class AccountantController {
 
 
 
-
+    //
     @GetMapping("/get-accountant-by-branch/{taxPayerId}/{branchId}")
     public ResponseEntity getBranchAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer branchId){
         return ResponseEntity.status(200).body(accountantService.getBranchAccountant(taxPayerId,branchId));
@@ -33,7 +35,8 @@ public class AccountantController {
 
 
     @GetMapping("/get-accountant-by-business/{taxPayerId}/{businessId}")
-    public ResponseEntity getBusinessAccountant(@PathVariable Integer taxPayerId,@PathVariable Integer businessId){
+    //    public ResponseEntity getBusinessAccountant(@AuthenticationPrincipal TaxPayer taxPayer, @PathVariable Integer taxPayerId, @PathVariable Integer businessId){
+    public ResponseEntity getBusinessAccountant( TaxPayer taxPayer, @PathVariable Integer taxPayerId, @PathVariable Integer businessId){
         return ResponseEntity.status(200).body(accountantService.getBusinessAccountant(taxPayerId,businessId));
     }
 
@@ -54,6 +57,7 @@ public class AccountantController {
         accountantService.deleteAccountant(id);
         return ResponseEntity.status(200).body("Accountant deleted successfully");
     }
+
 
 
 

@@ -49,7 +49,7 @@ public class TaxPayerController {
 
 
     /// 13
-    @PostMapping("/add-accountant/{taxPayerID}/{branchId}")
+    @PostMapping("/add-accountant/{taxPayerID}/{branchId}") //last edit
     public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @PathVariable Integer taxPayerID,@PathVariable Integer branchId){
         taxPayerService.addAccountant(taxPayerID,branchId,accountantDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the accountant is added successfully "));
@@ -70,10 +70,10 @@ public class TaxPayerController {
 //        taxPayerService.deActivateAccountant(taxPayerId, accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
-
+    //last update
     @GetMapping("/taxpayers/{taxPayerId}/accountants")
     public ResponseEntity<List<Map<String, Object>>> getAccountantsByTaxPayerId(@PathVariable Integer taxPayerId) {
-        return ResponseEntity.ok(taxPayerService.getAccountantsByTaxPayerId(taxPayerId));
+        return ResponseEntity.status(200).body(taxPayerService.getAccountantsByTaxPayerId(taxPayerId));
     }
 
 

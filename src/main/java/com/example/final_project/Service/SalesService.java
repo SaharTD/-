@@ -14,6 +14,7 @@ import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -191,7 +192,7 @@ public class SalesService {
 
     }
 
-
+    //create
     public ItemSale updateProductQuantity(Integer accounterId, Integer SalesId, Integer quantity){
         ItemSale itemSale = itemSaleRepository.findById(SalesId)
                 .orElseThrow(() -> new ApiException("Item sale not found"));
@@ -444,24 +445,6 @@ public class SalesService {
 //    }
 
 
-    public Map<String, Double> getSalesSummaryByBranch(Integer branchId) {
-        List<Sales> salesList = salesRepository.findSalesByBranch(branchId);
-        double totalBeforeTax = 0.0;
-
-        for (Sales sale : salesList) {
-            if (sale.getTotal_amount() != null)
-                totalBeforeTax += sale.getTotal_amount();
-        }
-
-        double taxAmount = totalBeforeTax * 0.15;
-        double grandTotal = totalBeforeTax + taxAmount;
-
-        Map<String, Double> result = new HashMap<>();
-        result.put("total", totalBeforeTax);
-        result.put("total tax Amount is:", taxAmount);
-        result.put("grand total is:", grandTotal);
-        return result;
-    }
 
     public Map<String, Object> addSales2(Integer counterBox_id, Integer branch_id, Sales sales) {
         CounterBox counterBox = counterBoxRepository.findCounterBoxById(counterBox_id);

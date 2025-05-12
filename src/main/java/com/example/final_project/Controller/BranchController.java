@@ -4,6 +4,7 @@ import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTOOUT.SalesDTO;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.Product;
+import com.example.final_project.Model.User;
 import com.example.final_project.Service.BranchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/branch")
@@ -42,13 +44,11 @@ public class BranchController {
         return ResponseEntity.status(200).body(new ApiResponse("branch deleted"));
     }
 
-
     /// 3
-    @GetMapping("branch-sales/{taxPayerId}/{branchId}")
-    public ResponseEntity salesOperationOnBranch(@PathVariable Integer taxPayerId,@PathVariable Integer branchId){
-       List<SalesDTO> sales= branchService.salesOperationOnBranch(taxPayerId, branchId);
-        return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n "+sales.size()
-        +branchService.salesOperationOnBranch(taxPayerId, branchId)));
+    @GetMapping("/sales-summary/{branchId}")
+    //    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User taxPayer, @PathVariable Integer branchId) {
+    public ResponseEntity<Map<String, Double>> getSalesByBranch(User taxPayer, @PathVariable Integer branchId) {
+        return ResponseEntity.status(200).body(branchService.getSalesSummaryByBranch(taxPayer.getId(),branchId));
     }
 
     // Endpoint 12
