@@ -4,8 +4,11 @@ import com.example.final_project.Api.ApiException;
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.ItemsDTO;
 import com.example.final_project.DTO.SaleDTO;
+import com.example.final_project.DTO.SaleRequestDTO;
+import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.ItemSale;
 import com.example.final_project.Model.MyUser;
+import com.example.final_project.Model.Product;
 import com.example.final_project.Model.Sales;
 import com.example.final_project.Service.ItemSaleService;
 import com.example.final_project.Service.SalesService;
@@ -19,6 +22,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/api/v1/sales")
@@ -103,6 +109,24 @@ public class SalesController {
 //        ItemSale updatedItemSale = salesService.updateProductQuantity(accountantId, itemid, quantity);
 //        return ResponseEntity.status(200).body(updatedItemSale);
 //    }
+//
+//    @GetMapping("/print-sale/{accountantId}/{saleId}")
+//    public ResponseEntity<byte[]> printInvoice(@PathVariable Integer accountantId,@PathVariable Integer saleId) {
+//        byte[] pdf = salesService.printInvoice(accountantId,saleId);
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + saleId + ".pdf")
+//                .contentType(MediaType.APPLICATION_PDF)
+//                .body(pdf);
+//    }
+
+
+    @PutMapping("/update-quantity/{saleId}/{itemId}/{quantity}")
+    public ResponseEntity updateItemQuantity(@AuthenticationPrincipal MyUser accountant,@PathVariable Integer saleId, @PathVariable Integer itemId, @PathVariable Integer quantity) {
+        salesService.updateProductQuantity(accountant.getId(), saleId, itemId, quantity);
+        return ResponseEntity.status(200).body(new ApiResponse("Quantity updated successfully"));
+    }
+
+
 
 
 }
