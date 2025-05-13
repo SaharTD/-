@@ -1,11 +1,10 @@
-package com.example.final_project;
+package com.example.final_project.RepositoryTest;
 
 import com.example.final_project.Model.Auditor;
 import com.example.final_project.Model.TaxReports;
 import com.example.final_project.Repository.AuditorRepository;
 import com.example.final_project.Repository.TaxReportsRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -44,6 +43,7 @@ public class TaxReportsRepositoryTest {
 
         taxReportsRepository.saveAll(List.of(report1, report2, report3));
     }
+
 
 
 

@@ -1,6 +1,5 @@
-package com.example.final_project;
+package com.example.final_project.ControllerTest;
 
-import com.example.final_project.Controller.SalesController;
 import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Service.SalesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
