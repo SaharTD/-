@@ -43,7 +43,6 @@ public class MyUser implements UserDetails {
     @Email(message = "email must be valid")
     private String email;
 
-//    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT','ADMIN'))") @NotEmpty(message = "role must ne not empty")
 @Column(columnDefinition ="varchar(20)")
 @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
     private String role;

@@ -27,12 +27,12 @@ public class ItemSale {
     @NotNull(message = "quantity must be not empty")
     private Integer quantity;
 
-    @Column(columnDefinition = "double not null")
-    @NotNull(message = "unitPrice must be not empty")
+    @Column(columnDefinition = "double ")
+//    @NotNull(message = "unitPrice must be not empty")
     private Double unitPrice;
 
-    @Column(columnDefinition = "double not null")
-    @NotNull(message = "totalPrice must be not empty")
+    @Column(columnDefinition = "double ")
+//    @NotNull(message = "totalPrice must be not empty")
     private Double totalPrice; // = quantity * unitPrice
 
 
