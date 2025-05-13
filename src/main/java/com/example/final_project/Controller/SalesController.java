@@ -47,9 +47,9 @@ public class SalesController {
     }
 
     // authority -> Accountant
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id){
-        salesService.deleteSales(myUser.getId(),id);
+    @DeleteMapping("delete/{saleId}")
+    public ResponseEntity deleteSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer saleId){
+        salesService.deleteSales(myUser.getId(),saleId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
     }
 
@@ -126,6 +126,12 @@ public class SalesController {
         return ResponseEntity.status(200).body(new ApiResponse("Quantity updated successfully"));
     }
 
+
+    @PutMapping("/refund-sale/{saleId}")
+    public ResponseEntity refundSale(@AuthenticationPrincipal MyUser accountant,@PathVariable Integer saleId) {
+        salesService.refundSale(accountant.getId(), saleId);
+        return ResponseEntity.status(200).body(new ApiResponse("Sale refunded"));
+    }
 
 
 
