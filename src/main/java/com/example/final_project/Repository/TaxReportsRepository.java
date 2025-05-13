@@ -26,7 +26,8 @@ public interface TaxReportsRepository extends JpaRepository<TaxReports,Integer> 
     Long countByAuditorIdAndStatus(Integer auditorId, String status);
 
 
-    @Query("select r from TaxReports r order by r.end_date desc")
+
+    @Query("select r from TaxReports r where r.auditor.id = ?1 order by r.end_date desc")
     List<TaxReports> findTopByAuditorIdOrderByEnd_dateDesc(Integer auditorId);
 
     @Query("select t from TaxReports t where t.business.taxPayer.id=?1")

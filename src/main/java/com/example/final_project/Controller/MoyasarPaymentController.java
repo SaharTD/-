@@ -26,55 +26,30 @@ import java.util.Map;
 public class MoyasarPaymentController {
 
     private final MoyasarPaymentService moyasarPaymentService;
-    private final TaxReportsService taxReportsService;
-    private final PaymentService paymentService;
 
     @Value("${moyasar.api.key}")
     private String apiKey;
 
-
-    // authority -> TaxPayer
     @PostMapping("/pay-tax/tax-report/{taxReportId}")
-    public ResponseEntity<?> processPayment(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId, @RequestBody @Valid MoyasarPayment moyasarPayment) throws IOException {
-        return ResponseEntity.status(200).body(moyasarPaymentService.processPayment(myUser.getId(), taxReportId, moyasarPayment));
+    public ResponseEntity<?> processPayment(@PathVariable Integer taxReportId, @RequestBody MoyasarPayment moyasarPayment) throws IOException {
+        return moyasarPaymentService.processPayment(taxReportId, moyasarPayment);
     }
 
-
-    @GetMapping("/get-status/{id}")
-    public ResponseEntity getPaymentStatus(@PathVariable Integer id) throws JsonProcessingException {
-        return ResponseEntity.ok().body(moyasarPaymentService.getPaymentStatus(id));
-    }
-
-
-    @RequestMapping(value = "/callback",method = {RequestMethod.GET,RequestMethod.POST})
-    public ResponseEntity callbackHandler(HttpServletRequest request) {
+    @RequestMapping(value = "/callback", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<?> callbackHandler(HttpServletRequest request) {
         String paymentId = request.getParameter("id");
-        String taxPayerIdStr = request.getParameter("taxPayerId");
-        if (paymentId==null||taxPayerIdStr==null)
-            return ResponseEntity.status(400).body(new ApiResponse("Missing paymetn ID or taxpayer ID"));
+        String taxReportIdStr = request.getParameter("taxReportId");
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(apiKey,"");
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
-
-        String url = "https://api.moyasar.com/v1/payments/" + paymentId;
-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET,entity,Map.class);
-
-        String status = (String) response.getBody().get("status");
-
-        if ("paid".equalsIgnoreCase(status)) {
-            Integer taxPayerId = Integer.parseInt(taxPayerIdStr);
-            paymentService.paymentSuccess(taxPayerId,paymentId);
-            return ResponseEntity.ok("Tax Report successfully paid");
+        if (paymentId == null || taxReportIdStr == null) {
+            return ResponseEntity.status(400).body(new ApiResponse("Missing payment ID or tax report ID"));
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed."); // يرجع التقرير مع حالته سواء دفعت أو لم تدفع
-    }
-
-    @GetMapping("/callback2")
-    public ResponseEntity callbackUrl(){
-        return ResponseEntity.status(200).body("Paid !!");
+        try {
+            moyasarPaymentService.callback(paymentId); // استدعاء callback
+            return ResponseEntity.ok("Tax Report successfully paid or rejected");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(new ApiResponse("Payment failed: " + e.getMessage()));
+        }
     }
 
 }

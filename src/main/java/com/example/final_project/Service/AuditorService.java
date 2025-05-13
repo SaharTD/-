@@ -108,6 +108,7 @@ public class AuditorService {
     }
 
 
+    // Khalid almutiri
     public void approveTaxReportStatus(Integer taxReportId,Integer auditorId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
         if (taxReport == null) {
@@ -125,6 +126,7 @@ public class AuditorService {
         taxReportsRepository.save(taxReport);
     }
 
+    // Khalid almutiri
     public void rejectTaxReportStatus(Integer taxReportId,Integer auditorId) {
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
         if (taxReport == null) {
@@ -207,6 +209,7 @@ public class AuditorService {
 
 
 
+    // Khalid almutiri
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostConstruct

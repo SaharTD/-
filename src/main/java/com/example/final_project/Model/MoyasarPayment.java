@@ -20,4 +20,5 @@ public class MoyasarPayment {
         private String country;
         private Integer taxPayerId;
 
+
 }
