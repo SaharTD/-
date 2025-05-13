@@ -24,20 +24,23 @@ public class BranchController {
         return ResponseEntity.status(200).body(branchService.getAllBranches());
     }
 
+    // authority -> TaxPayer
     @PostMapping("/add/{businessId}")
     public ResponseEntity addBranch(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId, @RequestBody @Valid Branch branch){
         branchService.addBranch(businessId, myUser.getId(), branch);
         return ResponseEntity.status(200).body(new ApiResponse("new branch added"));
     }
 
+    // authority -> TaxPayer
     @PutMapping("/update/{businessId}/branch/{branchId}")
     public ResponseEntity updateBranch(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId, @PathVariable Integer branchId, @RequestBody @Valid Branch branch){
         branchService.updateBranch(businessId, branchId, branch);
         return ResponseEntity.status(200).body(new ApiResponse("branch updated"));
     }
 
+    // authority -> TaxPayer
     @DeleteMapping("/delete/{businessId}/branch/{branchId}")
-    public ResponseEntity deleteProduct(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId, @PathVariable Integer branchId){
+    public ResponseEntity deleteBranch(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId, @PathVariable Integer branchId){
         branchService.deleteBranch(businessId, branchId);
         return ResponseEntity.status(200).body(new ApiResponse("branch deleted"));
     }
@@ -50,12 +53,14 @@ public class BranchController {
 //                + branchService.salesOperationOnBranch(user.getId(), branchId)));
 //    }
 
+    // authority -> TaxPayer
     @GetMapping("/sales-summary/{branchId}")
     //    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User taxPayer, @PathVariable Integer branchId) {
     public ResponseEntity<Map<String, Double>> getSalesByBranch(MyUser taxPayer, @PathVariable Integer branchId) {
         return ResponseEntity.status(200).body(branchService.getSalesSummaryByBranch(taxPayer.getId(),branchId));
     }
 
+    // authority -> TaxPayer
     // Endpoint 12
     @GetMapping("/get-tax-payer-branches")
     public ResponseEntity getAllTaxPayerBranches(@AuthenticationPrincipal MyUser myUser){

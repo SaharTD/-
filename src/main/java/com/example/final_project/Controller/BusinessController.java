@@ -25,38 +25,40 @@ public class BusinessController {
 
 
 
+
     @GetMapping("/get-all-business")
     public ResponseEntity getAllBusiness (@AuthenticationPrincipal MyUser myUser){
         return ResponseEntity.status(200).body(businessService.getAllBusiness(myUser.getId()));
     }
 
 
-
+    // authority -> TaxPayer
     @GetMapping("/get-my-business/{bId}")
     public ResponseEntity getMyBusiness (@AuthenticationPrincipal MyUser myUser, @PathVariable Integer bId){
         return ResponseEntity.status(200).body(businessService.getMyBusiness(myUser.getId(), bId));
     }
 
+    // authority -> TaxPayer
     @GetMapping("/get-number-of-branches/{bI}")
     public ResponseEntity getMyBranches (@AuthenticationPrincipal MyUser myUser, @PathVariable Integer bI){
         return ResponseEntity.status(200).body(new ApiResponse("The number of branches for the business : "
                 +businessService.getMyBranches(myUser.getId(), bI)));
     }
 
-
+    // authority -> TaxPayer
     @GetMapping("/get-my-businesses")
     public ResponseEntity getMyBusinesses (@AuthenticationPrincipal MyUser myUser){
         return ResponseEntity.status(200).body(businessService.getMyBusinesses(myUser.getId()));
     }
 
-
+    // authority -> TaxPayer
     @PostMapping("/add-business")
     public ResponseEntity addBusiness (@AuthenticationPrincipal MyUser myUser, @RequestBody @Valid BusinessDTO businessDTO){
         businessService.addBusiness(myUser.getId(), businessDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the business is added successfully "));
     }
 
-
+    // authority -> TaxPayer
     @PutMapping("/update/{businessId}")
     public ResponseEntity updateBusiness(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId , @RequestBody BusinessDTO businessDTO ){
         businessService.updateBusiness(myUser.getId(), businessId,businessDTO);
@@ -64,14 +66,14 @@ public class BusinessController {
     }
 
 
-
+    // authority -> TaxPayer
     @DeleteMapping("/delete/{businessId}")
     public ResponseEntity deleteBusiness(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId){
         businessService.deleteBusiness(myUser.getId(), businessId);
         return ResponseEntity.status(200).body(new ApiResponse("the business has been deleted successfully "));
     }
 
-
+    // authority -> TaxPayer
     @GetMapping("/sales-business/{businessId}")
     public ResponseEntity salesOperationOnBusiness(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId){
         List<SalesDTO> sales= businessService.salesOperationOnBusiness(myUser.getId(), businessId);
@@ -79,7 +81,7 @@ public class BusinessController {
                 +businessService.salesOperationOnBusiness(myUser.getId(), businessId)));
     }
 
-
+    // authority -> TaxPayer
     @GetMapping("/business-revenue/{businessId}")
     public ResponseEntity businessRevenue(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId){
         return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "

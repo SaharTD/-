@@ -32,15 +32,19 @@ public class MoyasarPaymentController {
     @Value("${moyasar.api.key}")
     private String apiKey;
 
+
+    // authority -> TaxPayer
     @PostMapping("/pay-tax/tax-report/{taxReportId}")
     public ResponseEntity<?> processPayment(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId, @RequestBody @Valid MoyasarPayment moyasarPayment) throws IOException {
         return ResponseEntity.status(200).body(moyasarPaymentService.processPayment(myUser.getId(), taxReportId, moyasarPayment));
     }
 
+
     @GetMapping("/get-status/{id}")
     public ResponseEntity getPaymentStatus(@PathVariable Integer id) throws JsonProcessingException {
         return ResponseEntity.ok().body(moyasarPaymentService.getPaymentStatus(id));
     }
+
 
     @RequestMapping(value = "/callback",method = {RequestMethod.GET,RequestMethod.POST})
     public ResponseEntity callbackHandler(HttpServletRequest request) {

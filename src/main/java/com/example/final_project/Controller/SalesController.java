@@ -33,12 +33,14 @@ public class SalesController {
         return ResponseEntity.status(HttpStatus.OK).body(salesService.getAllSales());
     }
 
+    // authority -> Accountant
     @PutMapping("/update/{id}")
     public ResponseEntity updateSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id, @Valid @RequestBody  Sales sales){
         salesService.updateSales(myUser.getId(),id, sales);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales  is updated"));
     }
 
+    // authority -> Accountant
     @DeleteMapping("delete/{id}")
     public ResponseEntity deleteSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id){
         salesService.deleteSales(myUser.getId(),id);
@@ -55,12 +57,14 @@ public class SalesController {
 
 
 
+    // authority -> Accountant
     @PostMapping("/adds/{counterBoxId}/{branch_id}")
     public ResponseEntity addSales(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer counterBoxId, @PathVariable Integer branch_id, @RequestBody @Valid SaleDTO saleDTO ) {
         salesService.addSales(accountant.getId(),counterBoxId,branch_id,saleDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Sale made successfully"));
     }
 
+    // authority -> Accountant
     /// Integer accountantId, Integer saleId, ProductDTO productDTO
     @PutMapping("/add-product-in-sale/{saleId}")
     public ResponseEntity addProductInSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId, @Valid @RequestBody ProductDTO product){
@@ -68,12 +72,14 @@ public class SalesController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(" Product is added to invoice successfully"));
     }
 
+    /// ?????????????????????????????????
     @GetMapping("/by-taxpayer/{taxPayerId}")
     public ResponseEntity getSalesByTaxPayerId(@AuthenticationPrincipal MyUser taxPayer) {
         List<Sales> sales = salesService.getSalesByTaxPayerId(taxPayer.getId());
         return ResponseEntity.status(200).body(sales);
     }
 
+    // authority -> Accountant
     @PutMapping("/confirm-sale/{saleId}")
     public ResponseEntity confirmSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId){
         salesService.confirmSale(accountant.getId(), saleId);
@@ -81,7 +87,7 @@ public class SalesController {
     }
 
 
-
+    // authority -> Accountant
     @GetMapping("/print-sale/{saleId}")
     public ResponseEntity<byte[]> printInvoice(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId) {
         byte[] pdf = salesService.printInvoice(accountant.getId(),saleId);
@@ -91,7 +97,7 @@ public class SalesController {
                 .body(pdf);
     }
 
-
+    /// ?????????????????????????????????
     @PutMapping("/update-product-quantity/{accountantId}/{itemSaleId}/{quantity}")
     public ResponseEntity updateProductQuantity(@PathVariable Integer accountantId, @PathVariable Integer itemid, @PathVariable Integer quantity) {
 

@@ -70,12 +70,14 @@ public class AuditorController {
 
 
     //اعتماد التقرير
+    // authority -> Auditor
     @PutMapping("/approve-tax-report/{taxReportId}")
     public ResponseEntity approveTaxReport(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId) {
         auditorService.approveTaxReportStatus(taxReportId, myUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " ));
     }
 
+    // authority -> Auditor
     @PutMapping("/reject-tax-report/{taxReportId}/{auditorId}")
     public ResponseEntity rejectTaxReport(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId) {
         auditorService.rejectTaxReportStatus(taxReportId, myUser.getId());

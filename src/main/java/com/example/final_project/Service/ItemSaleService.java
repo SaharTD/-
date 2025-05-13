@@ -5,6 +5,7 @@ import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.ItemSale;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Model.Sales;
+import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.ItemSaleRepository;
 import com.example.final_project.Repository.ProductRepository;
 import com.example.final_project.Repository.SalesRepository;
@@ -24,6 +25,7 @@ public class ItemSaleService {
     private final ItemSaleRepository itemSaleRepository;
     private final ProductRepository productRepository;
     private final SalesRepository salesRepository;
+    private final AccountantRepository accountantRepository;
 
     public List<ItemSale> getAllItemSales() {
         return itemSaleRepository.findAll();
@@ -52,7 +54,10 @@ public class ItemSaleService {
         itemSaleRepository.delete(itemSale);
     }
 
-    public List<ItemSale> getItemSalesBySalesId(Integer salesId) {
+    public List<ItemSale> getItemSalesBySalesId(Integer accountantId,Integer salesId) {
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant==null)
+            throw new ApiException("accountant not found");
         return itemSaleRepository.findItemSaleBySalesId(salesId);
     }
 

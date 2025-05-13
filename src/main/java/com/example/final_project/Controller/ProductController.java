@@ -27,24 +27,30 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.getAllProduct());
     }
 
+    // authority -> Accountant
     @PostMapping("/add/{branchId}")
     public ResponseEntity addProduct(@AuthenticationPrincipal MyUser accountant ,@PathVariable Integer branchId, @RequestBody@Valid Product product){
         productService.addProduct(accountant.getId(),branchId,product);
         return ResponseEntity.status(200).body(new ApiResponse("new product added"));
     }
 
+    // authority -> Accountant
+    /// ?????????????????????????????????
     @PutMapping("/update/branch/{branchId}/product/{productId}")
     public ResponseEntity updateProduct(@PathVariable Integer branchId,@PathVariable Integer productId, @RequestBody@Valid Product product){
         productService.updateProduct(branchId, productId, product);
         return ResponseEntity.status(200).body(new ApiResponse("product updated"));
     }
 
+    // authority -> Accountant
+    /// ?????????????????????????????????
     @DeleteMapping("/delete/branch/{branchId}/product/{productId}")
     public ResponseEntity deleteProduct(@PathVariable Integer branchId,@PathVariable Integer productId){
         productService.deleteProduct(branchId, productId);
         return ResponseEntity.status(200).body(new ApiResponse("product deleted"));
     }
 
+    /// ?????????????????????????????????
     @GetMapping("/barcode/{barcode}")
     public ResponseEntity<?> getProductsByBarcode(@PathVariable String barcode) {
         Product products = productService.getProductsByBarcode(barcode);
@@ -56,6 +62,7 @@ public class ProductController {
 
 
     //accountant add product to branch
+    /// ?????????????????????????????????
     @PostMapping("/add-to-branch/{accountantId}/{branchId}")
     public ResponseEntity<?> addProductToBranch(@PathVariable Integer accountantId, @PathVariable Integer branchId, @RequestBody Product product) {
         productService.addProductToBranch(accountantId, branchId, product);

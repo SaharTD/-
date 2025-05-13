@@ -10,6 +10,7 @@ import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class CounterBoxController {
     public ResponseEntity getAll(){
         return ResponseEntity.status(200).body(counterBoxService.getAllCounterBoxes());
     }
+
 
     @GetMapping("/get")
     public ResponseEntity getById(@AuthenticationPrincipal MyUser account){
@@ -83,6 +85,8 @@ public class CounterBoxController {
 
 
     // Endpoint 7
+    // Auto
+//    @Scheduled
     @PutMapping("/close-opened-counter-box")
     public ResponseEntity closeCounterBoxAuto(){
         counterBoxService.closeCounterBoxAuto();

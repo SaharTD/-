@@ -43,20 +43,20 @@ public class MyUser implements UserDetails {
     @Email(message = "email must be valid")
     private String email;
 
-@Column(columnDefinition ="varchar(20)")
-@Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
+    @Column(columnDefinition = "varchar(20)")
+    @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
     private String role;
 
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "myUser")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "myUser")
     @PrimaryKeyJoinColumn
     private Auditor auditor;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "myUser")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "myUser")
     @PrimaryKeyJoinColumn
     private Accountant accountant;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "myUser")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "myUser")
     @PrimaryKeyJoinColumn
     private TaxPayer taxPayer;
 
@@ -64,6 +64,7 @@ public class MyUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(this.role));
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
