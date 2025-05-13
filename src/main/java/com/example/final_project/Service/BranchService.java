@@ -152,11 +152,11 @@ public class BranchService {
 
 
 
-     public List<Branch> getTaxPayerBranches(Integer taxPayerId){
+   /*  public List<Branch> getTaxPayerBranches(Integer taxPayerId){
         List<Branch> branches = branchRepository.findBranchesByBusinessTaxPayerId(taxPayerId);
         if (branches.isEmpty())
             throw new ApiException("no branches belong to this tax payer");
         return branches;
-     }
+     }*/
 
 }

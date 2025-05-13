@@ -74,7 +74,7 @@ public class SalesService {
         }
 
         Sales newSale=new Sales();
-        newSale.setSalesStatus("DRAFT");
+       // newSale.setSalesStatus("DRAFT");
         newSale.setBranch(branch);
         newSale.setSale_invoice(saleDTO.getSale_invoice());
         newSale.setCounterBox(counterBox);
@@ -111,10 +111,10 @@ public class SalesService {
 
         }
 
-        if (!currentSale.getSalesStatus().equals("DRAFT")){
+     /*   if (!currentSale.getSalesStatus().equals("DRAFT")){
             throw new ApiException("Sorry can not add product to confirmed invoice ");
 
-        }
+        }*/
 
 /// create new item sale
         ItemSale itemSale=new ItemSale();
@@ -175,9 +175,9 @@ public class SalesService {
 
         }
 
-        if (!currentSale.getSalesStatus().equals("DRAFT")){
+       /* if (!currentSale.getSalesStatus().equals("DRAFT")){
             throw new ApiException("Sorry can not add product to confirmed invoice ");
-        }
+        }*/
 
         List<ItemSale> items =itemSaleRepository.findItemSaleBySalesId(saleId);
         if (items.isEmpty()){
@@ -186,8 +186,8 @@ public class SalesService {
 
 
         updateCalculations(saleId);
-        currentSale.setSalesStatus("CONFIRMED");
-        currentSale.setSaleDate(LocalDateTime.now());
+       // currentSale.setSalesStatus("CONFIRMED");
+        //currentSale.setSaleDate(LocalDateTime.now());
         salesRepository.save(currentSale);
 
     }
@@ -210,9 +210,9 @@ public class SalesService {
             throw new ApiException("This sale does not belong to this accountant");
         }
 
-        if (sale.getSalesStatus().equals("CONFIRMED")) {
+       /* if (sale.getSalesStatus().equals("CONFIRMED")) {
             throw new ApiException("Cannot update product quantity for a confirmed invoice");
-        }
+        }*/
         ItemSale itemSale = itemSaleRepository.findById(itemId)
             .orElseThrow(() -> new ApiException("Item not found"));
 
@@ -449,7 +449,7 @@ public class SalesService {
             document.add(new Paragraph("------------------------------------------------------------"));
 
             document.add(new Paragraph("INVOICE ID: " + currentSale.getSale_invoice()));
-            document.add(new Paragraph("Date: " + currentSale.getSaleDate()));
+          //  document.add(new Paragraph("Date: " + currentSale.getSaleDate()));
             document.add(new Paragraph("Branch: " + currentSale.getBranch().getBranchNumber()));
             document.add(new Paragraph("------------------------------------------------------------"));
 
@@ -499,7 +499,7 @@ public class SalesService {
             document.add(new Paragraph("Mohasil Team", new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC)));
 
             document.close();
-            currentSale.setSaleDate(LocalDateTime.now());
+           // currentSale.setSaleDate(LocalDateTime.now());
             salesRepository.save(currentSale);
 
             return baos.toByteArray();

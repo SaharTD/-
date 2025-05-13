@@ -65,9 +65,9 @@ public class ItemSaleService {
 
         Product product1 = itemSale.getProduct();
 
-        if (currentSale.getSalesStatus().equals("CONFIRMED")) {
+       /* if (currentSale.getSalesStatus().equals("CONFIRMED")) {
             throw new ApiException("Cannot remove item from a confirmed invoice");
-        }
+        }*/
 
 
         product1.setStock(product1.getStock()+itemSale.getQuantity());
