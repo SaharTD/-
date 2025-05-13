@@ -2,7 +2,11 @@ package com.example.final_project;
 
 
 import com.example.final_project.Model.ItemSale;
+import com.example.final_project.Model.MyUser;
+import com.example.final_project.Model.Product;
 import com.example.final_project.Repository.ItemSaleRepository;
+import com.example.final_project.Repository.MyUserRepository;
+import com.example.final_project.Repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +25,17 @@ public class ItemSaleRepositoryTest {
     @Autowired
     ItemSaleRepository itemSaleRepository;
 
+    @Autowired
+    MyUserRepository myUserRepository;
+
+    @Autowired
+    ProductRepository productRepository;
     ItemSale item1, item2 ;
+
+    MyUser myUser;
+
+    Product product1,product2;
+
 
     @BeforeEach
     void setUp() {
@@ -37,7 +51,12 @@ public class ItemSaleRepositoryTest {
         item2.setUnitPrice(375.0);
         item2.setTotalPrice(1125.0);
 
+        myUser = new MyUser(1,"myuser","admin","123456789","myuser@gmail.com","ADMIN",null,null,null);
 
+        product1 = new Product(1,"water",12.0,24,"123456789",null,null);
+
+        productRepository.save(product1);
+        myUserRepository.save(myUser);
         itemSaleRepository.save(item1);
         itemSaleRepository.save(item2);
 
@@ -53,4 +72,21 @@ public class ItemSaleRepositoryTest {
         assertThat(found.getUnitPrice()).isEqualTo(375.0);
         assertThat(found.getTotalPrice()).isEqualTo(1125.0);
     }
+
+    @Test
+    public void findUserByIdAndRoleTest(){
+        MyUser user = myUserRepository.findUserByIdAndRole(1,"ADMIN");
+
+        assertThat(user).isEqualTo(myUser);
+    }
+
+    @Test
+    public void findProductByBarcode(){
+        Product product = productRepository.findProductByBarcode("123456789");
+
+        assertThat(product).isEqualTo(product1);
+    }
+
+
+
 }
