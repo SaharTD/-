@@ -70,7 +70,7 @@ public class CounterBoxController {
     /// Auth->Accountant
     @PatchMapping("/open/{boxId}")
     public ResponseEntity<?> openCounterBox(@AuthenticationPrincipal MyUser Accountant, @PathVariable Integer boxId) {
-        counterBoxService.openCounterBox(Accountant.getId(),boxId);
+        counterBoxService.openCounterBox(boxId,Accountant.getId());
         return ResponseEntity.status(200).body("CounterBox opened successfully");
     }
 
@@ -79,7 +79,7 @@ public class CounterBoxController {
     /// Auth-> Accountant
     @PostMapping("/close/{boxId}")
     public ResponseEntity<String> closeCounterBox(@AuthenticationPrincipal MyUser Accountant, @PathVariable Integer boxId) {
-        String result = counterBoxService.closeCounterBox(Accountant.getId(), boxId);
+        String result = counterBoxService.closeCounterBox(boxId,Accountant.getId());
         return ResponseEntity.status(200).body(result);
     }
 

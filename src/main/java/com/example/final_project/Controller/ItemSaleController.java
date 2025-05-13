@@ -34,9 +34,9 @@ public class ItemSaleController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("ItemSale updated successfully"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteItemSale(@PathVariable Integer id) {
-        itemSaleService.deleteItemSale(id);
+    @DeleteMapping("/remove/{itemSaleId}/{saleId}")
+    public ResponseEntity<ApiResponse> removeItemFromSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer itemSaleId, @PathVariable Integer saleId) {
+        itemSaleService.removeItemFromSale(accountant.getId(),itemSaleId,saleId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("ItemSale deleted successfully"));
     }
 

@@ -2,8 +2,8 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.DTO.ItemsDTO;
 import com.example.final_project.DTO.SaleDTO;
-import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.ItemSale;
 import com.example.final_project.Model.MyUser;
 import com.example.final_project.Model.Sales;
@@ -55,20 +55,19 @@ public class SalesController {
 //        return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(accountant.getId()));
 //    }
 
-
-
     // authority -> Accountant
-    @PostMapping("/adds/{counterBoxId}/{branch_id}")
-    public ResponseEntity addSales(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer counterBoxId, @PathVariable Integer branch_id, @RequestBody @Valid SaleDTO saleDTO ) {
-        salesService.addSales(accountant.getId(),counterBoxId,branch_id,saleDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Sale made successfully"));
+    @PostMapping("add-sale/{boxId}")
+    public ResponseEntity addSales(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer boxId, @RequestBody @Valid SaleDTO saleDTO ) {
+        salesService.addSales(accountant.getId(), boxId,saleDTO);
+        return ResponseEntity.status(200).body("Sale made successfully");
     }
+
 
     // authority -> Accountant
     /// Integer accountantId, Integer saleId, ProductDTO productDTO
     @PutMapping("/add-product-in-sale/{saleId}")
-    public ResponseEntity addProductInSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId, @Valid @RequestBody ProductDTO product){
-        salesService.addProductInSale(accountant.getId(), saleId,product);
+    public ResponseEntity addProductInSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId, @Valid @RequestBody ItemsDTO itemsDTO){
+        salesService.addProductInSale(accountant.getId(), saleId,itemsDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(" Product is added to invoice successfully"));
     }
 
@@ -83,7 +82,7 @@ public class SalesController {
     @PutMapping("/confirm-sale/{saleId}")
     public ResponseEntity confirmSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId){
         salesService.confirmSale(accountant.getId(), saleId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" The sales confirmed successfully"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(" The sales confirmed successfully"));
     }
 
 
