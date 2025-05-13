@@ -193,8 +193,8 @@ public class SalesService {
     }
 
     //create
-    public ItemSale updateProductQuantity(Integer accounterId, Integer SalesId, Integer quantity){
-        ItemSale itemSale = itemSaleRepository.findById(SalesId)
+    public ItemSale updateProductQuantity(Integer accounterId, Integer itemid, Integer quantity){
+        ItemSale itemSale = itemSaleRepository.findById(itemid)
                 .orElseThrow(() -> new ApiException("Item sale not found"));
 
         Accountant accountant = accountantRepository.findAccountantById(accounterId);
@@ -202,7 +202,7 @@ public class SalesService {
             throw new ApiException("Accountant not found");
         }
 
-        Sales currentSale = salesRepository.findSalesById(SalesId);
+        Sales currentSale = salesRepository.findSalesById(itemid);
         if (currentSale == null) {
             throw new ApiException("Sale not found");
         }

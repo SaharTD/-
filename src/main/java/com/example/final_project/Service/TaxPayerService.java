@@ -150,7 +150,6 @@ public class TaxPayerService {
             throw new ApiException("The Taxpayer is not found");
         }
 
-
         Branch branch = branchRepository.findBranchesById(branchId);
         if (branch == null) {
             throw new ApiException("Branch not found");
@@ -158,7 +157,6 @@ public class TaxPayerService {
 
         User userACC = new User();
         userACC.setRole("ACCOUNTANT");
-
 
         userACC.setName(accountantDTO.getName());
         userACC.setUsername(accountantDTO.getUsername());
@@ -172,7 +170,6 @@ public class TaxPayerService {
         accountant.setUser(userACC);
         accountant.setIsActive(true);
         accountant.setBranch(branch);
-
 
         Business business = businessRepository.findBusinessByBusinessName(accountantDTO.getBusinessName());
         accountant.setBusiness(business);
