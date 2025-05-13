@@ -33,6 +33,7 @@ public class BusinessController {
 
 
     // authority -> TaxPayer
+    //  sahar - 8
     @GetMapping("/get-my-business/{bId}")
     public ResponseEntity getMyBusiness (@AuthenticationPrincipal MyUser myUser, @PathVariable Integer bId){
         return ResponseEntity.status(200).body(businessService.getMyBusiness(myUser.getId(), bId));
@@ -46,12 +47,14 @@ public class BusinessController {
     }
 
     // authority -> TaxPayer
+    //sahar - 9
     @GetMapping("/get-my-businesses")
     public ResponseEntity getMyBusinesses (@AuthenticationPrincipal MyUser myUser){
         return ResponseEntity.status(200).body(businessService.getMyBusinesses(myUser.getId()));
     }
 
     // authority -> TaxPayer
+    //sahar - 10
     @PostMapping("/add-business")
     public ResponseEntity addBusiness (@AuthenticationPrincipal MyUser myUser, @RequestBody @Valid BusinessDTO businessDTO){
         businessService.addBusiness(myUser.getId(), businessDTO);
@@ -74,6 +77,7 @@ public class BusinessController {
     }
 
     // authority -> TaxPayer
+    //sahar - 11
     @GetMapping("/sales-business/{businessId}")
     public ResponseEntity salesOperationOnBusiness(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId){
         List<SalesDTO> sales= businessService.salesOperationOnBusiness(myUser.getId(), businessId);
@@ -82,6 +86,7 @@ public class BusinessController {
     }
 
     // authority -> TaxPayer
+    //sahar - 12
     @GetMapping("/business-revenue/{businessId}")
     public ResponseEntity businessRevenue(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId){
         return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "

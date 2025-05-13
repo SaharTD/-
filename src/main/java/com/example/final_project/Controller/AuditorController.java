@@ -55,6 +55,7 @@ public class AuditorController {
     }
 
     // authority -> Auditor
+    //sahar - 14
     @PutMapping("activate-business/{taxPayerId}/{businessId}")
     public ResponseEntity activateBusiness(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxPayerId, @PathVariable Integer businessId){
         auditorService.activateBusiness(myUser.getId(),taxPayerId,businessId);

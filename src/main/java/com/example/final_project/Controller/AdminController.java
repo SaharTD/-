@@ -17,6 +17,9 @@ public class AdminController {
     private final TaxPayerService taxPayerService;
 
 
+
+    //sahar - 14
+
     @PutMapping("/activate/{taxPayerId}")
     public ResponseEntity updateBusiness(@AuthenticationPrincipal MyUser admin, @PathVariable Integer taxPayerId ){
         taxPayerService.activateTP(admin.getId(), taxPayerId);
