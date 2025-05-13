@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @NotEmpty(message = "username must ne not empty unique")
     private String username;
 
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(220) not null")
     @NotEmpty(message = "password must ne not empty")
     private String password;
 
@@ -42,7 +42,6 @@ public class User implements UserDetails {
     @Email(message = "email must be valid")
     private String email;
 
-    @Check(constraints = "role in ('TAXPAYER','AUDITOR','ACCOUNTANT')")
     @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))") @NotEmpty(message = "role must ne not empty")
     @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
     private String role;

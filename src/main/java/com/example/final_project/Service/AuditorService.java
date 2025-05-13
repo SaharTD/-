@@ -11,7 +11,9 @@ import com.example.final_project.Repository.AuditorRepository;
 import com.example.final_project.Repository.BusinessRepository;
 import com.example.final_project.Repository.MyUserRepository;
 import com.example.final_project.Repository.TaxPayerRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -203,5 +205,25 @@ public class AuditorService {
 
     }
 
+
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @PostConstruct
+    public void createAdminUser() {
+        if (myUserRepository.findUserByUsername("admin") == null) {
+            User admin = new User();
+            admin.setName("Admin User");
+            admin.setUsername("admin");
+            admin.setEmail("admin@example.com");
+            admin.setPassword(passwordEncoder.encode("Admin12345"));
+            admin.setRole("ADMIN");
+
+            myUserRepository.save(admin);
+            System.out.println("Admin user created");
+        } else {
+            System.out.println("Admin user already exists");
+        }
+    }
 
 }

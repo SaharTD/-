@@ -59,29 +59,7 @@ public class AuditorServiceTest{
 
 
 
-//    @Test
-//    public void getAllAuditors(){
-//        when(myUserRepository.findUserById(user.getId())).thenReturn(user);
-//        when(auditorRepository.findAuditorsById(user.getId())).thenReturn(auditor1);
-//
-//        List<Auditor> auditorList=auditorService.getAllAuditors();
-//        Assertions.assertEquals(auditorList,auditorList);
-//        verify(myUserRepository,times(1)).findUserById(user.getId());
-//        verify(myUserRepository,times(1)).findUserById(user.getId());
-//    }
-//
-//
-//
-//
-//    @Test
-//    public void addAuditor(){
-//        when(myUserRepository.findUserById(user.getId())).thenReturn(user);
-//
-//        auditorService.addAuditor(user.getId(),auditor2);
-//        verify(myUserRepository,times(1)).findUserById(user.getId());
-//        verify(auditorRepository,times(1)).save(auditor2);
-//
-//    }
+
 
 
     @Test

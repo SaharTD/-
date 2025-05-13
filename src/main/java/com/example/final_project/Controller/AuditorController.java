@@ -70,7 +70,7 @@ public class AuditorController {
 
 
     //اعتماد التقرير
-    @PutMapping("/approve-tax-report/{taxReportId}/{auditorId}")
+    @PutMapping("/approve-tax-report/{taxReportId}")
     public ResponseEntity approveTaxReport(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
         auditorService.approveTaxReportStatus(taxReportId, user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Status updated to: " ));

@@ -39,6 +39,7 @@ public class ConfigurationSecurity {
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
 
+                .requestMatchers("/api/v1/auditor/add").hasAuthority("ADMIN")
                 //   AUDITOR
                 .requestMatchers(
                         "/api/v1/taxReports/add/**",
