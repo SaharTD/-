@@ -121,20 +121,20 @@ public class ConfigurationSecurity {
 
         return httpSecurity.build();
     }
-    //.requestMatchers("/api/v1/business/add-business",
-    //                        "/api/v1/branch/add/",
-    //                        "api/v1/tax-payer/add-accountant/",
-    //                        "api/v1/accountant/assign-accountant-to-branch/accountant/").hasAuthority("TAXPAYER")
-    //
-    //                .requestMatchers("/api/v1/product/add/",
-    //                        "/api/v1/counterbox/create",
-    //                        "/api/v1/counterbox/open/",
-    //                        "/api/v1/counterbox/close/," ,
-    //                        "/api/v1/sales/add-sale/{boxId}",
-    //                        "/api/v1/sales/add-product-in-sale/{saleId}",
-    //                        "/api/v1/item-sales/remove/",
-    //                        "/api/v1/sales/confirm-sale/," ,
-    //                         "/api/v1/sales/print-sale/").hasAuthority("ACCOUNTANT")
+//    .requestMatchers("/api/v1/business/add-business",
+//                            "/api/v1/branch/add/",
+//                            "api/v1/tax-payer/add-accountant/",
+//                            "api/v1/accountant/assign-accountant-to-branch/accountant/").hasAuthority("TAXPAYER")
+//
+//                    .requestMatchers("/api/v1/product/add/",
+//                            "/api/v1/counterbox/create",
+//                            "/api/v1/counterbox/open/",
+//                            "/api/v1/counterbox/close/," ,
+//                            "/api/v1/sales/add-sale/{boxId}",
+//                            "/api/v1/sales/add-product-in-sale/{saleId}",
+//                            "/api/v1/item-sales/remove/",
+//                            "/api/v1/sales/confirm-sale/," ,
+//                             "/api/v1/sales/print-sale/").hasAuthority("ACCOUNTANT")
 
 
 }

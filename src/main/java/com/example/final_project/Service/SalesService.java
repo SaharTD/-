@@ -194,46 +194,42 @@ public class SalesService {
 
 
     //create
-    public ItemSale updateProductQuantity(Integer accounterId, Integer itemid, Integer quantity){
-
-
-        if (itemSale==null){
-            throw new ApiException("items not found");
-        }
-
-        Accountant accountant = accountantRepository.findAccountantById(accounterId);
-        if (accountant == null) {
-            throw new ApiException("Accountant not found");
-        }
-
-        Sales currentSale = salesRepository.findSalesById(itemid);
-        if (currentSale == null) {
-            throw new ApiException("Sale not found");
-        }
-
-        if (currentSale.getSalesStatus().equals("CONFIRMED")) {
-            throw new ApiException("Cannot update quantity of a confirmed invoice");
-        }
-
-        Product product = itemSale.getProduct();
-        int quantityDifference = quantity -itemSale.getQuantity();
-
-        if (product.getStock() < quantityDifference) {
-            throw new ApiException("Insufficient stock");
-        }
-
-
-        product.setStock(product.getStock()-quantityDifference);
-        productRepository.save(product);
-
-        itemSale.setQuantity(quantity);
-        itemSale = itemSaleRepository.save(itemSale);
-
-        return itemSale;
-    }
-
-
-
+//    public ItemSale updateProductQuantity(Integer accounterId, Integer itemid, Integer quantity){
+//
+//        if (itemid==null){
+//            throw new ApiException("items not found");
+//        }
+//
+//        Accountant accountant = accountantRepository.findAccountantById(accounterId);
+//        if (accountant == null) {
+//            throw new ApiException("Accountant not found");
+//        }
+//
+//        Sales currentSale = salesRepository.findSalesById(itemid);
+//        if (currentSale == null) {
+//            throw new ApiException("Sale not found");
+//        }
+//
+//        if (currentSale.getSalesStatus().equals("CONFIRMED")) {
+//            throw new ApiException("Cannot update quantity of a confirmed invoice");
+//        }
+//
+//        Product product = currentSale.getProduct();
+//        int quantityDifference = quantity -itemSale.getQuantity();
+//
+//        if (product.getStock() < quantityDifference) {
+//            throw new ApiException("Insufficient stock");
+//        }
+//
+//
+//        product.setStock(product.getStock()-quantityDifference);
+//        productRepository.save(product);
+//
+//        itemSale.setQuantity(quantity);
+//        itemSale = itemSaleRepository.save(itemSale);
+//
+//        return itemSale;
+//    }
 
 
 

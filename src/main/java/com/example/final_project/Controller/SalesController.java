@@ -97,12 +97,12 @@ public class SalesController {
     }
 
     /// ?????????????????????????????????
-    @PutMapping("/update-product-quantity/{accountantId}/{itemSaleId}/{quantity}")
-    public ResponseEntity updateProductQuantity(@PathVariable Integer accountantId, @PathVariable Integer itemid, @PathVariable Integer quantity) {
-
-        ItemSale updatedItemSale = salesService.updateProductQuantity(accountantId, itemid, quantity);
-        return ResponseEntity.status(200).body(updatedItemSale);
-    }
+//    @PutMappingapping("/update-product-quantity/{accountantId}/{itemSaleId}/{quantity}")
+//    public ResponseEntity updateProductQuantity(@PathVariable Integer accountantId, @PathVariable Integer itemid, @PathVariable Integer quantity) {
+//
+//        ItemSale updatedItemSale = salesService.updateProductQuantity(accountantId, itemid, quantity);
+//        return ResponseEntity.status(200).body(updatedItemSale);
+//    }
 
 
 }
