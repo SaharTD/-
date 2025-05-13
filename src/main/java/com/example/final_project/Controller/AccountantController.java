@@ -28,7 +28,7 @@ public class AccountantController {
 
 
 
-    /// Auth -> taxPayer
+    /// Auth ->
     @GetMapping("/get-accountant-by-branch/{branchId}")
     public ResponseEntity getBranchAccountant(@AuthenticationPrincipal MyUser taxPayer,@PathVariable Integer branchId){
         return ResponseEntity.status(200).body(accountantService.getBranchAccountant(taxPayer.getId(),branchId));

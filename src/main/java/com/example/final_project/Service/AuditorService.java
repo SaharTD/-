@@ -41,11 +41,16 @@ public class AuditorService {
     public void addAuditor(Integer adminId, DTOAuditor dtoAuditor) {
         MyUser admin = myUserRepository.findUserByIdAndRole(adminId,"ADMIN");
         if (admin==null)
-            throw new ApiException("user not found or does have permission");
+
+
+        throw new ApiException("user not found or does have permission");
         MyUser myUser = new MyUser();
         myUser.setName(dtoAuditor.getName());
         myUser.setUsername(dtoAuditor.getUsername());
-        myUser.setPassword(dtoAuditor.getPassword());
+
+        String hashPassword = new BCryptPasswordEncoder().encode(dtoAuditor.getPassword());
+        myUser.setPassword(hashPassword);
+
         myUser.setEmail(dtoAuditor.getEmail());
         myUser.setRole("AUDITOR");
         Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), myUser, null);
@@ -65,7 +70,6 @@ public class AuditorService {
         myUser.getAuditor().setSOCPA(dtoAuditor.getSOCPA());
 
         myUserRepository.save(myUser);
-//        auditorRepository.save(auditor);
     }
 
 
@@ -74,7 +78,6 @@ public class AuditorService {
         if (myUser == null)
             throw new ApiException("auditor not found");
         myUserRepository.delete(myUser);
-//        auditorRepository.delete(auditor);
     }
 
 
@@ -151,7 +154,6 @@ public class AuditorService {
         }
 
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
-
         if (taxPayer == null) {
             throw new ApiException("The Taxpayer is not found");
         }

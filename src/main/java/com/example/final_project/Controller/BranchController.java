@@ -27,7 +27,7 @@ public class BranchController {
     // authority -> TaxPayer
     @PostMapping("/add/{businessId}")
     public ResponseEntity addBranch(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer businessId, @RequestBody @Valid Branch branch){
-        branchService.addBranch(businessId, myUser.getId(), branch);
+        branchService.addBranch( myUser.getId(),businessId, branch);
         return ResponseEntity.status(200).body(new ApiResponse("new branch added"));
     }
 
@@ -45,13 +45,12 @@ public class BranchController {
         return ResponseEntity.status(200).body(new ApiResponse("branch deleted"));
     }
 
-//    /// 3
-//    @GetMapping("branch-sales/{branchId}")
-//    public ResponseEntity salesOperationOnBranch(@AuthenticationPrincipal User user,@PathVariable Integer branchId) {
-//        List<SalesDTO> sales = branchService.salesOperationOnBranch(user.getId(), branchId);
-//        return ResponseEntity.status(200).body(new ApiResponse("The total number of sales operations: \n " + sales.size()
-//                + branchService.salesOperationOnBranch(user.getId(), branchId)));
-//    }
+
+    @GetMapping("branch-revenue/{branchId}")
+    public ResponseEntity branchRevenue(@AuthenticationPrincipal MyUser user,@PathVariable Integer branchId) {
+        return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "
+                + branchService.branchRevenue(user.getId(), branchId)));
+    }
 
     // authority -> TaxPayer
     @GetMapping("/sales-summary/{branchId}")

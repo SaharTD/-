@@ -103,7 +103,6 @@ public class TaxPayerService {
         taxPayer.setRegistrationDate(LocalDateTime.now());
         user.setTaxPayer(taxPayer);
 
-        myUserRepository.save(user);
         taxPayerRepository.save(taxPayer);
         myUserRepository.save(user);
 

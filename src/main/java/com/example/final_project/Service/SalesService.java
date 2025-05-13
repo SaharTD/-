@@ -126,8 +126,8 @@ public class SalesService {
         itemSale.setTotalPrice(product.getPrice()* item.getQuantity());
 
         product.setStock(product.getStock()-item.getQuantity());
-        itemSaleRepository.save(itemSale);
         productRepository.save(product);
+        itemSaleRepository.save(itemSale);
 
     }
 
@@ -155,6 +155,8 @@ public class SalesService {
         sale.setTotal_amount(subTotal);
         sale.setTax_amount(tax);
         sale.setGrand_amount(grandTotal);
+        salesRepository.save(sale);
+
 
     }
 
@@ -189,6 +191,9 @@ public class SalesService {
         currentSale.setSalesStatus("CONFIRMED");
         currentSale.setSaleDate(LocalDateTime.now());
         salesRepository.save(currentSale);
+
+
+
 
     }
 
@@ -340,8 +345,7 @@ public class SalesService {
             document.add(new Paragraph("Mohasil Team", new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC)));
 
             document.close();
-            currentSale.setSaleDate(LocalDateTime.now());
-            salesRepository.save(currentSale);
+
 
             return baos.toByteArray();
 
