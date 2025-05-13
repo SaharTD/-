@@ -1,7 +1,7 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiResponse;
-import com.example.final_project.Model.User;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Service.MyUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,27 +19,27 @@ public class MyUserController {
 
     // authority -> ADMIN
     @GetMapping("/get")
-    public ResponseEntity getAllUser(@AuthenticationPrincipal User user){
-        return ResponseEntity.status(HttpStatus.OK).body(myUserService.getAllUser(user.getId()));
+    public ResponseEntity getAllUser(@AuthenticationPrincipal MyUser myUser){
+        return ResponseEntity.status(HttpStatus.OK).body(myUserService.getAllUser(myUser.getId()));
     }
 
     @PostMapping("/add")
-    public ResponseEntity addUser(@Valid @RequestBody User user){
-        myUserService.addAdmin(user);
+    public ResponseEntity addUser(@Valid @RequestBody MyUser myUser){
+        myUserService.addAdmin(myUser);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is added"));
     }
 
     // authority -> any
     @PutMapping("/update")
-    public ResponseEntity updateUser(@AuthenticationPrincipal User user ,@Valid @RequestBody User user2){
-        myUserService.updateUser(user.getId(), user2);
+    public ResponseEntity updateUser(@AuthenticationPrincipal MyUser myUser, @Valid @RequestBody MyUser myUser2){
+        myUserService.updateUser(myUser.getId(), myUser2);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is updated"));
     }
 
     // authority -> ADMIN
     @DeleteMapping("/delete/{username}")
-    public ResponseEntity deleteUser(@AuthenticationPrincipal User user,@PathVariable String username){
-        myUserService.deleteUser(user.getId());
+    public ResponseEntity deleteUser(@AuthenticationPrincipal MyUser myUser, @PathVariable String username){
+        myUserService.deleteUser(myUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user not found"));
     }
 

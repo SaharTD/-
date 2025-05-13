@@ -22,7 +22,7 @@ public class TaxPayer {
     @Id
     private Integer id;
 
-    @Column(columnDefinition = "varchar(9) not null")
+    @Column(columnDefinition = "varchar(10) not null unique")
     @NotEmpty(message = "the phone number should not be empty")
     @Pattern(regexp = "^05[0-9]{8}$",message = " please enter correct phone number")
     private String phoneNumber;
@@ -54,7 +54,7 @@ public class TaxPayer {
     @MapsId
     @JsonIgnore
     @JoinColumn(name = "id")
-    private User user;
+    private MyUser myUser;
 
 
 }

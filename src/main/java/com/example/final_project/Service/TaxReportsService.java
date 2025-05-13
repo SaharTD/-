@@ -76,7 +76,7 @@ public class TaxReportsService {
 
 
     public void deleteTaxReports(Integer id, Integer taxReportId) {
-        User admin = myUserRepository.findUserByIdAndRole(id, "ADMIN");
+        MyUser admin = myUserRepository.findUserByIdAndRole(id, "ADMIN");
         if (admin == null)
             throw new ApiException("Auditor not found");
         TaxReports taxReports = taxReportsRepository.findTaxReportsById(taxReportId);
@@ -118,8 +118,8 @@ public class TaxReportsService {
         } else {
             throw new ApiException("No penalty: payment is still within grace period");
         }
-        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
-        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String emailTo = taxReport.getBusiness().getTaxPayer().getMyUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getMyUser().getName();
         String message = "Dear"+name+"\n\n Due to your failure to " +
                 "pay the value-added tax and your delay of one month, " +
                 "a financial penalty has been imposed, " +
@@ -161,8 +161,8 @@ public class TaxReportsService {
         taxReport.setTotalTax(originalTax + penalty);
 
 
-        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
-        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String emailTo = taxReport.getBusiness().getTaxPayer().getMyUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getMyUser().getName();
         String message = "Dear"+name+"\n\n Due to your failure to " +
                 "pay the value-added tax and your delay of two month, " +
                 "a financial penalty has been imposed, " +
@@ -204,8 +204,8 @@ public class TaxReportsService {
             throw new ApiException("Conditions for legal action not met");
         }
 
-        String emailTo = taxReport.getBusiness().getTaxPayer().getUser().getEmail();
-        String name = taxReport.getBusiness().getTaxPayer().getUser().getName();
+        String emailTo = taxReport.getBusiness().getTaxPayer().getMyUser().getEmail();
+        String name = taxReport.getBusiness().getTaxPayer().getMyUser().getName();
         String message = "Dear "+name+"\n\n  " +
                 "We regret to inform you that, due to your failure to settle the due value-added tax (VAT) \n" +
                 "and a delay exceeding three months, your case has been officially referred for legal action and the initiation of a lawsuit. \n" +
@@ -364,7 +364,7 @@ public class TaxReportsService {
                     Business business = report.getBusiness();
                     if (business == null || business.getTaxPayer() == null) continue;
 
-                    String email = business.getTaxPayer().getUser().getEmail();
+                    String email = business.getTaxPayer().getMyUser().getEmail();
                     String subject = " Payment Reminder - Tax Report #" + report.getId();
                     String message = "Dear Taxpayer,\n\nThis is a reminder that the tax report (ID: " + report.getId() +
                             ") is due for payment on " + paymentDate + ".\n\n" +
@@ -379,8 +379,8 @@ public class TaxReportsService {
 
 
     public byte[] getTaxReportAsPdf(Integer userId, Integer reportId) {
-        User user = myUserRepository.findUserByIdAndRole(userId, "TAXPAYER");
-        if (user == null)
+        MyUser myUser = myUserRepository.findUserByIdAndRole(userId, "TAXPAYER");
+        if (myUser == null)
             throw new ApiException("User not found or doesn't have permission");
         TaxReports report = taxReportsRepository.findTaxReportsById(reportId);
         if (report == null) throw new ApiException("Tax report not found.");

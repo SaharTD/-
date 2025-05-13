@@ -1,18 +1,17 @@
 package com.example.final_project.Repository;
 
-import com.example.final_project.Model.User;
-import jakarta.validation.constraints.NotEmpty;
+import com.example.final_project.Model.MyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MyUserRepository extends JpaRepository<User,Integer> {
+public interface MyUserRepository extends JpaRepository<MyUser,Integer> {
 
 
-    User findUserByUsername(String username);
+    MyUser findUserByUsername(String username);
 
-    User findUserById(Integer id);
+    MyUser findUserById(Integer id);
 
-    User findUserByIdAndRole(Integer id, String role);
+    MyUser findUserByIdAndRole(Integer id, String role);
 
 }

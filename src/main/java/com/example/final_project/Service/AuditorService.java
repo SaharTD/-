@@ -6,7 +6,7 @@ import com.example.final_project.DTO.DTOAuditor;
 import com.example.final_project.Repository.*;
 import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
-import com.example.final_project.Model.User;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Repository.AuditorRepository;
 import com.example.final_project.Repository.BusinessRepository;
 import com.example.final_project.Repository.MyUserRepository;
@@ -32,48 +32,48 @@ public class AuditorService {
 
     // authority -> ADMIN
     public List<Auditor> getAllAuditors(Integer id) {
-        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
+        MyUser admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
         if (admin==null)
             throw new ApiException("user not found or doesn't have permission");
         return auditorRepository.findAll();
     }
 
     public void addAuditor(Integer adminId, DTOAuditor dtoAuditor) {
-        User admin = myUserRepository.findUserByIdAndRole(adminId,"ADMIN");
+        MyUser admin = myUserRepository.findUserByIdAndRole(adminId,"ADMIN");
         if (admin==null)
             throw new ApiException("user not found or does have permission");
-        User user = new User();
-        user.setName(dtoAuditor.getName());
-        user.setUsername(dtoAuditor.getUsername());
-        user.setPassword(dtoAuditor.getPassword());
-        user.setEmail(dtoAuditor.getEmail());
-        user.setRole("AUDITOR");
-        Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), user, null);
-        user.setAuditor(auditor);
-        myUserRepository.save(user);
+        MyUser myUser = new MyUser();
+        myUser.setName(dtoAuditor.getName());
+        myUser.setUsername(dtoAuditor.getUsername());
+        myUser.setPassword(dtoAuditor.getPassword());
+        myUser.setEmail(dtoAuditor.getEmail());
+        myUser.setRole("AUDITOR");
+        Auditor auditor = new Auditor(null, dtoAuditor.getSOCPA(), myUser, null);
+        myUser.setAuditor(auditor);
+        myUserRepository.save(myUser);
         auditorRepository.save(auditor);
     }
 
     public void updateAuditor(Integer auditorId, DTOAuditor dtoAuditor) {
-        User user = myUserRepository.findUserById(auditorId);
-        if (user == null){
+        MyUser myUser = myUserRepository.findUserById(auditorId);
+        if (myUser == null){
             throw new ApiException("auditor not found");}
-        user.setName(dtoAuditor.getName());
-        user.setUsername(dtoAuditor.getUsername());
-        user.setPassword(dtoAuditor.getPassword());
-        user.setEmail(dtoAuditor.getEmail());
-        user.getAuditor().setSOCPA(dtoAuditor.getSOCPA());
+        myUser.setName(dtoAuditor.getName());
+        myUser.setUsername(dtoAuditor.getUsername());
+        myUser.setPassword(dtoAuditor.getPassword());
+        myUser.setEmail(dtoAuditor.getEmail());
+        myUser.getAuditor().setSOCPA(dtoAuditor.getSOCPA());
 
-        myUserRepository.save(user);
+        myUserRepository.save(myUser);
 //        auditorRepository.save(auditor);
     }
 
 
     public void deleteAuditor(Integer auditorId) {
-        User user = myUserRepository.findUserById(auditorId);
-        if (user == null)
+        MyUser myUser = myUserRepository.findUserById(auditorId);
+        if (myUser == null)
             throw new ApiException("auditor not found");
-        myUserRepository.delete(user);
+        myUserRepository.delete(myUser);
 //        auditorRepository.delete(auditor);
     }
 
@@ -209,10 +209,10 @@ public class AuditorService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @PostConstruct
+//    @PostConstruct
     public void createAdminUser() {
         if (myUserRepository.findUserByUsername("admin") == null) {
-            User admin = new User();
+            MyUser admin = new MyUser();
             admin.setName("Admin User");
             admin.setUsername("admin");
             admin.setEmail("admin@example.com");

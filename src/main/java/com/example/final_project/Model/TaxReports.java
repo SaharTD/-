@@ -64,8 +64,6 @@ public class TaxReports {
     private Auditor auditor;
 
 
-
-
     @OneToMany(mappedBy = "taxReports")
     private Set<Sales> sales;
 }

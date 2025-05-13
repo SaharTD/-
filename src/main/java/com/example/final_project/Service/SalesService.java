@@ -15,11 +15,9 @@ import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.Document;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -452,7 +450,7 @@ public class SalesService {
     }
 
     public void deleteSales(Integer id,Integer saleId){
-        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
+        MyUser admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
         if (admin==null)
             throw new ApiException("you don't have permission");
         Sales sales=salesRepository.findSalesById(saleId);

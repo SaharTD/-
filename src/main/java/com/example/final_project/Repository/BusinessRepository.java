@@ -2,8 +2,6 @@ package com.example.final_project.Repository;
 
 import com.example.final_project.Model.Business;
 import com.example.final_project.Model.TaxPayer;
-import com.example.final_project.Model.User;
-import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

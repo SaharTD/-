@@ -2,7 +2,7 @@ package com.example.final_project.Service;
 
 
 import com.example.final_project.Api.ApiException;
-import com.example.final_project.Model.User;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +18,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = authRepository.findUserByUsername(username);
-        if (user==null)
+        MyUser myUser = authRepository.findUserByUsername(username);
+        if (myUser ==null)
             throw new ApiException("wrong username or password"); //must be like this because security by agreement
-        return user;
+        return myUser;
     }
 
 }

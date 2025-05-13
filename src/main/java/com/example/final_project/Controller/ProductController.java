@@ -1,6 +1,7 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Model.Product;
 import com.example.final_project.Service.ProductService;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +27,9 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.getAllProduct());
     }
 
-    @PostMapping("/add/branch/{accountantId}/{branchId}")
-    public ResponseEntity addProduct(@PathVariable Integer branchId,@PathVariable Integer accountantId, @RequestBody@Valid Product product){
-        productService.addProduct(accountantId,branchId,product);
+    @PostMapping("/add/{branchId}")
+    public ResponseEntity addProduct(@AuthenticationPrincipal MyUser accountant ,@PathVariable Integer branchId, @RequestBody@Valid Product product){
+        productService.addProduct(accountant.getId(),branchId,product);
         return ResponseEntity.status(200).body(new ApiResponse("new product added"));
     }
 

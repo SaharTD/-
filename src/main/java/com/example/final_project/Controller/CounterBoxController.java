@@ -3,10 +3,8 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.DTO.CounterBoxDTO;
-import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.Model.CounterBox;
-import com.example.final_project.Model.User;
-import com.example.final_project.Repository.SalesRepository;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Service.CounterBoxService;
 import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
@@ -26,7 +24,7 @@ public class CounterBoxController {
 
     //كرييت مع المحاسب
     @PostMapping("/create")
-    public ResponseEntity createCounterBox(@AuthenticationPrincipal User account,@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
+    public ResponseEntity createCounterBox(@AuthenticationPrincipal MyUser account, @RequestBody @Valid CounterBoxDTO counterBoxDTO) {
         counterBoxService.createCounterBox(account.getId(),counterBoxDTO);
         return ResponseEntity.ok("Counter box created successfully");
     }
@@ -38,18 +36,18 @@ public class CounterBoxController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity getById(@AuthenticationPrincipal User account){
+    public ResponseEntity getById(@AuthenticationPrincipal MyUser account){
         return ResponseEntity.status(200).body(counterBoxService.getCounterBox(account.getId()));
     }
 
     @PutMapping("/update")
-    public ResponseEntity update(@RequestBody @Valid CounterBox counterBox,@AuthenticationPrincipal User account){
+    public ResponseEntity update(@RequestBody @Valid CounterBox counterBox,@AuthenticationPrincipal MyUser account){
         counterBoxService.updateCounterBox(counterBox, account.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Updated successfully"));
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity delete(@AuthenticationPrincipal User account){
+    public ResponseEntity delete(@AuthenticationPrincipal MyUser account){
         counterBoxService.deleteCounterBox(account.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Deleted successfully"));
     }
@@ -69,7 +67,7 @@ public class CounterBoxController {
     //open  the counter box
     /// Auth->Accountant
     @PatchMapping("/open/{boxId}")
-    public ResponseEntity<?> openCounterBox(@AuthenticationPrincipal User Accountant, @PathVariable Integer boxId) {
+    public ResponseEntity<?> openCounterBox(@AuthenticationPrincipal MyUser Accountant, @PathVariable Integer boxId) {
         counterBoxService.openCounterBox(Accountant.getId(),boxId);
         return ResponseEntity.status(200).body("CounterBox opened successfully");
     }
@@ -78,7 +76,7 @@ public class CounterBoxController {
     //close the counter box
     /// Auth-> Accountant
     @PostMapping("/close/{boxId}")
-    public ResponseEntity<String> closeCounterBox(@AuthenticationPrincipal User Accountant,@PathVariable Integer boxId) {
+    public ResponseEntity<String> closeCounterBox(@AuthenticationPrincipal MyUser Accountant, @PathVariable Integer boxId) {
         String result = counterBoxService.closeCounterBox(Accountant.getId(), boxId);
         return ResponseEntity.status(200).body(result);
     }

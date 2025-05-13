@@ -2,7 +2,7 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Model.MoyasarPayment;
 import com.example.final_project.Model.TaxReports;
-import com.example.final_project.Model.User;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Service.MoyasarPaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
@@ -21,8 +21,8 @@ public class MoyasarPaymentController {
     private final MoyasarPaymentService moyasarPaymentService;
 
     @PostMapping("/pay-tax/tax-report/{taxReportId}")
-    public ResponseEntity<?> processPayment(@AuthenticationPrincipal User user, @PathVariable Integer taxReportId, @RequestBody @Valid MoyasarPayment moyasarPayment) throws IOException {
-        return ResponseEntity.status(200).body(moyasarPaymentService.processPayment(user.getId(), taxReportId, moyasarPayment));
+    public ResponseEntity<?> processPayment(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId, @RequestBody @Valid MoyasarPayment moyasarPayment) throws IOException {
+        return ResponseEntity.status(200).body(moyasarPaymentService.processPayment(myUser.getId(), taxReportId, moyasarPayment));
     }
 
     @GetMapping("/get-status/{id}")

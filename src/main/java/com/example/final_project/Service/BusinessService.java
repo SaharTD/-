@@ -115,7 +115,7 @@ public class BusinessService {
         }
 
         if (!taxPayer.getIsActive()) {
-            throw new ApiException("Tax Payer :" + taxPayer.getUser().getName() + " is not Active"
+            throw new ApiException("Tax Payer :" + taxPayer.getMyUser().getName() + " is not Active"
                     + "--inactive taxpayers are unable to add business");
         }
 

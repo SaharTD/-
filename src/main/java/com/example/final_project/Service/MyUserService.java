@@ -1,7 +1,7 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
-import com.example.final_project.Model.User;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Repository.MyUserRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,44 +18,44 @@ public class MyUserService {
     private final MyUserRepository myUserRepository;
 
     // authority -> ADMIN
-    public List<User> getAllUser(Integer id) {
-        User admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
+    public List<MyUser> getAllUser(Integer id) {
+        MyUser admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
         return myUserRepository.findAll();
     }
 
-    public void addAdmin(User user) {
+    public void addAdmin(MyUser myUser) {
 
-        String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-        user.setPassword(hashPassword);
-        user.setRole("ADMIN");
-        user.setAccountant(null);
-        user.setAuditor(null);
-        user.setTaxPayer(null);
-        myUserRepository.save(user);
+        String hashPassword = new BCryptPasswordEncoder().encode(myUser.getPassword());
+        myUser.setPassword(hashPassword);
+        myUser.setRole("ADMIN");
+        myUser.setAccountant(null);
+        myUser.setAuditor(null);
+        myUser.setTaxPayer(null);
+        myUserRepository.save(myUser);
     }
 
-    public void updateUser(Integer username, User user) {
-        User oldUser = myUserRepository.findUserById(username);
-        if (oldUser == null) {
+    public void updateUser(Integer username, MyUser myUser) {
+        MyUser oldMyUser = myUserRepository.findUserById(username);
+        if (oldMyUser == null) {
             throw new ApiException("user not found");
         }
 
-        oldUser.setUsername(user.getUsername());
-        String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-        oldUser.setPassword(hashPassword);
-        oldUser.setEmail(user.getEmail());
-        oldUser.setName(user.getName());
+        oldMyUser.setUsername(myUser.getUsername());
+        String hashPassword = new BCryptPasswordEncoder().encode(myUser.getPassword());
+        oldMyUser.setPassword(hashPassword);
+        oldMyUser.setEmail(myUser.getEmail());
+        oldMyUser.setName(myUser.getName());
 
-        myUserRepository.save(oldUser);
+        myUserRepository.save(oldMyUser);
     }
 
 
     public void deleteUser(Integer username) {
-        User user = myUserRepository.findUserById(username);
-        if (user == null) {
+        MyUser myUser = myUserRepository.findUserById(username);
+        if (myUser == null) {
             throw new ApiException("user not found");
         }
-        myUserRepository.delete(user);
+        myUserRepository.delete(myUser);
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.final_project.Service;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.DTO.AccountantDTO;
 import com.example.final_project.Model.*;
-import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.Accountant;
 import com.example.final_project.Repository.*;
 import lombok.RequiredArgsConstructor;
@@ -66,11 +65,11 @@ public class AccountantService {
         if (accountant==null){
             throw new ApiException("Accountant not found");
         }
-        User user = accountant.getUser();
-        user.setName(accountantDTO.getName());
-        user.setUsername(accountantDTO.getUsername());
-        user.setPassword(accountantDTO.getPassword());
-        user.setEmail(accountantDTO.getEmail());
+        MyUser myUser = accountant.getMyUser();
+        myUser.setName(accountantDTO.getName());
+        myUser.setUsername(accountantDTO.getUsername());
+        myUser.setPassword(accountantDTO.getPassword());
+        myUser.setEmail(accountantDTO.getEmail());
 
         accountantRepository.save(accountant);
     }
@@ -148,7 +147,6 @@ public class AccountantService {
 
         accountant.setBranch(branch);
         accountantRepository.save(accountant);
-
 
     }
 

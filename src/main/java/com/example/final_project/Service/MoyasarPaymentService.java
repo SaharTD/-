@@ -19,7 +19,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,7 +60,7 @@ public class MoyasarPaymentService {
         params.add("description", moyasarPayment.getDescription());
         params.add("callback_url", "http://localhost:5000/api/v1/moyasar-payment/callback");
         params.add("source[type]", "card"); // or "sadad", "mada", "applepay" "creditcard"
-        params.add("source[name]", taxPayer.getUser().getName());
+        params.add("source[name]", taxPayer.getMyUser().getName());
         params.add("source[number]", moyasarPayment.getNumber());
         params.add("source[month]", moyasarPayment.getMonth());
         params.add("source[year]", moyasarPayment.getYear());

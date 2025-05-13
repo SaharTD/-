@@ -38,33 +38,37 @@ public class ConfigurationSecurity {
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
-
-                .requestMatchers("/api/v1/auditor/add").hasAuthority("ADMIN")
-                //   AUDITOR
-                .requestMatchers(
-                        "/api/v1/taxReports/add/**",
-                        "/api/v1/taxReports/get",
-                        "/api/v1/taxReports/update/**",
-                        "/api/v1/taxReports/delete/**",
-                        "/api/v1/taxReports/apply-penalty/**",
-                        "/api/v1/taxReports/apply-2month-penalty/**",
-                        "/api/v1/taxReports/apply-legal-action/**",
-                        "/api/v1/taxReports/due-payment",
-                        "/api/v1/taxReports/reports/**",
-                        "/api/v1/taxReports/report-count/**",
-                        "/api/v1/taxReports/approval-rate/**",
-                        "/api/v1/taxReports/bulk-approve/**",
-                        "/api/v1/taxReports/latest-report",
-                        "/api/v1/taxReports/unapproved",
-                        "/api/v1/taxReports/*/payment-status",
-                        "/api/v1/auditor/create-tax-report/**",
-                        "/api/v1/auditor/activate-business/**",
-                        "/api/v1/auditor/approve-tax-report/**",
-                        "/api/v1/auditor/reject-tax-report/**"
-                ).hasRole("AUDITOR")
-
+                .requestMatchers("/api/v1/tax-payer/tax-payer-register").permitAll()
+                .requestMatchers("/api/v1/business/add-business",
+                                 "/api/v1/branch/add/",
+                                "api/v1/tax-payer/add-accountant/",
+                                   "api/v1/accountant/assign-accountant-to-branch/accountant/").hasAuthority("TAXPAYER")
+                .requestMatchers("/api/v1/product/add/").hasAuthority("ACCOUNTANT")
+                //   AUDITOR tax report
+//                .requestMatchers(
+//                        "/api/v1/taxReports/add",
+//                        "/api/v1/taxReports/get",
+//                        "/api/v1/taxReports/update",
+//                        "/api/v1/taxReports/delete")
+//                .hasAuthority("AUDITOR")
+//
+//                .requestMatchers( "/api/v1/taxReports/apply-penalty/**",
+//                        "/api/v1/taxReports/apply-2month-penalty/**",
+//                        "/api/v1/taxReports/apply-legal-action/**",
+//                        "/api/v1/taxReports/due-payment",
+//                        "/api/v1/taxReports/reports/**",
+//                        "/api/v1/taxReports/report-count/**",
+//                        "/api/v1/taxReports/approval-rate/**",
+//                        "/api/v1/taxReports/bulk-approve/**",
+//                        "/api/v1/taxReports/latest-report",
+//                        "/api/v1/taxReports/unapproved",
+//                        "/api/v1/taxReports/*/payment-status",
+//                        "/api/v1/auditor/create-tax-report/**",
+//                        "/api/v1/auditor/activate-business/**",
+//                        "/api/v1/auditor/approve-tax-report/**",
+//                        "/api/v1/auditor/reject-tax-report/**"
+//                ).hasRole("AUDITOR")
                 .anyRequest().authenticated()
-
                 .and()
                 .logout()
                 .logoutUrl("/api/v1/user/logout")

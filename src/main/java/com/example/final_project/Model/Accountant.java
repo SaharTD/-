@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -36,6 +34,10 @@ public class Accountant {
 
 
 
+    @Column(columnDefinition = "varchar(10) not null unique")
+    @NotEmpty(message = "the phone number should not be empty")
+    @Pattern(regexp = "^05[0-9]{8}$",message = " please enter correct phone number")
+    private String phoneNumber;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastActiveCounterBox;
@@ -45,7 +47,7 @@ public class Accountant {
     @MapsId
     @JsonIgnore
     @JoinColumn(name = "id")
-    private User user;
+    private MyUser myUser;
 
     @JsonIgnore
     @OneToMany(mappedBy = "accountant")

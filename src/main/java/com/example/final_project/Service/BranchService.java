@@ -36,7 +36,6 @@ public class BranchService {
 
     public void addBranch(Integer taxPayerID,Integer businessId, Branch branch){
 
-
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerID);
 
         if (taxPayer == null) {
@@ -46,7 +45,6 @@ public class BranchService {
         Business business = businessRepository.findBusinessById(businessId);
         if (business==null)
             throw new ApiException("business not found");
-
 
 
         if (branchRepository.findBranchesById(branch.getId())!=null){

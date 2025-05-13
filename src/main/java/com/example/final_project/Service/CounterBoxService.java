@@ -6,13 +6,10 @@ import com.example.final_project.Model.Accountant;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
 import com.example.final_project.Notification.NotificationService;
-import com.example.final_project.Model.Sales;
 import com.example.final_project.Repository.AccountantRepository;
 import com.example.final_project.Repository.BranchRepository;
 import com.example.final_project.Repository.CounterBoxRepository;
-import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -169,7 +166,7 @@ public class CounterBoxService {
         for (CounterBox cb:counterBoxes){
             cb.setCloseDatetime(LocalDateTime.now());
             cb.setStatus("Closed");
-            String sendTo= cb.getBranch().getBusiness().getTaxPayer().getUser().getEmail();
+            String sendTo= cb.getBranch().getBusiness().getTaxPayer().getMyUser().getEmail();
             notificationService.sendEmail(sendTo,"Closing Counter Box","Dear customer \n we have closed your counter box because it was opening for 12 hours");
         }
         counterBoxRepository.saveAll(counterBoxes);

@@ -1,10 +1,8 @@
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
-import com.example.final_project.Api.ApiResponse;
-import com.example.final_project.DTOOUT.TaxReportStatusDTO;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Model.TaxReports;
-import com.example.final_project.Model.User;
 import com.example.final_project.Service.TaxReportsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,46 +23,46 @@ public class TaxReportsController {
     private final TaxReportsService taxReportsService;
 
     @GetMapping("/get")
-    public ResponseEntity getAllTaxReports(@AuthenticationPrincipal User user){
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getAllTaxReports(user.getId()));
+    public ResponseEntity getAllTaxReports(@AuthenticationPrincipal MyUser myUser){
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getAllTaxReports(myUser.getId()));
     }
 
     @PostMapping("/add/{business_id}")
-    public ResponseEntity addTaxReports(@AuthenticationPrincipal User user, @PathVariable Integer business_id, @Valid @RequestBody TaxReports taxReports){
-        taxReportsService.addTaxReports(user.getId(), business_id, taxReports);
+    public ResponseEntity addTaxReports(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer business_id, @Valid @RequestBody TaxReports taxReports){
+        taxReportsService.addTaxReports(myUser.getId(), business_id, taxReports);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Tax Reports is added!"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity updateTaxReports(@AuthenticationPrincipal User user,@PathVariable Integer id,@Valid @RequestBody TaxReports taxReports){
-        taxReportsService.updateTaxReports(user.getId(),id, taxReports);
+    public ResponseEntity updateTaxReports(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id, @Valid @RequestBody TaxReports taxReports){
+        taxReportsService.updateTaxReports(myUser.getId(),id, taxReports);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Tax Reports is updated"));
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteTaxReports(@AuthenticationPrincipal User user,@PathVariable Integer id){
-        taxReportsService.deleteTaxReports(user.getId(),id);
+    public ResponseEntity deleteTaxReports(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id){
+        taxReportsService.deleteTaxReports(myUser.getId(),id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Tax Reports is deleted"));
     }
 
     //فرض غرامة تاخير سداد بعدها بشهر
     @PutMapping("/apply-penalty/{taxReportId}")
-    public ResponseEntity applyLatePaymentPenalty(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
-        taxReportsService.applyLatePaymentPenalty(user.getId(),taxReportId);
+    public ResponseEntity applyLatePaymentPenalty(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId) {
+        taxReportsService.applyLatePaymentPenalty(myUser.getId(),taxReportId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Late payment penalty applied if applicable"));
     }
 
     //فرض غرامة تاخير سداد بعدها بشهرين
     @PutMapping("/apply-2month-penalty/{taxReportId}")
-    public ResponseEntity applyTwoMonthLatePenalty(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
-        taxReportsService.applyTwoMonthLatePenalty(user.getId(),taxReportId);
+    public ResponseEntity applyTwoMonthLatePenalty(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId) {
+        taxReportsService.applyTwoMonthLatePenalty(myUser.getId(),taxReportId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("10% penalty applied for 2-month late payment"));
     }
 
     //في حال تجاوز 90 يوم يتم اتخاذ الإجراءات القانونية
     @PutMapping("/apply-legal-action/{taxReportId}")
-    public ResponseEntity applyLegalAction(@AuthenticationPrincipal User user,@PathVariable Integer taxReportId) {
-        taxReportsService.applyLegalActionForTaxEvasion(user.getId(),taxReportId);
+    public ResponseEntity applyLegalAction(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer taxReportId) {
+        taxReportsService.applyLegalActionForTaxEvasion(myUser.getId(),taxReportId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Legal action applied for tax evasion"));
     }
 
@@ -73,50 +71,50 @@ public class TaxReportsController {
 //################################
 // التقارير المستحقه لدفع وغير مدفوعه
     @GetMapping("/due-payment")
-    public ResponseEntity getUnpaidDueTaxReports(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getUnpaidDueTaxReports(user.getId()));
+    public ResponseEntity getUnpaidDueTaxReports(@AuthenticationPrincipal MyUser myUser) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getUnpaidDueTaxReports(myUser.getId()));
     }
 
 
 
     @GetMapping("/reports/{auditorId}")
-    public ResponseEntity getReportsByAuditor(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportsByAuditor(user.getId()));
+    public ResponseEntity getReportsByAuditor(@AuthenticationPrincipal MyUser myUser) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportsByAuditor(myUser.getId()));
     }
 
     // 2. Get report count by status for an auditor
     @GetMapping("/report-count/{auditorId}/{status}")
-    public ResponseEntity getReportCountByStatus(@AuthenticationPrincipal User user, @PathVariable String status) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportCountByStatus(user.getId(), status));
+    public ResponseEntity getReportCountByStatus(@AuthenticationPrincipal MyUser myUser, @PathVariable String status) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getReportCountByStatus(myUser.getId(), status));
     }
 
     // 4. Get approval rate for an auditor
     @GetMapping("/approval-rate/{auditorId}")
-    public ResponseEntity getApprovalRate(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getApprovalRate(user.getId()));
+    public ResponseEntity getApprovalRate(@AuthenticationPrincipal MyUser myUser) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getApprovalRate(myUser.getId()));
     }
 
     // 5. Bulk approve reports for an auditor
     @PutMapping("/bulk-approve/{auditorId}")
-    public ResponseEntity bulkApproveReports(@AuthenticationPrincipal User user, @RequestBody List<Integer> reportIds) {
-        taxReportsService.bulkApproveReports(user.getId(), reportIds);
+    public ResponseEntity bulkApproveReports(@AuthenticationPrincipal MyUser myUser, @RequestBody List<Integer> reportIds) {
+        taxReportsService.bulkApproveReports(myUser.getId(), reportIds);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException("Reports approved successfully"));
     }
 
     // 7. Get latest report reviewed by auditor
     @GetMapping("/latest-report")
-    public ResponseEntity getLatestReport(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(user.getId()));
+    public ResponseEntity getLatestReport(@AuthenticationPrincipal MyUser myUser) {
+        return ResponseEntity.status(HttpStatus.OK).body(taxReportsService.getLatestReportByAuditor(myUser.getId()));
     }
 
     @GetMapping("/unapproved")
-    public ResponseEntity getUnapprovedTaxReports(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(200).body(taxReportsService.getUnapprovedTaxReports(user.getId()));
+    public ResponseEntity getUnapprovedTaxReports(@AuthenticationPrincipal MyUser myUser) {
+        return ResponseEntity.status(200).body(taxReportsService.getUnapprovedTaxReports(myUser.getId()));
     }
 
     @GetMapping("/{reportId}/payment-status")
-    public ResponseEntity getPaymentStatus(@AuthenticationPrincipal User user,@PathVariable Integer reportId) {
-        return ResponseEntity.status(200).body(taxReportsService.getPaymentStatusByReportId(user.getId(),reportId));
+    public ResponseEntity getPaymentStatus(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer reportId) {
+        return ResponseEntity.status(200).body(taxReportsService.getPaymentStatusByReportId(myUser.getId(),reportId));
     }
 //888888888888888888 دجى
     @GetMapping("/notify-upcoming-payment")
@@ -127,13 +125,13 @@ public class TaxReportsController {
 
     // Endpoint 37
     @GetMapping("/get-tax-reports/tax-payer/{taxPayerId}")
-    public ResponseEntity printTaxReportForEveryBusinesses(@AuthenticationPrincipal User user){
-        return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(user.getId()));
+    public ResponseEntity printTaxReportForEveryBusinesses(@AuthenticationPrincipal MyUser myUser){
+        return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(myUser.getId()));
     }
 
     @GetMapping("/print/{reportId}")
-    public ResponseEntity<byte[]> printTaxReportAsPdf(@AuthenticationPrincipal User user, @PathVariable Integer reportId) {
-        byte[] pdf = taxReportsService.getTaxReportAsPdf(user.getId(),reportId);
+    public ResponseEntity<byte[]> printTaxReportAsPdf(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer reportId) {
+        byte[] pdf = taxReportsService.getTaxReportAsPdf(myUser.getId(),reportId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + reportId + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)

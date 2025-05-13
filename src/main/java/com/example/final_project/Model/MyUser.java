@@ -8,11 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Check;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public class MyUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,29 +43,28 @@ public class User implements UserDetails {
     @Email(message = "email must be valid")
     private String email;
 
-    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT'))") @NotEmpty(message = "role must ne not empty")
-    @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
+//    @Column(columnDefinition ="varchar(20) CHECK(role IN ('TAXPAYER','AUDIT','ACCOUNTANT','ADMIN'))") @NotEmpty(message = "role must ne not empty")
+@Column(columnDefinition ="varchar(20)")
+@Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
     private String role;
 
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "myUser")
     @PrimaryKeyJoinColumn
     private Auditor auditor;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "myUser")
     @PrimaryKeyJoinColumn
     private Accountant accountant;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "myUser")
     @PrimaryKeyJoinColumn
     private TaxPayer taxPayer;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return Collections.singleton(new SimpleGrantedAuthority(this.role));
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

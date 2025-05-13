@@ -27,7 +27,7 @@ public class Auditor {
     @MapsId
     @JsonIgnore
     @JoinColumn(name = "id")
-    private User user;
+    private MyUser myUser;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "auditor")
     private Set<TaxPayer> taxPayers;
