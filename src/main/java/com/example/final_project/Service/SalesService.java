@@ -18,6 +18,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.id.IntegralDataTypeHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -528,16 +529,19 @@ public class SalesService {
         salesRepository.save(oldSales);
     }
 
-    public void deleteSales(Integer id,Integer saleId){
-        MyUser admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
-        if (admin==null)
+
+    public void deleteSales(Integer accountantId,Integer saleId){
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant==null)
             throw new ApiException("you don't have permission");
         Sales sales=salesRepository.findSalesById(saleId);
-
         if(sales==null){
             throw new ApiException("Sales not found");
         }
 
+        Set<ItemSale> itemSale = sales.getItemSales();
+
+        itemSaleRepository.deleteAll(itemSale);
         salesRepository.delete(sales);
     }
 
@@ -666,6 +670,28 @@ public class SalesService {
     }
 
 
+
+    public void refundSale(Integer accountantId,Integer saleId){
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant==null)
+            throw new ApiException("cannot access you should be an accountant");
+        Sales sales = salesRepository.findSalesById(saleId);
+        if (sales==null)
+            throw new ApiException("Sale not found ");
+        if (sales.getSalesStatus().equals("Refunded"))
+            throw new ApiException("This sale is already refunded");
+
+        List<ItemSale> itemSale = (List<ItemSale>) sales.getItemSales();
+        for (ItemSale is:itemSale){
+            Product p = is.getProduct();
+            p.setStock(p.getStock()+is.getQuantity());
+            p.getItemSales().remove(is);
+            productRepository.save(p);
+        }
+
+        sales.setSalesStatus("Refunded");
+        salesRepository.save(sales);
+    }
 
 
 
