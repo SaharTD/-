@@ -1,4 +1,3 @@
-/*
 package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
@@ -48,9 +47,9 @@ public class SalesController {
     }
 
     // authority -> Accountant
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id){
-        salesService.deleteSales(myUser.getId(),id);
+    @DeleteMapping("delete/{saleId}")
+    public ResponseEntity deleteSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer saleId){
+        salesService.deleteSales(myUser.getId(),saleId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
     }
 
@@ -63,6 +62,7 @@ public class SalesController {
 //    }
 
     // authority -> Accountant
+    //sahar - 3
     @PostMapping("add-sale/{boxId}")
     public ResponseEntity addSales(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer boxId, @RequestBody @Valid SaleDTO saleDTO ) {
         salesService.addSales(accountant.getId(), boxId,saleDTO);
@@ -86,6 +86,7 @@ public class SalesController {
     }
 
     // authority -> Accountant
+    //    //sahar - 2
     @PutMapping("/confirm-sale/{saleId}")
     public ResponseEntity confirmSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId){
         salesService.confirmSale(accountant.getId(), saleId);
@@ -128,7 +129,12 @@ public class SalesController {
     }
 
 
+    @PutMapping("/refund-sale/{saleId}")
+    public ResponseEntity refundSale(@AuthenticationPrincipal MyUser accountant,@PathVariable Integer saleId) {
+        salesService.refundSale(accountant.getId(), saleId);
+        return ResponseEntity.status(200).body(new ApiResponse("Sale refunded"));
+    }
+
 
 
 }
-*/

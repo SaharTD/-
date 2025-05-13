@@ -18,6 +18,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.id.IntegralDataTypeHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -74,7 +75,7 @@ public class SalesService {
         }
 
         Sales newSale=new Sales();
-       // newSale.setSalesStatus("DRAFT");
+        newSale.setSalesStatus("DRAFT");
         newSale.setBranch(branch);
         newSale.setSale_invoice(saleDTO.getSale_invoice());
         newSale.setCounterBox(counterBox);
@@ -111,12 +112,12 @@ public class SalesService {
 
         }
 
-     /*   if (!currentSale.getSalesStatus().equals("DRAFT")){
+        if (!currentSale.getSalesStatus().equals("DRAFT")){
             throw new ApiException("Sorry can not add product to confirmed invoice ");
 
-        }*/
+        }
 
-/// create new item sale
+        /// create new item sale
         ItemSale itemSale=new ItemSale();
         itemSale.setSales(currentSale);
         itemSale.setProductName(product.getName());
@@ -126,8 +127,8 @@ public class SalesService {
         itemSale.setTotalPrice(product.getPrice()* item.getQuantity());
 
         product.setStock(product.getStock()-item.getQuantity());
-        itemSaleRepository.save(itemSale);
         productRepository.save(product);
+        itemSaleRepository.save(itemSale);
 
     }
 
@@ -155,6 +156,8 @@ public class SalesService {
         sale.setTotal_amount(subTotal);
         sale.setTax_amount(tax);
         sale.setGrand_amount(grandTotal);
+        salesRepository.save(sale);
+
 
     }
 
@@ -175,9 +178,9 @@ public class SalesService {
 
         }
 
-       /* if (!currentSale.getSalesStatus().equals("DRAFT")){
+        if (!currentSale.getSalesStatus().equals("DRAFT")){
             throw new ApiException("Sorry can not add product to confirmed invoice ");
-        }*/
+        }
 
         List<ItemSale> items =itemSaleRepository.findItemSaleBySalesId(saleId);
         if (items.isEmpty()){
@@ -186,13 +189,16 @@ public class SalesService {
 
 
         updateCalculations(saleId);
-       // currentSale.setSalesStatus("CONFIRMED");
-        //currentSale.setSaleDate(LocalDateTime.now());
+        currentSale.setSalesStatus("CONFIRMED");
+        currentSale.setSaleDate(LocalDateTime.now());
         salesRepository.save(currentSale);
+
+
+
 
     }
 
-//
+
 
     public ItemSale updateProductQuantity(Integer accountantId, Integer saleId, Integer itemId, Integer newQuantity) {
 
@@ -210,9 +216,9 @@ public class SalesService {
             throw new ApiException("This sale does not belong to this accountant");
         }
 
-       /* if (sale.getSalesStatus().equals("CONFIRMED")) {
+        if (sale.getSalesStatus().equals("CONFIRMED")) {
             throw new ApiException("Cannot update product quantity for a confirmed invoice");
-        }*/
+        }
         ItemSale itemSale = itemSaleRepository.findById(itemId)
             .orElseThrow(() -> new ApiException("Item not found"));
 
@@ -237,165 +243,7 @@ public class SalesService {
         return itemSale;
     }
 
-    //create
-//    public ItemSale updateProductQuantity(Integer accounterId, Integer itemid, Integer quantity){
-//
-//        if (itemid==null){
-//            throw new ApiException("items not found");
-//        }
-//
-//        Accountant accountant = accountantRepository.findAccountantById(accounterId);
-//        if (accountant == null) {
-//            throw new ApiException("Accountant not found");
-//        }
-//
-//        Sales currentSale = salesRepository.findSalesById(itemid);
-//        if (currentSale == null) {
-//            throw new ApiException("Sale not found");
-//        }
-//
-//        if (currentSale.getSalesStatus().equals("CONFIRMED")) {
-//            throw new ApiException("Cannot update quantity of a confirmed invoice");
-//        }
-//
-//        Product product = currentSale.getProduct();
-//        int quantityDifference = quantity -itemSale.getQuantity();
-//
-//        if (product.getStock() < quantityDifference) {
-//            throw new ApiException("Insufficient stock");
-//        }
-//
-//
-//        product.setStock(product.getStock()-quantityDifference);
-//        productRepository.save(product);
-//
-//        itemSale.setQuantity(quantity);
-//        itemSale = itemSaleRepository.save(itemSale);
-//
-//        return itemSale;
-//    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//    public byte[] printInvoice(Integer accountantId, Integer saleId) {
-//
-//        Accountant accountant = accountantRepository.findAccountantById(accountantId);
-//        if (accountant == null) {
-//            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
-//        }
-//
-//        Sales currentSale = salesRepository.findSalesByIdAndCounterBox_Accountant(saleId,accountant);
-//        if (currentSale == null) {
-//            throw new ApiException("the Invoice is not found ");
-//        }
-//
-//
-//        try {
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            Document document = new Document();
-//            PdfWriter.getInstance(document, baos);
-//            document.open();
-//
-//
-//            try {
-//                InputStream is = getClass().getResourceAsStream("/logo.png");
-//                if (is != null) {
-//                    Image logo = Image.getInstance(is.readAllBytes());
-//                    logo.scaleToFit(120, 120);
-//                    logo.setAlignment(Element.ALIGN_CENTER);
-//                    document.add(logo);
-//                    document.add(Chunk.NEWLINE);
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Logo not found or failed to load.");
-//            }
-//
-//
-//            Paragraph title = new Paragraph("SALE INVOICE", new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
-//            title.setAlignment(Element.ALIGN_CENTER);
-//            document.add(title);
-//            document.add(Chunk.NEWLINE);
-//
-//
-//            document.add(new Paragraph("Generated on: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
-//
-//            document.add(new Paragraph("------------------------------------------------------------"));
-//
-//            document.add(new Paragraph("INVOICE ID: " + currentSale.getId()));
-//            document.add(new Paragraph("Date: " + currentSale.getSaleDate() ));
-//            document.add(new Paragraph("Branch: " + currentSale.getBranch()));
-//            document.add(new Paragraph("------------------------------------------------------------"));
-//
-//
-//            document.add(new Paragraph("Products:"));
-//            PdfPTable table = new PdfPTable(4);
-//            table. setWidthPercentage(100);
-//            table.addCell("Product Name:");
-//            table.addCell(" Quantity:");
-//            table.addCell("Unit Price:");
-//            table.addCell("Total Price:");
-//
-//            Double subTotal = 0.0;
-//            for (Product p : currentSale.getProducts()) {
-//
-//                table.addCell(p.getName());
-//                table.addCell(String.valueOf(p.getQuantity()));
-//                table.addCell(String.valueOf(p.getPrice()));
-//                Double total=p.getQuantity() * p.getPrice();
-//                table.addCell(String.valueOf(total));
-//                subTotal+=total;
-//
-//            }
-//            document.add(table);
-//
-//
-//
-//            currentSale.setTax_amount(subTotal * 0.15);
-//            currentSale.setGrand_amount(subTotal + currentSale.getTax_amount());
-//
-//
-//            /// the total prices tax +grand total after tax
-//            document.add(new Paragraph("------------------------------------------------------------"));
-//            document.add(new Paragraph("Subtotal :" + String.valueOf(subTotal)));
-//            document.add(new Paragraph("Tax (15%) :" + String.valueOf(currentSale.getTax_amount())));
-//            document.add(new Paragraph("Total :" + String.valueOf(currentSale.getGrand_amount())));
-//            document.add(new Paragraph("------------------------------------------------------------"));
-//            document.add(Chunk.NEWLINE);
-//
-//
-//            document.add(new Paragraph("Thank you for shopping with us!"));
-//            document.add(Chunk.NEWLINE);
-//            document.add(new Paragraph("Mohasil Team", new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC)));
-//
-//            document.close();
-//
-//
-//            currentSale.setSaleDate(LocalDateTime.now());
-//            salesRepository.save(currentSale);
-//
-//
-//            return baos.toByteArray();
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to generate PDF", e);
-//        }
-//
-//
-//
-//
-//    }
-//
 
 
 
@@ -449,7 +297,7 @@ public class SalesService {
             document.add(new Paragraph("------------------------------------------------------------"));
 
             document.add(new Paragraph("INVOICE ID: " + currentSale.getSale_invoice()));
-          //  document.add(new Paragraph("Date: " + currentSale.getSaleDate()));
+            document.add(new Paragraph("Date: " + currentSale.getSaleDate()));
             document.add(new Paragraph("Branch: " + currentSale.getBranch().getBranchNumber()));
             document.add(new Paragraph("------------------------------------------------------------"));
 
@@ -468,7 +316,6 @@ public class SalesService {
             table.addCell("Total Price:");
 
            List <ItemSale> items=itemSaleRepository.findItemSaleBySalesId(saleId);
-
 
             for (ItemSale item : items) {
 
@@ -499,8 +346,7 @@ public class SalesService {
             document.add(new Paragraph("Mohasil Team", new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC)));
 
             document.close();
-           // currentSale.setSaleDate(LocalDateTime.now());
-            salesRepository.save(currentSale);
+
 
             return baos.toByteArray();
 
@@ -528,16 +374,19 @@ public class SalesService {
         salesRepository.save(oldSales);
     }
 
-    public void deleteSales(Integer id,Integer saleId){
-        MyUser admin = myUserRepository.findUserByIdAndRole(id,"ADMIN");
-        if (admin==null)
+
+    public void deleteSales(Integer accountantId,Integer saleId){
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant==null)
             throw new ApiException("you don't have permission");
         Sales sales=salesRepository.findSalesById(saleId);
-
         if(sales==null){
             throw new ApiException("Sales not found");
         }
 
+        Set<ItemSale> itemSale = sales.getItemSales();
+
+        itemSaleRepository.deleteAll(itemSale);
         salesRepository.delete(sales);
     }
 
@@ -666,6 +515,28 @@ public class SalesService {
     }
 
 
+
+    public void refundSale(Integer accountantId,Integer saleId){
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant==null)
+            throw new ApiException("cannot access you should be an accountant");
+        Sales sales = salesRepository.findSalesById(saleId);
+        if (sales==null)
+            throw new ApiException("Sale not found ");
+        if (sales.getSalesStatus().equals("Refunded"))
+            throw new ApiException("This sale is already refunded");
+
+        List<ItemSale> itemSale = (List<ItemSale>) sales.getItemSales();
+        for (ItemSale is:itemSale){
+            Product p = is.getProduct();
+            p.setStock(p.getStock()+is.getQuantity());
+            p.getItemSales().remove(is);
+            productRepository.save(p);
+        }
+
+        sales.setSalesStatus("Refunded");
+        salesRepository.save(sales);
+    }
 
 
 

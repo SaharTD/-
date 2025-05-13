@@ -44,71 +44,80 @@ public class ConfigurationSecurity {
                 .requestMatchers("/api/v1/user/update")
                 .hasAnyAuthority("ADMIN","AUDITOR","TAXPAYER","ACCOUNTANT")
                 .requestMatchers(
-                        "/api/v1/business/add-business",
+                        "/api/v1/business/add-business/",
                         "/api/v1/branch/add/",
                         "/api/v1/tax-payer/add-accountant/",
-                        "/api/v1/accountant/assign-accountant-to-branch/accountant/",
-                        "/api/v1/moyasar-payment/pay-tax/tax-report/{{taxReportId}}",
-                        "/api/v1/tax-payer/get-all-tax-payers/{{taxPayerId}}",
+                        "/api/v1/accountant/assign-accountant-to-branch/",
+                        "/api/v1/moyasar-payment/pay-tax/tax-report",
                         "/api/v1/tax-payer/tax-payer-register",
-                        "/api/v1/tax-payer/update/{{taxPayerId}}",
-                        "/api/v1/tax-payer/delete/{{taxPayerId}}",
-                        "/api/v1/tax-payer/add-accountant/{{taxPayerID}}/{{branchId}}",
-                        "/api/v1/tax-payer/activate-accountant/tax-payer/{{taxPayerId}}/accountant/{{accountantId}}",
-                        "/api/v1/tax-payer/de-activate-accountant/tax-payer/{{taxPayerId}}/accountant/{{accountantId}}",
-                        "/api/v1/tax-payer/de-activate-accountant/tax-payer/{{taxPayerId}}/accountant/{{accountantId}}",
-                        "/api/v1/tax-payer/taxpayers/{{taxPayerId}}/accountants",
-                        "/api/v1/tax-payer/block-inactive-accountant/{{taxPayerId}}/{{accountantId}}",
-                        "/api/v1/business/get-all-business/{{auditId}}",
-                        "/api/v1/business/get-my-business/{{taxPayerId}}/{{bId}}",
-                        "/api/v1/business/get-number-of-branches/{{taxPayerId}}/{{bI}}",
-                        "/api/v1/business/get-my-businesses/{{taxPayerId}}",
-                        "/api/v1/business/add-business/{{taxPayerId}}",
-                        "/api/v1/business/update/{{taxPayerId}}/{{businessId}}",
-                        "/api/v1/business/delete/{{taxPayerId}}/{{businessId}}",
-                        "/api/v1/business/sales-business/{{taxPayerId}}/{{businessId}}",
-                        "/api/v1/business/business-revenue/{{taxPayerId}}/{{businessId}}")  //24
+                        "/api/v1/tax-payer/update",
+                        "/api/v1/tax-payer/delete",
+                        "/api/v1/tax-payer/activate-accountant",
+                        "/api/v1/tax-payer/de-activate-accountant",
+                        "/api/v1/tax-payer/block-inactive-accountant",
+                        "/api/v1/business/get-my-business",
+                        "/api/v1/business/get-number-of-branches",
+                        "/api/v1/business/get-my-businesses",
+                        "/api/v1/business/add-business",
+                        "/api/v1/business/update",
+                        "/api/v1/business/delete",
+                        "/api/v1/business/sales-business",
+                        "/api/v1/business/business-revenue",
+                        "/api/v1/branch/branch-revenue/",
+                        "/api/v1/accountant/get-accountant-by-branch/",
+                        "/api/v1/accountant/get-accountant-by-business/")  //20
                 .hasAuthority("TAXPAYER")
                 .requestMatchers(
                         "/api/v1/product/add/",
-                        "/api/v1/accountant/get-accountant-by-branch/{{branchId}}",
-                        "/api/v1/accountant/get-accountant-by-business/{{businessId}}",
-                        "/api/v1/accountant/assign-accountant-to-branch/accountant/{{accountantId}}/{{branchId}}",
-                        "/api/v1/accountant/update/{{id}}",
-                        "/api/v1/accountant/delete/{{id}}",
-                        "/api/v1/accountant/restock-product/accountant/{{accountantId}}/product/{{productId}}/amount/{{amount}}",
-                        "/api/v1/counterbox/open/{{boxId}}/api/v1/counterbox/close/{{boxId}}",
+                        "/api/v1/accountant/update",
+                        "/api/v1/accountant/delete",
+                        "/api/v1/accountant/restock-product",
+                        "/api/v1/counterbox/open",
                         "/api/v1/counterbox/create",
+                        "/api/v1/counterbox/get-all",
                         "/api/v1/counterbox/get",
-                        "/api/v1/counterbox/get/{{id}}",
-                        "/api/v1/counterbox/update/{{id}}",
-                        "/api/v1/counterbox/delete/{{id}}",
-                        "/api/v1/counterbox/close-opened-counter-box")  // 14
+                        "/api/v1/counterbox/update",
+                        "/api/v1/counterbox/delete",
+                        "api/v1/counterbox/close-opened-counter-box",
+                        "/api/v1/sales/add-sale/{boxId}",
+                        "/api/v1/sales/add-product-in-sale",
+                        "/api/v1/item-sales/remove",
+                        "/api/v1/sales/update-quantity",
+                        "/api/v1/sales/confirm-sale" ,
+                        "/api/v1/sales/print-sale",
+                      "/api/v1/product/add-to-branch" +
+                              "/api/v1/product/get" +
+                              "/api/v1/product/update",
+                             "/api/v1/product/delete",
+                            "/api/v1/product/barcode")  // 20
                 .hasAuthority("ACCOUNTANT")
                 .requestMatchers(
                         "/api/v1/taxReports/add",
                         "/api/v1/taxReports/get",
                         "/api/v1/taxReports/update",
                         "/api/v1/taxReports/delete",
-                        "/api/v1/taxReports/apply-penalty/**",
-                        "/api/v1/taxReports/apply-2month-penalty/**",
-                        "/api/v1/taxReports/apply-legal-action/**",
+                        "/api/v1/taxReports/apply-penalty",
+                        "/api/v1/taxReports/apply-2month-penalty",
+                        "/api/v1/taxReports/apply-legal-action",
                         "/api/v1/taxReports/due-payment",
-                        "/api/v1/taxReports/reports/**",
-                        "/api/v1/taxReports/report-count/**",
-                        "/api/v1/taxReports/approval-rate/**",
-                        "/api/v1/taxReports/bulk-approve/**",
+                        "/api/v1/taxReports/reports",
+                        "/api/v1/taxReports/report-count",
+                        "/api/v1/taxReports/approval-rate",
+                        "/api/v1/taxReports/bulk-approve",
                         "/api/v1/taxReports/latest-report",
                         "/api/v1/taxReports/unapproved",
-                        "/api/v1/taxReports/*/payment-status",
-                        "/api/v1/auditor/create-tax-report/**",
-                        "/api/v1/auditor/activate-business/**",
-                        "/api/v1/auditor/approve-tax-report/**",
-                        "/api/v1/auditor/reject-tax-report/**") //19
+                        "/api/v1/auditor/create-tax-report",
+                        "/api/v1/auditor/activate-business/{taxPayerId}/{businessId}",
+                        "/api/v1/auditor/approve-tax-report",
+                        "/api/v1/auditor/reject-tax-report",
+                        "/api/v1/tax-payer/get-all-tax-payers",
+                        "/api/v1/business/get-all-business")//20+ get all TPs
                 .hasAuthority("AUDITOR")
                 .requestMatchers(
-                        "/api/v1/taxReports/reports/{{auditorId}}",
-                        "/api/v1/taxReports/approval-rate/{{auditorId}}")
+                        "/api/v1/taxReports/reports/{auditorId}",
+                        "/api/v1/taxReports/approval-rate/{auditorId}",
+                         "/api/v1/admin/activate/",
+                        "/api/v1/auditor/add")
                 .hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
@@ -121,20 +130,5 @@ public class ConfigurationSecurity {
 
         return httpSecurity.build();
     }
-//    .requestMatchers("/api/v1/business/add-business",
-//                            "/api/v1/branch/add/",
-//                            "api/v1/tax-payer/add-accountant/",
-//                            "api/v1/accountant/assign-accountant-to-branch/accountant/").hasAuthority("TAXPAYER")
-//
-//                    .requestMatchers("/api/v1/product/add/",
-//                            "/api/v1/counterbox/create",
-//                            "/api/v1/counterbox/open/",
-//                            "/api/v1/counterbox/close/," ,
-//                            "/api/v1/sales/add-sale/{boxId}",
-//                            "/api/v1/sales/add-product-in-sale/{saleId}",
-//                            "/api/v1/item-sales/remove/",
-//                            "/api/v1/sales/confirm-sale/," ,
-//                             "/api/v1/sales/print-sale/").hasAuthority("ACCOUNTANT")
-
 
 }

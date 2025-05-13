@@ -1,15 +1,10 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
-import com.example.final_project.Model.Accountant;
-import com.example.final_project.Model.Branch;
-import com.example.final_project.Model.Product;
-import com.example.final_project.Model.Sales;
+import com.example.final_project.DTO.ProductDTO;
+import com.example.final_project.Model.*;
 import com.example.final_project.Notification.NotificationService;
-import com.example.final_project.Repository.AccountantRepository;
-import com.example.final_project.Repository.BranchRepository;
-import com.example.final_project.Repository.ProductRepository;
-import com.example.final_project.Repository.SalesRepository;
+import com.example.final_project.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,58 +17,61 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
     private final AccountantRepository accountantRepository;
-    private final NotificationService notificationService;
-    private final SalesRepository salesRepository;
+    private final BusinessRepository businessRepository;
 
 
-    //by accountant
-    public void addProductToBranch(Integer accountantId, Integer branchId, Product product) {
-        Accountant accountant = accountantRepository.getReferenceById(accountantId);
+
+
+    public void addProductToBranch(Integer accountantId, Integer branchId, ProductDTO product) {
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
         if (accountant == null) throw new ApiException("Accountant not found");
 
-        Branch branch = branchRepository.getReferenceById(branchId);
+        Branch branch = branchRepository.findBranchesById(branchId);
         if (branch == null) throw new ApiException("Branch not found");
 
         Product existingProduct = productRepository.findByNameAndBranchId(product.getName(), branchId);
         if (existingProduct != null)
             throw new ApiException("The product is already exist you can edit it");
 
-        product.setBranch(branch);
-        productRepository.save(product);
+
+
+        Product product1=new Product();
+        product1.setName(product.getName());
+        product1.setPrice(product.getPrice());
+        product1.setStock(product.getStock());
+        product1.setBarcode(product.getBarcode());
+
+
+
+        product1.setBranch(branch);
+        productRepository.save(product1);
     }
 
 
-    public List<Product> getAllProduct() {
-        return productRepository.findAll();
-    }
 
-    public void addProduct(Integer accountantId,Integer branchId, Product product) {
 
-        Branch branch = branchRepository.findBranchesById(branchId);
-        if (branch == null) {
-            throw new ApiException("branch not found");
+
+
+
+    public List<Product> getAllProductForBusiness(Integer accountantId) {
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) throw new ApiException("Accountant not found");
+        Business b= businessRepository.findBusinessById(accountant.getBusiness().getId());
+
+        List<Product>productList=productRepository.findProductByBusiness(b.getId());
+        if(productList.isEmpty()){
+            throw new ApiException("no products found ");
         }
-
-        Accountant accountant = accountantRepository.findAccountantByIdAndBranch(accountantId,branch);
-        if (accountant == null) {
-            throw new ApiException("accountant is not found or does not belong to the branch");
-        }
-
-
-/// if business is not active
-        if (!branch.getBusiness().getIsActive()) {
-            throw new ApiException("The business that this branch belong to is not activated");
-
-        }
-
-
-        product.setBranch(branch);
-        branchRepository.save(branch);
-        productRepository.save(product);
+        return productList;
     }
 
 
-    public void updateProduct(Integer branchId, Integer productId, Product product) {
+    public void updateProduct(Integer accountantId,Integer branchId, Integer productId, Product product) {
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) throw new ApiException("Accountant not found");
+
         Branch branch = branchRepository.findBranchesById(branchId);
         Product oldProduct = productRepository.findProductById(productId);
         if (branch == null)
@@ -87,7 +85,7 @@ public class ProductService {
         productRepository.save(oldProduct);
     }
 
-    public void deleteProduct(Integer branchId, Integer productId) {
+    public void deleteProduct(Integer accountantId,Integer branchId, Integer productId) {
         Branch branch = branchRepository.findBranchesById(branchId);
         Product product = productRepository.findProductById(productId);
         if (branch == null)
@@ -101,7 +99,12 @@ public class ProductService {
     }
 
 
-    public Product getProductsByBarcode(String barcode) {
+    // Khalid almutiri
+    public Product getProductsByBarcode(Integer accountantId,String barcode) {
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) throw new ApiException("Accountant not found");
+
         Product products = productRepository.findProductByBarcode(barcode);
         if (products==null) {
             throw new RuntimeException("No products found with barcode: " + barcode);

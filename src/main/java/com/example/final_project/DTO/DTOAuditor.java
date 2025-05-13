@@ -7,10 +7,12 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Check;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class DTOAuditor {
 
 //    private Integer user_id;

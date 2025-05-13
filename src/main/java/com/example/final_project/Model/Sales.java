@@ -3,6 +3,7 @@ package com.example.final_project.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,7 @@ public class Sales {
 
 
 
+    @Pattern(regexp = "^Confirmed|Refunded$")
     private String salesStatus;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

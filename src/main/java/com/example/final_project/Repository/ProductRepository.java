@@ -1,6 +1,7 @@
 package com.example.final_project.Repository;
 
 import com.example.final_project.Model.Branch;
+import com.example.final_project.Model.Business;
 import com.example.final_project.Model.Product;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -22,6 +23,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     Product findProductByName(String name);
 
+    @Query("select p from Product p where p.branch.business.id=?1")
+    List<Product> findProductByBusiness(Integer businessId);
 
 
 

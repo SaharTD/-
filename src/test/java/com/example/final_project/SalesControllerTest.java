@@ -38,7 +38,7 @@ public class SalesControllerTest {
 
     @BeforeEach
     void setUp() {
-        productDTO = new ProductDTO("Nova Water",1,25,"54553478795");
+        productDTO = new ProductDTO("Nova water", 1.0, 5,"3456184658");
     }
 
     @Test
@@ -51,7 +51,7 @@ public class SalesControllerTest {
 //        verify(salesService, times(1)).addProductInSale(eq(1), eq(1), any(ProductDTO.class));
     }
 
-
+    // ✅ Bean configuration بدون @MockBean
     @TestConfiguration
     static class SalesServiceTestConfig {
         @Bean
