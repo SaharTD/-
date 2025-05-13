@@ -195,39 +195,46 @@ public class SalesService {
     }
 
 //
-//
-    //create
-    public ItemSale updateProductQuantity(Integer accounterId, Integer itemid, Integer quantity){
-        ItemSale itemSale = itemSaleRepository.findById(itemid)
-                .orElseThrow(() -> new ApiException("Item sale not found"));
 
-        Accountant accountant = accountantRepository.findAccountantById(accounterId);
+    public ItemSale updateProductQuantity(Integer accountantId, Integer saleId, Integer itemId, Integer newQuantity) {
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
         if (accountant == null) {
             throw new ApiException("Accountant not found");
         }
 
-        Sales currentSale = salesRepository.findSalesById(itemid);
-        if (currentSale == null) {
+        Sales sale = salesRepository.findSalesById(saleId);
+        if (sale == null) {
             throw new ApiException("Sale not found");
         }
 
-        if (!currentSale.getSalesStatus().equals("CONFIRMED")) {
-            throw new ApiException("Cannot update quantity of a confirmed invoice");
+        if (!sale.getCounterBox().getAccountant().getId().equals(accountantId)) {
+            throw new ApiException("This sale does not belong to this accountant");
+        }
+
+        if (sale.getSalesStatus().equals("CONFIRMED")) {
+            throw new ApiException("Cannot update product quantity for a confirmed invoice");
+        }
+        ItemSale itemSale = itemSaleRepository.findById(itemId)
+            .orElseThrow(() -> new ApiException("Item not found"));
+
+        if (!itemSale.getSales().getId().equals(saleId)) {
+            throw new ApiException("This item is not part of the specified sale");
         }
 
         Product product = itemSale.getProduct();
-        int quantityDifference = quantity -itemSale.getQuantity();
+        int quantityDifference = newQuantity - itemSale.getQuantity();
 
         if (product.getStock() < quantityDifference) {
-            throw new ApiException("Insufficient stock");
+            throw new ApiException("Insufficient stock for the new quantity");
         }
 
+        itemSale.setQuantity(newQuantity);
+        itemSale.setTotalPrice(newQuantity * product.getPrice());
+         product.setStock(product.getStock() - quantityDifference);
 
-        product.setStock(product.getStock()-quantityDifference);
-        productRepository.save(product);
-
-        itemSale.setQuantity(quantity);
-        itemSale = itemSaleRepository.save(itemSale);
+         productRepository.save(product);
+         itemSaleRepository.save(itemSale);
 
         return itemSale;
     }

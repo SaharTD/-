@@ -38,7 +38,7 @@ public class ConfigurationSecurity {
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/tax-payer/tax-payer-register").permitAll()
+                .requestMatchers ("/api/v1/tax-report/print/{reportId}").permitAll()
                 .requestMatchers("/api/v1/business/add-business",
                         "/api/v1/branch/add/",
                         "api/v1/tax-payer/add-accountant/",
