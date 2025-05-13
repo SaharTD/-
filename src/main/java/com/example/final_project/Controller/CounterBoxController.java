@@ -10,6 +10,7 @@ import com.example.final_project.Service.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class CounterBoxController {
     public ResponseEntity getAll(){
         return ResponseEntity.status(200).body(counterBoxService.getAllCounterBoxes());
     }
+
 
     @GetMapping("/get")
     public ResponseEntity getById(@AuthenticationPrincipal MyUser account){
@@ -68,7 +70,7 @@ public class CounterBoxController {
     /// Auth->Accountant
     @PatchMapping("/open/{boxId}")
     public ResponseEntity<?> openCounterBox(@AuthenticationPrincipal MyUser Accountant, @PathVariable Integer boxId) {
-        counterBoxService.openCounterBox(Accountant.getId(),boxId);
+        counterBoxService.openCounterBox(boxId,Accountant.getId());
         return ResponseEntity.status(200).body("CounterBox opened successfully");
     }
 
@@ -77,12 +79,14 @@ public class CounterBoxController {
     /// Auth-> Accountant
     @PostMapping("/close/{boxId}")
     public ResponseEntity<String> closeCounterBox(@AuthenticationPrincipal MyUser Accountant, @PathVariable Integer boxId) {
-        String result = counterBoxService.closeCounterBox(Accountant.getId(), boxId);
+        String result = counterBoxService.closeCounterBox(boxId,Accountant.getId());
         return ResponseEntity.status(200).body(result);
     }
 
 
     // Endpoint 7
+    // Auto
+//    @Scheduled
     @PutMapping("/close-opened-counter-box")
     public ResponseEntity closeCounterBoxAuto(){
         counterBoxService.closeCounterBoxAuto();

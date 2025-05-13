@@ -29,7 +29,7 @@ public class MyUserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("user is added"));
     }
 
-    // authority -> any
+    // authority -> any authoirty
     @PutMapping("/update")
     public ResponseEntity updateUser(@AuthenticationPrincipal MyUser myUser, @Valid @RequestBody MyUser myUser2){
         myUserService.updateUser(myUser.getId(), myUser2);

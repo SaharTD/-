@@ -1,6 +1,7 @@
 package com.example.final_project.Service;
 
 import com.example.final_project.Api.ApiException;
+import com.example.final_project.DTO.ItemsDTO;
 import com.example.final_project.DTO.SaleDTO;
 import com.example.final_project.Model.Branch;
 import com.example.final_project.Model.CounterBox;
@@ -14,6 +15,7 @@ import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Model.*;
 import com.example.final_project.Repository.*;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,29 +48,28 @@ public class SalesService {
 
 
 
-    public void addSales(Integer accountantId, Integer counterBox_id, Integer branch_id, SaleDTO saleDTO) {
+    public void addSales(Integer accountantId, Integer counterBox_id,  SaleDTO saleDTO) {
+
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) {
+            throw new ApiException("accountant is not found ");
+        }
 
 
         CounterBox counterBox = counterBoxRepository.findCounterBoxById(counterBox_id);
-        Branch branch = branchRepository.findBranchesById(branch_id);
+        Branch branch = branchRepository.findBranchesById(accountant.getBranch().getId());
 
         if (counterBox == null && branch == null) {
             throw new ApiException("Branch or Counter Box not found ");
         }
 
-
-        Accountant accountant = accountantRepository.findAccountantByIdAndBranch(accountantId, branch);
-        if (accountant == null) {
-            throw new ApiException("accountant is not found or does not belong to the mentioned branch");
-        }
-
-
         if (!accountant.getCounterBoxes().contains(counterBox)) {
-            throw new ApiException("The counter  does not belong to the accountant");
+            throw new ApiException("The counter does not belong to the accountant");
         }
 
 
-        if (!accountant.getCounterBoxes().contains(counterBox) && counterBox.getStatus().equals("Closed")) {
+        if (counterBox.getStatus().equals("Closed")) {
             throw new ApiException("The counter box is closed");
         }
 
@@ -81,7 +82,7 @@ public class SalesService {
     }
 
 
-    public void addProductInSale(Integer accountantId, Integer saleId, ProductDTO productDTO) {
+    public void addProductInSale(Integer accountantId, Integer saleId, ItemsDTO item) {
 
         Accountant accountant = accountantRepository.findAccountantById(accountantId);
         if (accountant == null) {
@@ -98,14 +99,14 @@ public class SalesService {
 
         }
 
-        Product product = productRepository.findProductByBarcode(productDTO.getBarcode());
+        Product product = productRepository.findProductByBarcode(item.getBarcode());
         if (product==null){
             throw new ApiException("Sorry the product is not found . check the  product name again ");
 
         }
 
 
-        if(product.getStock()< productDTO.getStock()){
+        if(product.getStock()< item.getQuantity()){
             throw new ApiException("Sorry the product is out of stock");
 
         }
@@ -115,21 +116,18 @@ public class SalesService {
 
         }
 
-
+/// create new item sale
         ItemSale itemSale=new ItemSale();
         itemSale.setSales(currentSale);
         itemSale.setProductName(product.getName());
         itemSale.setProduct(product);
-        itemSale.setQuantity(productDTO.getStock());
+        itemSale.setQuantity(item.getQuantity());
         itemSale.setUnitPrice(product.getPrice());
-        itemSale.setTotalPrice(product.getPrice()* productDTO.getStock());
+        itemSale.setTotalPrice(product.getPrice()* item.getQuantity());
 
-        product.setStock(product.getStock()-productDTO.getStock());
-        productRepository.save(product);
-
-
+        product.setStock(product.getStock()-item.getQuantity());
         itemSaleRepository.save(itemSale);
-
+        productRepository.save(product);
 
     }
 
@@ -239,7 +237,43 @@ public class SalesService {
         return itemSale;
     }
 
-
+    //create
+//    public ItemSale updateProductQuantity(Integer accounterId, Integer itemid, Integer quantity){
+//
+//        if (itemid==null){
+//            throw new ApiException("items not found");
+//        }
+//
+//        Accountant accountant = accountantRepository.findAccountantById(accounterId);
+//        if (accountant == null) {
+//            throw new ApiException("Accountant not found");
+//        }
+//
+//        Sales currentSale = salesRepository.findSalesById(itemid);
+//        if (currentSale == null) {
+//            throw new ApiException("Sale not found");
+//        }
+//
+//        if (currentSale.getSalesStatus().equals("CONFIRMED")) {
+//            throw new ApiException("Cannot update quantity of a confirmed invoice");
+//        }
+//
+//        Product product = currentSale.getProduct();
+//        int quantityDifference = quantity -itemSale.getQuantity();
+//
+//        if (product.getStock() < quantityDifference) {
+//            throw new ApiException("Insufficient stock");
+//        }
+//
+//
+//        product.setStock(product.getStock()-quantityDifference);
+//        productRepository.save(product);
+//
+//        itemSale.setQuantity(quantity);
+//        itemSale = itemSaleRepository.save(itemSale);
+//
+//        return itemSale;
+//    }
 
 
 
@@ -377,7 +411,7 @@ public class SalesService {
             throw new ApiException("the Invoice is not found ");
         }
 
-        if (currentSale.getCounterBox().getAccountant().getId()!=accountantId){
+        if (currentSale.getCounterBox().getAccountant().getId() != accountantId) {
             throw new ApiException("the counter box with this sale does not belong to this accountant ");
 
         }
@@ -385,7 +419,7 @@ public class SalesService {
 
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            Document document = new Document();
             PdfWriter.getInstance(document, baos);
             document.open();
 
@@ -414,22 +448,60 @@ public class SalesService {
 
             document.add(new Paragraph("------------------------------------------------------------"));
 
-            document.add(new Paragraph("INVOICE ID: " + currentSale.getId()));
-            document.add(new Paragraph("Date: " + currentSale.getSaleDate() ));
-            document.add(new Paragraph("Branch: " + currentSale.getBranch()));
+            document.add(new Paragraph("INVOICE ID: " + currentSale.getSale_invoice()));
+            document.add(new Paragraph("Date: " + currentSale.getSaleDate()));
+            document.add(new Paragraph("Branch: " + currentSale.getBranch().getBranchNumber()));
             document.add(new Paragraph("------------------------------------------------------------"));
 
 
             document.add(Chunk.NEWLINE);
 
+            document.add(new Paragraph("Products:"));
+            document.add(new Paragraph("------------------------------------------------------------"));
 
-            document.add(new Paragraph("This document summarizes your tax obligations as submitted."));
-            document.add(new Paragraph("Please ensure payment is completed before the due date to avoid penalties."));
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.addCell("Product Name:");
+            table.addCell(" Quantity:");
+            table.addCell("Unit Price:");
+            table.addCell("Total Price:");
+
+           List <ItemSale> items=itemSaleRepository.findItemSaleBySalesId(saleId);
+
+
+            for (ItemSale item : items) {
+
+                table.addCell(item.getProductName());
+                table.addCell(String.valueOf(item.getQuantity()));
+                table.addCell(String.valueOf(item.getUnitPrice()));
+                Double total = item.getTotalPrice();
+                table.addCell(String.valueOf(total));
+            }
+
+
+            document.add(table);
+
+
+
+
+            /// the total prices tax +grand total after tax
+            document.add(new Paragraph("------------------------------------------------------------"));
+            document.add(new Paragraph("Subtotal :" + String.valueOf(currentSale.getTotal_amount())));
+            document.add(new Paragraph("Tax (15%) :" + String.valueOf(currentSale.getTax_amount())));
+            document.add(new Paragraph("Total :" + String.valueOf(currentSale.getGrand_amount())));
+            document.add(new Paragraph("------------------------------------------------------------"));
             document.add(Chunk.NEWLINE);
-            document.add(new Paragraph("Signature: ___________________________"));
+
+
+            document.add(new Paragraph("Thank you for shopping with us!"));
+            document.add(Chunk.NEWLINE);
             document.add(new Paragraph("Mohasil Team", new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC)));
 
             document.close();
+            currentSale.setSaleDate(LocalDateTime.now());
+            salesRepository.save(currentSale);
+
             return baos.toByteArray();
 
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Api.ApiResponse;
+import com.example.final_project.DTO.ItemsDTO;
 import com.example.final_project.DTO.SaleDTO;
 import com.example.final_project.DTO.SaleRequestDTO;
 import com.example.final_project.DTO.ProductDTO;
@@ -37,82 +38,77 @@ public class SalesController {
     public ResponseEntity getAllSales(){
         return ResponseEntity.status(HttpStatus.OK).body(salesService.getAllSales());
     }
-//
-//    @PostMapping("/add/{counterBox_id}/{branch_id}")
-//    public ResponseEntity addTaxReports(@PathVariable Integer counterBox_id,@PathVariable Integer branch_id) {
-//        salesService.addSales(counterBox_id, branch_id);
-//        return ResponseEntity.status(200).body(new ApiResponse("new tax report added"));
-//    }
-//
-//    @PostMapping("/add/{accountantId}/{counterBox_id}/{branch_id}")
-//    public ResponseEntity addTaxReports(@PathVariable Integer accountantId,@PathVariable Integer counterBox_id,@PathVariable Integer branch_id,  @Valid @RequestBody Sales sales){
-//        salesService.addSales(accountantId,counterBox_id);
-//        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is added!"));
-//    }
 
+    // authority -> Accountant
     @PutMapping("/update/{id}")
-    public ResponseEntity updateSales(@PathVariable Integer id,@Valid @RequestBody  Sales sales){
-        salesService.updateSales(id, sales);
+    public ResponseEntity updateSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id, @Valid @RequestBody  Sales sales){
+        salesService.updateSales(myUser.getId(),id, sales);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales  is updated"));
     }
 
+    // authority -> Accountant
     @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteSales(@PathVariable Integer id){
-        salesService.deleteSales(id);
+    public ResponseEntity deleteSales(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer id){
+        salesService.deleteSales(myUser.getId(),id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Sales is deleted"));
     }
 
-//    @PostMapping("/add-product/{salesId}/barcode/{barcode}")
-//    public ResponseEntity addProductToSaleByBarcode(@PathVariable Integer salesId, @PathVariable String barcode) {
-//        salesService.addProductToSales(salesId, barcode);
-//        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Product added to sale"));
+
+
+
+//    @GetMapping("/sales-summary/{branchId}")
+//    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User accountant) {
+//        return ResponseEntity.status(200).body(salesService.getSalesSummaryByBranch(accountant.getId()));
 //    }
 
-
-//    @PutMapping("/calculate/{salesId}")
-//    public ResponseEntity calculateAmountsForSale(@PathVariable Integer salesId) {
-//        salesService.calculateSalesAmounts(salesId);
-//        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Amounts calculated successfully"));
-//    }
-
-
-
-
-
-    @PostMapping("/adds/{accountantId}/{counterBoxId}/{branch_id}")
-    public ResponseEntity addSales(@PathVariable Integer accountantId, @PathVariable Integer counterBoxId, @PathVariable Integer branch_id, @RequestBody @Valid SaleDTO saleDTO ) {
-        salesService.addSales(accountantId,counterBoxId,branch_id,saleDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Sale made successfully"));
+    // authority -> Accountant
+    @PostMapping("add-sale/{boxId}")
+    public ResponseEntity addSales(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer boxId, @RequestBody @Valid SaleDTO saleDTO ) {
+        salesService.addSales(accountant.getId(), boxId,saleDTO);
+        return ResponseEntity.status(200).body("Sale made successfully");
     }
 
+
+    // authority -> Accountant
     /// Integer accountantId, Integer saleId, ProductDTO productDTO
-    @PutMapping("/add-product-in-sale/{accountantId}/{saleId}")
-    public ResponseEntity addProductInSale(@PathVariable Integer accountantId,@PathVariable Integer saleId,@Valid @RequestBody ProductDTO product){
-        salesService.addProductInSale(accountantId, saleId,product);
+    @PutMapping("/add-product-in-sale/{saleId}")
+    public ResponseEntity addProductInSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId, @Valid @RequestBody ItemsDTO itemsDTO){
+        salesService.addProductInSale(accountant.getId(), saleId,itemsDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(" Product is added to invoice successfully"));
     }
 
+    /// ?????????????????????????????????
     @GetMapping("/by-taxpayer/{taxPayerId}")
-    public ResponseEntity getSalesByTaxPayerId(@PathVariable Integer taxPayerId) {
-        List<Sales> sales = salesService.getSalesByTaxPayerId(taxPayerId);
+    public ResponseEntity getSalesByTaxPayerId(@AuthenticationPrincipal MyUser taxPayer) {
+        List<Sales> sales = salesService.getSalesByTaxPayerId(taxPayer.getId());
         return ResponseEntity.status(200).body(sales);
     }
 
-    @PutMapping("/confirm-sale/{accountantId}/{saleId}")
-    public ResponseEntity confirmSale(@PathVariable Integer accountantId,@PathVariable Integer saleId){
-        salesService.confirmSale(accountantId, saleId);
+    // authority -> Accountant
+    @PutMapping("/confirm-sale/{saleId}")
+    public ResponseEntity confirmSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId){
+        salesService.confirmSale(accountant.getId(), saleId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(" The sales confirmed successfully"));
     }
 
 
-//    }
-//
-//    @PutMapping("/add-product-in-sale/{accountantId}/{saleId}")
-//    public ResponseEntity addProductInSale(@PathVariable Integer accountantId,@PathVariable Integer saleId,@Valid @RequestBody ProductDTO product){
-//        salesService.addProductInSale(accountantId, saleId,product);
-//        return ResponseEntity.status(HttpStatus.OK).body(new ApiException(" Product is added to invoice successfully"));
-//    }
+    // authority -> Accountant
+    @GetMapping("/print-sale/{saleId}")
+    public ResponseEntity<byte[]> printInvoice(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId) {
+        byte[] pdf = salesService.printInvoice(accountant.getId(),saleId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tax-report-" + saleId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
 
+    /// ?????????????????????????????????
+//    @PutMappingapping("/update-product-quantity/{accountantId}/{itemSaleId}/{quantity}")
+//    public ResponseEntity updateProductQuantity(@PathVariable Integer accountantId, @PathVariable Integer itemid, @PathVariable Integer quantity) {
+//
+//        ItemSale updatedItemSale = salesService.updateProductQuantity(accountantId, itemid, quantity);
+//        return ResponseEntity.status(200).body(updatedItemSale);
+//    }
 //
 //    @GetMapping("/print-sale/{accountantId}/{saleId}")
 //    public ResponseEntity<byte[]> printInvoice(@PathVariable Integer accountantId,@PathVariable Integer saleId) {

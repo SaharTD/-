@@ -209,7 +209,7 @@ public class AuditorService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-//    @PostConstruct
+    @PostConstruct
     public void createAdminUser() {
         if (myUserRepository.findUserByUsername("admin") == null) {
             MyUser admin = new MyUser();

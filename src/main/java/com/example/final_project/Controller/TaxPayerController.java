@@ -24,24 +24,27 @@ public class TaxPayerController {
     private final TaxPayerService taxPayerService;
 
 
-
+    /// ?????????????????????????????????
     @GetMapping("/get-all-tax-payers")
     public ResponseEntity getAllTaxTaxPayers (@AuthenticationPrincipal MyUser audit){
         return ResponseEntity.status(200).body(taxPayerService.getAllTaxTaxPayers(audit.getId()));
     }
 
-    @PostMapping("tax-payer-register")
+    // authority -> permitAll
+    @PostMapping("/tax-payer-register")
     public ResponseEntity register (@RequestBody @Valid TaxPayerDTO taxPayerDTO ){
         taxPayerService.register(taxPayerDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer is registered successfully "));
     }
 
+    // authority -> TaxPayer
     @PutMapping("/update")
     public ResponseEntity updateTaxPayer(@AuthenticationPrincipal MyUser taxPayer , @Valid@RequestBody TaxPayerDTO taxPayerDTO ){
         taxPayerService.updateTaxPayer(taxPayer.getId(), taxPayerDTO);
         return ResponseEntity.status(200).body(new ApiResponse("the tax payer information has been updated successfully "));
     }
 
+    // authority -> TaxPayer
     @DeleteMapping("/delete/")
     public ResponseEntity deleteTaxPayer(@AuthenticationPrincipal MyUser taxPayer){
         taxPayerService.deleteTaxPayer(taxPayer.getId());
@@ -50,6 +53,7 @@ public class TaxPayerController {
 
 
     /// 13
+    // authority -> TaxPayer
     @PostMapping("/add-accountant/{businessId}") //last edit
     public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @AuthenticationPrincipal MyUser taxPayer,@PathVariable Integer businessId){
         taxPayerService.addAccountant(taxPayer.getId(),businessId,accountantDTO);
@@ -58,6 +62,7 @@ public class TaxPayerController {
 
 
     // Endpoint 40
+    // authority -> TaxPayer
     @PutMapping("/activate-accountant/tax-payer/accountant/{accountantId}")
     public ResponseEntity activateAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer accountantId){
           taxPayerService.activateAccountant(taxPayer.getId(), accountantId);
@@ -66,18 +71,22 @@ public class TaxPayerController {
 
 
     // Endpoint 41
+    // authority -> TaxPayer
     @PutMapping("/de-activate-accountant/tax-payer/accountant/{accountantId}")
     public ResponseEntity deActivateAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer accountantId){
         taxPayerService.deActivateAccountant(taxPayer.getId(), accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
     }
+
     //last update
+    /// ?????????????????????????????????
     @GetMapping("/taxpayers/{taxPayerId}/accountants")
     public ResponseEntity<List<Map<String, Object>>> getAccountantsByTaxPayerId(@PathVariable Integer taxPayerId) {
         return ResponseEntity.status(200).body(taxPayerService.getAccountantsByTaxPayerId(taxPayerId));
     }
 
     /// 15
+    // authority -> TaxPayer
     @PutMapping("block-inactive-accountant/{accountantId}")
     public ResponseEntity blockInnActiveAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer accountantId ){
         taxPayerService.blockUnnActiveAccountant(taxPayer.getId(),accountantId);

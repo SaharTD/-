@@ -42,34 +42,30 @@ public class CounterBoxService {
             throw new ApiException("Accountant not found");
         }
 
-        Branch branch = branchRepository.findBranchesById(counterBoxDTO.getBranchId());
-        if (branch == null) {
-            throw new ApiException("Branch not found");
+        Branch branch = branchRepository.findBranchesById(accountant.getBranch().getId());
+            if (branch == null){
+                throw new ApiException("accountant has not been assign to branch yet ");
         }
+
 
         CounterBox counterBox = new CounterBox();
 
         counterBox.setType(counterBoxDTO.getType());
-        counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
         counterBox.setBranch(branch);
         counterBox.setStatus("Closed");
-       // counterBox.setOpenDatetime(LocalDateTime.now());
         counterBox.setAccountant(accountant);
 
-        if (counterBoxDTO.getBranchId() != null) {
-            Branch branch2 = branchRepository.findBranchesById(counterBoxDTO.getBranchId());
-            if (branch2 == null) {
-                throw new ApiException("Branch not found");
-            }
-            counterBox.setBranch(branch);
-        }
+
 
         accountant.setLastActiveCounterBox(LocalDateTime.now());
         counterBoxRepository.save(counterBox);
         accountantRepository.save(accountant);
 
     }
+
+
+
 
     public List getAllCounterBoxes() {
         return counterBoxRepository.findAll();
@@ -115,22 +111,29 @@ public class CounterBoxService {
             throw new ApiException("CounterBox not found");
         }
 
-        if (box.getOpenDatetime() != null) {
+        if (box.getStatus().equals("Opened") ){
             throw new ApiException("CounterBox is already opened");
         }
 
-        Accountant accountant = accountantRepository.getReferenceById(accountantId);
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
         if (accountant == null) {
             throw new ApiException("Accountant not found");
         }
 
         box.setOpenDatetime(LocalDateTime.now());
-        box.setAccountant(accountant);
         box.setStatus("Opened");
+        accountant.setLastActiveCounterBox(LocalDateTime.now());
+        accountantRepository.save(accountant);
         counterBoxRepository.save(box);
     }
 
     public String closeCounterBox(Integer counterBoxId, Integer accountantId) {
+
+        Accountant accountant = accountantRepository.findAccountantById(accountantId);
+        if (accountant == null) {
+            throw new ApiException("Accountant not found");
+        }
+
         CounterBox box = counterBoxRepository.findCounterBoxById(counterBoxId);
         if (box == null) {
             throw new ApiException("CounterBox not found");
@@ -140,15 +143,17 @@ public class CounterBoxService {
             throw new ApiException("You are not authorized to close this counter box");
         }
 
-        if (box.getCloseDatetime() != null) {
-            throw new ApiException("This counter box is already closed");
+        if (box.getStatus().equals("Closed") ){
+            throw new ApiException("CounterBox is already opened");
         }
 
         LocalDateTime now = LocalDateTime.now();
         box.setCloseDatetime(now);
-        box.setStatus("Closed");
 
+        box.setStatus("Closed");
         counterBoxRepository.save(box);
+        accountant.setLastActiveCounterBox(LocalDateTime.now());
+        accountantRepository.save(accountant);
 
         long hours = Duration.between(box.getOpenDatetime(), now).toHours();
         long minutes = Duration.between(box.getOpenDatetime(), now).toMinutesPart();
@@ -166,6 +171,7 @@ public class CounterBoxService {
         for (CounterBox cb:counterBoxes){
             cb.setCloseDatetime(LocalDateTime.now());
             cb.setStatus("Closed");
+
             String sendTo= cb.getBranch().getBusiness().getTaxPayer().getMyUser().getEmail();
             notificationService.sendEmail(sendTo,"Closing Counter Box","Dear customer \n we have closed your counter box because it was opening for 12 hours");
         }
