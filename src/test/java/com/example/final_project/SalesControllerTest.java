@@ -36,10 +36,10 @@ public class SalesControllerTest {
 
     ProductDTO productDTO;
 
-    @BeforeEach
-    void setUp() {
-        productDTO = new ProductDTO("Nova water", 2, "24577358996");
-    }
+//    @BeforeEach
+//    void setUp() {
+//        productDTO = new ProductDTO("Nova water", 2, "24577358996");
+//    }
 
     @Test
     public void testAddProductInSale() throws Exception {

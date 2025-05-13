@@ -101,6 +101,7 @@ public class ProductService {
     }
 
 
+    // Khalid almutiri
     public Product getProductsByBarcode(String barcode) {
         Product products = productRepository.findProductByBarcode(barcode);
         if (products==null) {

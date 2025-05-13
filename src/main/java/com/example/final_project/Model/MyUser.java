@@ -44,7 +44,7 @@ public class MyUser implements UserDetails {
     private String email;
 
     @Column(columnDefinition = "varchar(20)")
-    @Pattern(regexp = "TAXPAYER|AUDIT|ACCOUNTANT|ADMIN")
+    @Pattern(regexp = "TAXPAYER|AUDITOR|ACCOUNTANT|ADMIN")
     private String role;
 
 
