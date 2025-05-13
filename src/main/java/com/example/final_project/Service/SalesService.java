@@ -105,7 +105,7 @@ public class SalesService {
         }
 
 
-        if(product.getStock()< productDTO.getQuantity()){
+        if(product.getStock()< productDTO.getStock()){
             throw new ApiException("Sorry the product is out of stock");
 
         }
@@ -120,11 +120,11 @@ public class SalesService {
         itemSale.setSales(currentSale);
         itemSale.setProductName(product.getName());
         itemSale.setProduct(product);
-        itemSale.setQuantity(productDTO.getQuantity());
+        itemSale.setQuantity(productDTO.getStock());
         itemSale.setUnitPrice(product.getPrice());
-        itemSale.setTotalPrice(product.getPrice()* productDTO.getQuantity());
+        itemSale.setTotalPrice(product.getPrice()* productDTO.getStock());
 
-        product.setStock(product.getStock()-productDTO.getQuantity());
+        product.setStock(product.getStock()-productDTO.getStock());
         productRepository.save(product);
 
 

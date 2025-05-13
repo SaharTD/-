@@ -385,7 +385,7 @@ public class TaxReportsService {
         TaxReports report = taxReportsRepository.findTaxReportsById(reportId);
         if (report == null) throw new ApiException("Tax report not found.");
 
-        if (!report.getBusiness().getTaxPayer().getId().equals(taxPayerId)) {
+        if (!report.getBusiness().getTaxPayer().getId().equals(userId)) {
             throw new ApiException("You don't have access to this tax report!");
         }
 

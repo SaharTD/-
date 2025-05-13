@@ -3,7 +3,6 @@ package com.example.final_project.Controller;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.MyUser;
 import com.example.final_project.Model.TaxReports;
-import com.example.final_project.Model.User;
 import com.example.final_project.Service.TaxReportsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

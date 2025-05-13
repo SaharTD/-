@@ -46,7 +46,7 @@ public class PaymentService {
             if (t.getPaymentDate().isAfter(LocalDate.now().minusDays(1))){
                 Payment payment = new Payment();
                 payment.setPaymentDate(LocalDateTime.now());
-                payment.setName(taxPayer.getUser().getName());
+                payment.setName(taxPayer.getMyUser().getName());
                 payment.setStatus("Paid");
                 payment.setTaxPayer(taxPayer);
                 payment.setTaxReports(t);
