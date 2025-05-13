@@ -86,7 +86,7 @@ public class SalesController {
     }
 
     // authority -> Accountant
-    //    //sahar - 2
+    //sahar - 4
     @PutMapping("/confirm-sale/{saleId}")
     public ResponseEntity confirmSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId){
         salesService.confirmSale(accountant.getId(), saleId);
@@ -95,6 +95,7 @@ public class SalesController {
 
 
     // authority -> Accountant
+    //sahar - 5
     @GetMapping("/print-sale/{saleId}")
     public ResponseEntity<byte[]> printInvoice(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId) {
         byte[] pdf = salesService.printInvoice(accountant.getId(),saleId);

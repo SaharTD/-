@@ -47,6 +47,7 @@ public class BranchController {
 
 
     @GetMapping("branch-revenue/{branchId}")
+    //sahar - 13
     public ResponseEntity branchRevenue(@AuthenticationPrincipal MyUser user,@PathVariable Integer branchId) {
         return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "
                 + branchService.branchRevenue(user.getId(), branchId)));

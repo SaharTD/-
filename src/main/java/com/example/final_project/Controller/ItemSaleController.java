@@ -34,6 +34,7 @@ public class ItemSaleController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("ItemSale updated successfully"));
     }
 
+    //sahar - 6
     @DeleteMapping("/remove/{itemSaleId}/{saleId}")
     public ResponseEntity<ApiResponse> removeItemFromSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer itemSaleId, @PathVariable Integer saleId) {
         itemSaleService.removeItemFromSale(accountant.getId(),itemSaleId,saleId);
