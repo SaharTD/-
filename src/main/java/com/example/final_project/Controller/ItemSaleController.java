@@ -2,11 +2,13 @@ package com.example.final_project.Controller;
 
 import com.example.final_project.Api.ApiResponse;
 import com.example.final_project.Model.ItemSale;
+import com.example.final_project.Model.MyUser;
 import com.example.final_project.Service.ItemSaleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,11 +34,12 @@ public class ItemSaleController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("ItemSale updated successfully"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteItemSale(@PathVariable Integer id) {
-        itemSaleService.deleteItemSale(id);
+    @DeleteMapping("/remove/{itemSaleId}/{saleId}")
+    public ResponseEntity<ApiResponse> removeItemFromSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer itemSaleId, @PathVariable Integer saleId) {
+        itemSaleService.removeItemFromSale(accountant.getId(),itemSaleId,saleId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("ItemSale deleted successfully"));
     }
+
 
     @GetMapping("/sales/{salesId}")
     public ResponseEntity<List<ItemSale>> getItemSalesBySalesId(@PathVariable Integer salesId) {
