@@ -37,11 +37,6 @@ public class Product {
     @Check(constraints = "price>=0.0")
     private Double price;
 
-//
-//    @Column(columnDefinition = "int not null")
-//    @NotNull(message = "quantity must be not null")
-//    private Integer quantity;
-
 
     @PositiveOrZero(message = "stock cannot be negative")
     @Column(columnDefinition = "int not null")

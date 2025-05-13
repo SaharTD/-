@@ -62,6 +62,7 @@ public class SalesController {
 //    }
 
     // authority -> Accountant
+    //sahar - 3
     @PostMapping("add-sale/{boxId}")
     public ResponseEntity addSales(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer boxId, @RequestBody @Valid SaleDTO saleDTO ) {
         salesService.addSales(accountant.getId(), boxId,saleDTO);
@@ -85,6 +86,7 @@ public class SalesController {
     }
 
     // authority -> Accountant
+    //    //sahar - 2
     @PutMapping("/confirm-sale/{saleId}")
     public ResponseEntity confirmSale(@AuthenticationPrincipal MyUser accountant, @PathVariable Integer saleId){
         salesService.confirmSale(accountant.getId(), saleId);

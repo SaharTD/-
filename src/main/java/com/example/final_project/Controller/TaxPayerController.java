@@ -54,6 +54,7 @@ public class TaxPayerController {
 
     /// 13
     // authority -> TaxPayer
+    //sahar - 1
     @PostMapping("/add-accountant/{businessId}") //last edit
     public ResponseEntity addAccountant (@RequestBody @Valid AccountantDTO accountantDTO, @AuthenticationPrincipal MyUser taxPayer,@PathVariable Integer businessId){
         taxPayerService.addAccountant(taxPayer.getId(),businessId,accountantDTO);
@@ -63,7 +64,7 @@ public class TaxPayerController {
 
     // Endpoint 40
     // authority -> TaxPayer
-    @PutMapping("/activate-accountant/tax-payer/accountant/{accountantId}")
+    @PutMapping("/activate-accountant/{accountantId}")
     public ResponseEntity activateAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer accountantId){
           taxPayerService.activateAccountant(taxPayer.getId(), accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is active"));
@@ -72,7 +73,7 @@ public class TaxPayerController {
 
     // Endpoint 41
     // authority -> TaxPayer
-    @PutMapping("/de-activate-accountant/tax-payer/accountant/{accountantId}")
+    @PutMapping("/de-activate-accountant/{accountantId}")
     public ResponseEntity deActivateAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer accountantId){
         taxPayerService.deActivateAccountant(taxPayer.getId(), accountantId);
         return ResponseEntity.status(200).body(new ApiResponse("accountant is nonActive"));
@@ -80,13 +81,14 @@ public class TaxPayerController {
 
     //last update
     /// ?????????????????????????????????
-    @GetMapping("/taxpayers/{taxPayerId}/accountants")
+    @GetMapping("/taxpayers/accountants")
     public ResponseEntity<List<Map<String, Object>>> getAccountantsByTaxPayerId(@PathVariable Integer taxPayerId) {
         return ResponseEntity.status(200).body(taxPayerService.getAccountantsByTaxPayerId(taxPayerId));
     }
 
-    /// 15
     // authority -> TaxPayer
+    //sahar - 2
+
     @PutMapping("block-inactive-accountant/{accountantId}")
     public ResponseEntity blockInnActiveAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer accountantId ){
         taxPayerService.blockUnnActiveAccountant(taxPayer.getId(),accountantId);
