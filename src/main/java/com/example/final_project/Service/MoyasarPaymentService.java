@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MoyasarPaymentService {
 
     private final TaxReportsRepository taxReportsRepository;

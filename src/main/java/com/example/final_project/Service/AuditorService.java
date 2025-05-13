@@ -97,6 +97,7 @@ public class AuditorService {
             totalTax += s.getTax_amount();
             s.setTaxReports(taxReports);
         }
+        taxReports.setStart_date(LocalDateTime.now().minusDays(90));
         taxReports.setBusiness(business);
         taxReports.setTotalTax(totalTax);
         taxReports.setEnd_date(LocalDateTime.now());

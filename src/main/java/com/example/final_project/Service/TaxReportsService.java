@@ -105,13 +105,11 @@ public class TaxReportsService {
             throw new ApiException("Payment date is missing");
         }
 
-
         LocalDate approvalDate = taxReport.getEnd_date().toLocalDate();
         LocalDate dueDate = approvalDate.plusMonths(1);
         LocalDate today = LocalDate.now();
 
-        if (today.isAfter(dueDate)) {
-
+        if (today.isAfter(dueDate)){
             Double penalty = taxReport.getTotalTax() * 0.05;
             taxReport.setTotalTax(taxReport.getTotalTax() + penalty);
             taxReportsRepository.save(taxReport);
@@ -134,6 +132,7 @@ public class TaxReportsService {
         Auditor auditor = auditorRepository.findAuditorsById(id);
         if (auditor == null)
             throw new ApiException("Auditor not found");
+
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
 
         if (taxReport == null) {
@@ -176,9 +175,11 @@ public class TaxReportsService {
 
     // Khalid almutiri
     public void applyLegalActionForTaxEvasion(Integer id, Integer taxReportId) {
+        Auditor auditor = auditorRepository.findAuditorsById(id);
+        if (auditor == null)
+            throw new ApiException("Auditor not found");
 
         TaxReports taxReport = taxReportsRepository.findTaxReportsById(taxReportId);
-
         if (taxReport == null) {
             throw new ApiException("Tax report not found");
         }
