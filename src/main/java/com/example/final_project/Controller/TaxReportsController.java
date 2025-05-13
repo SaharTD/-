@@ -3,6 +3,7 @@ package com.example.final_project.Controller;
 import com.example.final_project.Api.ApiException;
 import com.example.final_project.Model.MyUser;
 import com.example.final_project.Model.TaxReports;
+import com.example.final_project.Model.User;
 import com.example.final_project.Service.TaxReportsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -129,6 +130,7 @@ public class TaxReportsController {
         return ResponseEntity.status(200).body(taxReportsService.printTaxReportForEveryBusinesses(myUser.getId()));
     }
 
+    ///Auth-> TaxPayer
     @GetMapping("/print/{reportId}")
     public ResponseEntity<byte[]> printTaxReportAsPdf(@AuthenticationPrincipal MyUser myUser, @PathVariable Integer reportId) {
         byte[] pdf = taxReportsService.getTaxReportAsPdf(myUser.getId(),reportId);

@@ -22,7 +22,7 @@ public class CounterBoxController {
     private final CounterBoxService counterBoxService;
     private final SalesService salesService;
 
-    //كرييت مع المحاسب
+
     @PostMapping("/create")
     public ResponseEntity createCounterBox(@AuthenticationPrincipal MyUser account, @RequestBody @Valid CounterBoxDTO counterBoxDTO) {
         counterBoxService.createCounterBox(account.getId(),counterBoxDTO);
