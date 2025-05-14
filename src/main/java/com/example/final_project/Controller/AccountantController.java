@@ -27,14 +27,14 @@ public class AccountantController {
 
 
 
-
+    //DUJA
     /// Auth ->
     @GetMapping("/get-accountant-by-branch/{branchId}")
     public ResponseEntity getBranchAccountant(@AuthenticationPrincipal MyUser taxPayer,@PathVariable Integer branchId){
         return ResponseEntity.status(200).body(accountantService.getBranchAccountant(taxPayer.getId(),branchId));
     }
 
-
+    //DUJA
     /// Auth -> taxPayer
     @GetMapping("/get-accountant-by-business/{businessId}")
     public ResponseEntity getBusinessAccountant(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer businessId){
@@ -44,7 +44,7 @@ public class AccountantController {
 
 
 
-
+    //DUJA
     /// Auth -> Accountant
     @PutMapping("/update/{id}")
     public ResponseEntity update(@AuthenticationPrincipal MyUser accountant, @RequestBody @Valid AccountantDTO accountantDTO) {
@@ -52,6 +52,7 @@ public class AccountantController {
         return ResponseEntity.status(200).body("Updated Successfully");
     }
 
+    //DUJA
     /// Auth-> Accountant
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteAccountant(@AuthenticationPrincipal MyUser accountant) {
@@ -70,6 +71,7 @@ public class AccountantController {
         return ResponseEntity.status(200).body(new ApiResponse("The accountant has been assign to the branch successfully "));
     }
 
+    //DUJA
     /// Auth-> Accountant
     @PutMapping("/restock-product/accountant/{accountantId}/product/{productId}/amount/{amount}")
     public ResponseEntity restockProduct(@AuthenticationPrincipal MyUser accountant , @PathVariable Integer productId, @PathVariable Integer amount){

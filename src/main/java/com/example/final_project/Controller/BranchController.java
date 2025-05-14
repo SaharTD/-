@@ -51,11 +51,10 @@ public class BranchController {
         return ResponseEntity.status(200).body(new ApiResponse("The total revenue of the business: "
                 + branchService.branchRevenue(user.getId(), branchId)));
     }
-
+    //DUJA
     // authority -> TaxPayer
     @GetMapping("/sales-summary/{branchId}")
-    //    public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal User taxPayer, @PathVariable Integer branchId) {
-    public ResponseEntity<Map<String, Double>> getSalesByBranch(MyUser taxPayer, @PathVariable Integer branchId) {
+       public ResponseEntity<Map<String, Double>> getSalesByBranch(@AuthenticationPrincipal MyUser taxPayer, @PathVariable Integer branchId) {
         return ResponseEntity.status(200).body(branchService.getSalesSummaryByBranch(taxPayer.getId(),branchId));
     }
 

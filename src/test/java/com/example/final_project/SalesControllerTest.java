@@ -1,6 +1,5 @@
 package com.example.final_project;
 
-import com.example.final_project.Controller.SalesController;
 import com.example.final_project.DTO.ProductDTO;
 import com.example.final_project.Service.SalesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,10 +47,9 @@ public class SalesControllerTest {
                         .content(new ObjectMapper().writeValueAsString(productDTO)))
                 .andExpect(status().isOk());
 
-//        verify(salesService, times(1)).addProductInSale(eq(1), eq(1), any(ProductDTO.class));
     }
 
-    // ✅ Bean configuration بدون @MockBean
+
     @TestConfiguration
     static class SalesServiceTestConfig {
         @Bean
