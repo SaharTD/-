@@ -88,3 +88,12 @@ PUT /api/v1/sales/confirm-sale/{saleId}
 
 Added functionality to confirm a sale after verification.
 
+
+
+
+
+post man testing :http://muhassel.eu-north-1.elasticbeanstalk.com/
+
+
+
+
