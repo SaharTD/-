@@ -30,7 +30,7 @@ public class CounterBoxController {
         return ResponseEntity.ok("Counter box created successfully");
     }
 
-
+    //DUJA
     @GetMapping("/get-all")
     public ResponseEntity getAll(){
         return ResponseEntity.status(200).body(counterBoxService.getAllCounterBoxes());
@@ -57,7 +57,7 @@ public class CounterBoxController {
     //--------------------------------------------
 
 
-
+    //DUJA
     @PostMapping("/create-box")
     public ResponseEntity createCounterBox2(@RequestBody @Valid CounterBoxDTO counterBoxDTO) {
 //        counterBoxService.createCounterBox2(counterBoxDTO);
@@ -74,7 +74,7 @@ public class CounterBoxController {
         return ResponseEntity.status(200).body("CounterBox opened successfully");
     }
 
-
+     //DUJA
     //close the counter box
     /// Auth-> Accountant
     @PostMapping("/close/{boxId}")
