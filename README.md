@@ -92,7 +92,6 @@ Added functionality to confirm a sale after verification.
 
 
 
-post man testing :http://muhassel.eu-north-1.elasticbeanstalk.com/
 
 
 
