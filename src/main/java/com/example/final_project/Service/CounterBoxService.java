@@ -162,6 +162,7 @@ public class CounterBoxService {
     }
 
 
+    // Ali Ahmed Alshehri
     // Endpoint 7
     // close counter box if still opening for 12h
     public void closeCounterBoxAuto(){

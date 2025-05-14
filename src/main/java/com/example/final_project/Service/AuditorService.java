@@ -81,6 +81,7 @@ public class AuditorService {
     }
 
 
+    // Ali Ahmed Alshehri
     // Endpoint 27
     public void createTaxReport(Integer auditorId ,Integer businessId){
         Auditor auditor = auditorRepository.findAuditorsById(auditorId);
@@ -147,6 +148,7 @@ public class AuditorService {
         taxReport.setStatus("Rejected");
         taxReportsRepository.save(taxReport);
     }
+
 
 
     public void activateBusiness(Integer auditId, Integer taxPayerId, Integer businessId) {

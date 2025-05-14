@@ -334,6 +334,7 @@ public class TaxPayerService {
 
     }
 
+    // Ali Ahmed Alshehri
     // Endpoint 40
     public void activateAccountant(Integer taxPayerId, Integer accountantId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
@@ -349,6 +350,7 @@ public class TaxPayerService {
         accountantRepository.save(accountant);
     }
 
+    // Ali Ahmed Alshehri
     // Endpoint 41
     public void deActivateAccountant(Integer taxPayerId, Integer accountantId) {
         TaxPayer taxPayer = taxPayerRepository.findTaxBuyerById(taxPayerId);
